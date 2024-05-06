@@ -1,3 +1,4 @@
+import 'package:easyback/baepopage/baepo.dart';
 import 'package:flutter/material.dart';
 import '../mainpage/ApiPage.dart';
 import '../loginpage.dart';
@@ -17,6 +18,17 @@ class _sangtaeState extends State<sangtae> {
   Color buttonColor2 = Colors.black;
   Color buttonColor3 = Colors.black;
   String? centerText;
+
+  @override
+  void initState() {
+    super.initState();
+    setState(() {
+      buttonColor1 = Colors.black;
+      buttonColor2 = Colors.black;
+      buttonColor3 = Colors.white12; // 상태관리 버튼 색상 변경
+    });
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -106,11 +118,7 @@ class _sangtaeState extends State<sangtae> {
                       height: 50,
                       child: ElevatedButton(
                         onPressed: () {
-                          setState(() {
-                            buttonColor1 = Colors.white12; // 버튼 색상 변경
-                            buttonColor2 = Colors.black; // 다른 버튼 색상 원래대로 설정
-                            buttonColor3 = Colors.black;
-                          });
+                          _handleDeploymentGuideButton(context); // 배포 가이드 버튼 클릭 시 이동하는 함수 호출
                         },
                         style: ElevatedButton.styleFrom(
                           foregroundColor: Colors.white,
@@ -120,7 +128,7 @@ class _sangtaeState extends State<sangtae> {
 
                           ),
                         ),
-                        child: Text('상태상태'),
+                        child: Text('배포 가이드'),
                       ),
                     ),
                     SizedBox(height: 0),
@@ -129,11 +137,7 @@ class _sangtaeState extends State<sangtae> {
                       height: 50,
                       child: ElevatedButton(
                         onPressed: () {
-                          setState(() {
-                            buttonColor1 = Colors.black;
-                            buttonColor2 = Colors.white12;
-                            buttonColor3 = Colors.black;
-                          });
+                          _handlebaepoGuideButton(context); // 배포 가이드 버튼 클릭 시 이동하는 함수 호출
                         },
                         style: ElevatedButton.styleFrom(
                           foregroundColor: Colors.white,
@@ -152,11 +156,7 @@ class _sangtaeState extends State<sangtae> {
                       height: 50,
                       child: ElevatedButton(
                         onPressed: () {
-                          setState(() {
-                            buttonColor1 = Colors.black;
-                            buttonColor2 = Colors.black;
-                            buttonColor3 = Colors.white12;
-                          });
+                          // 배포 가이드 버튼 클릭 시 이동하는 함수 호출
                         },
                         style: ElevatedButton.styleFrom(
                           foregroundColor: Colors.white,
@@ -253,3 +253,17 @@ class _sangtaeState extends State<sangtae> {
   }
 }
 
+void _handleDeploymentGuideButton(BuildContext context) {
+  // Deployment 페이지로 이동
+  Navigator.push(
+    context,
+    MaterialPageRoute(builder: (context) => Deployment()), // Deployment 페이지로 이동
+  );
+}
+void _handlebaepoGuideButton(BuildContext context) {
+  // Deployment 페이지로 이동
+  Navigator.push(
+    context,
+    MaterialPageRoute(builder: (context) => baepo()), // Deployment 페이지로 이동
+  );
+}

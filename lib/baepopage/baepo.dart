@@ -1,5 +1,6 @@
 import 'dart:typed_data'; // Import the dart:typed_data library for Uint8List
 
+import 'package:easyback/baepopage/sangtae.dart';
 import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart'; // file_picker 라이브러리 추가
 import '../mainpage/ApiPage.dart';
@@ -139,13 +140,9 @@ class _baepoState extends State<baepo> {
                       width: double.infinity, // 버튼의 너비를 컨테이너의 너비와 동일하게 설정
                       height: 50,
                       child: ElevatedButton(
-                        onPressed: () {
-                          setState(() {
-                            buttonColor1 = Colors.black;
-                            buttonColor2 = Colors.white12;
-                            buttonColor3 = Colors.black;
-                          });
-                        },
+                          onPressed: () {
+                            _handleDeploymentGuideButton(context); // 배포 가이드 버튼 클릭 시 이동하는 함수 호출
+                          },
                         style: ElevatedButton.styleFrom(
                           foregroundColor: Colors.white, backgroundColor: buttonColor2,
                           shape: RoundedRectangleBorder(
@@ -161,13 +158,9 @@ class _baepoState extends State<baepo> {
                       width: double.infinity, // 버튼의 너비를 컨테이너의 너비와 동일하게 설정
                       height: 50,
                       child: ElevatedButton(
-                        onPressed: () {
-                          setState(() {
-                            buttonColor1 = Colors.black;
-                            buttonColor2 = Colors.black;
-                            buttonColor3 = Colors.white12;
-                          });
-                        },
+                          onPressed: () {
+                            _handlesangtaeButton(context); // 배포 가이드 버튼 클릭 시 이동하는 함수 호출
+                          },
                         style: ElevatedButton.styleFrom(
                           foregroundColor: Colors.white, backgroundColor: buttonColor3,
                           shape: RoundedRectangleBorder(
@@ -470,3 +463,9 @@ void _handleDeploymentGuideButton(BuildContext context) {
   );
 }
 
+void _handlesangtaeButton(BuildContext context) {
+  Navigator.push(
+    context,
+    MaterialPageRoute(builder: (context) => sangtae()), // sangtae 페이지로 이동
+  );
+}
