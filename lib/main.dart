@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'mainpage/ApiPage.dart';
 import 'mainpage/Deployment.dart';
 import 'loginpage.dart';
+import 'package:http/http.dart';
 
 void main() => runApp(MaterialApp(
   home: Home(),
@@ -82,7 +83,7 @@ class Home extends StatelessWidget {
               children: [
                 Center(
                   child: Text(
-                    "Let's start Easy Backend",
+                    "Let's start Easy Backend !!",
                     textAlign: TextAlign.center,
                     style: TextStyle(color: Colors.white, fontSize: 50),
                   ),
@@ -101,7 +102,7 @@ class Home extends StatelessWidget {
                   child: Padding(
                     padding: EdgeInsets.symmetric(horizontal: 40, vertical: 15),
                     child: Text(
-                      "Let's start easy backend!!",
+                      "     Login with github      ->    ",
                       style: TextStyle(fontSize: 20, color: Colors.black),
                     ),
                   ),

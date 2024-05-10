@@ -1,11 +1,13 @@
 import 'dart:typed_data'; // Import the dart:typed_data library for Uint8List
-
 import 'package:easyback/baepopage/sangtae.dart';
 import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart'; // file_picker 라이브러리 추가
 import '../mainpage/ApiPage.dart';
 import '../loginpage.dart';
 import '../mainpage/Deployment.dart';
+import 'package:http/http.dart' as http; // http 패키지 추가
+import 'dart:convert'; // JSON 디코딩을 위한 패키지 추가
+
 
 class baepo extends StatefulWidget {
   const baepo({Key? key});
@@ -25,8 +27,9 @@ class _baepoState extends State<baepo> {
 
   bool checkBox1 = false;
   bool checkBox2 = false;
-  bool fileUploadEnabled = true; // 파일 업로드 활성화 여부
-  bool textFieldEnabled = true; // 텍스트 필드 활성화 여부
+  bool fileUploadEnabled = true;
+  bool textFieldEnabled = true;
+  String fileContent = ""; // 파일 내용을 저장할 변수 추가
 
   @override
   void initState() {
@@ -222,6 +225,7 @@ class _baepoState extends State<baepo> {
                                       userInput = value;
                                       fileUploadEnabled = userInput.isEmpty; // 텍스트 필드에 내용이 없을 때 파일 업로드 활성화
                                     });
+                                    getFileFromGitHub(userInput);
                                   },
                                   decoration: InputDecoration(
                                     hintText: '   github URL... ', // 사용자에게 안내할 힌트 텍스트
@@ -233,6 +237,7 @@ class _baepoState extends State<baepo> {
                                     ),
                                   ),
                                 ),
+
                                 IconButton(
                                   onPressed: () {
                                     // 화살표 아이콘을 클릭한 경우 발생할 이벤트 추가
@@ -379,9 +384,7 @@ class _baepoState extends State<baepo> {
                   showFileName = "Now File Name: $fileName";
                   textFieldEnabled = false; // 파일 선택 시 텍스트 필드 비활성화
                 });
-                /*
-              do jobs
-              */
+                getFileFromGitHub(userInput);
               }
             },
             child: Row(
@@ -423,6 +426,28 @@ class _baepoState extends State<baepo> {
         ],
       ),
     );
+  }
+
+  void getFileFromGitHub(String url) async {
+    try {
+      var response = await http.get(Uri.parse(url)); // GitHub URL에서 파일 가져오기
+      if (response.statusCode == 200) {
+        // 요청이 성공하면 파일 내용을 가져와서 변수에 저장
+        setState(() {
+          fileContent = response.body; // 파일 내용 저장
+        });
+      } else {
+        // 요청이 실패한 경우 오류 메시지 표시
+        setState(() {
+          fileContent = "Failed to fetch file: ${response.statusCode}";
+        });
+      }
+    } catch (e) {
+      // 네트워크 오류 등의 예외 발생 시 오류 메시지 표시
+      setState(() {
+        fileContent = "Error: $e";
+      });
+    }
   }
 
   // API 버튼 처리
