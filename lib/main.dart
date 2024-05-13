@@ -112,7 +112,7 @@ class Home extends StatelessWidget {
           ),
           Positioned(
             bottom: 20, // 화면 하단과의 간격
-            right: 50, // 화면 오른쪽과의 간격
+            right: 80, // 화면 오른쪽과의 간격
             child: IconButton(
               icon: Image.asset(
                 'asset/image/background.png', // 다른 이미지 파일 경로 설정

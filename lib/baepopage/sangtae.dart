@@ -234,6 +234,16 @@ class _sangtaeState extends State<sangtae> {
                           children: [
                             SizedBox(height: 70),
                             Text(
+                              '현재 서버 : ',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            SizedBox(height: 10),
+                            SizedBox(height: 70),
+                            Text(
                               '서버 상태',
                               style: TextStyle(
                                 color: Colors.white,
@@ -477,7 +487,7 @@ class MyListView extends StatelessWidget {
       shrinkWrap: true, // 리스트뷰가 필요한 공간만 차지하도록 설정
       children: [
         _buildExpansionTile(context, '인스턴스', [
-          '리스트뷰 1 - 아이템 1',
+          '리인스턴스 1 - 서버목록 1',
           '리스트뷰 1 - 아이템 2',
           '리스트뷰 1 - 아이템 3',
           '리스트뷰 1 - 아이템 4',

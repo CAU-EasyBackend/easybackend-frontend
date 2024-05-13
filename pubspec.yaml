@@ -42,10 +42,12 @@ dependencies:
   flutter_treeview: ^1.0.7+1
   flutter_simple_treeview: ^3.0.1
   http: ^0.13.3
+  shared_preferences: ^2.0.0
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
+
 
 
   # The "flutter_lints" package below contains a set of recommended lints to
@@ -77,6 +79,7 @@ flutter:
     - asset/image/idea.png
     - asset/image/login.png
     - asset/image/background.png
+    - asset/image/github1.png
 
 
 
