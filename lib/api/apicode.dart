@@ -1,33 +1,38 @@
+import 'dart:typed_data'; // Import the dart:typed_data library for Uint8List
+import 'package:easyback/baepopage/sangtae.dart';
 import 'package:flutter/material.dart';
-import '../api/apicode.dart';
-import '../api/apidetails.dart';
-import 'Deployment.dart';
+import 'package:file_picker/file_picker.dart'; // file_picker 라이브러리 추가
+import '../mainpage/ApiPage.dart';
 import '../loginpage.dart';
+import '../mainpage/Deployment.dart';
+import 'package:http/http.dart' as http; // http 패키지 추가
+import 'dart:convert';
+
+import 'apidetails.dart'; // JSON 디코딩을 위한 패키지 추가
 
 
-class ApiPage extends StatefulWidget {
-  const ApiPage({Key? key}) : super(key: key);
+class apicode extends StatefulWidget {
+  const apicode({Key? key});
 
   @override
-  State<ApiPage> createState() => _ApiPageState();
+  State<apicode> createState() => _apicodeState();
 }
 
-class _ApiPageState extends State<ApiPage> {
+class _apicodeState extends State<apicode> {
   Color buttonColor1 = Colors.black; // 기본 색상을 검은색으로 설정
   Color buttonColor2 = Colors.black;
-  Color buttonColor3 = Colors.black;
-  String? centerText;
+  Color buttonColor3 = Colors.white12;
 
   @override
   void initState() {
     super.initState();
     setState(() {
-      buttonColor1 = Colors.white12; // 가이드 버튼 색상 변경
-      buttonColor2 = Colors.black; // 다른 버튼 색상 원래대로 설정
-      buttonColor3 = Colors.black;
-      centerText = 'API란 무엇인가?\n룰루랄ㄹ라라ㅏ라 에베베ㅔ\n에베베';
+      buttonColor1 = Colors.black; // 배포 가이드 버튼 색상 변경
+      buttonColor2 = Colors.black; // 파일 업로드 버튼 색상 변경
+      buttonColor3 = Colors.white12; // 상태관리 버튼 색상 변경
     });
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -116,41 +121,24 @@ class _ApiPageState extends State<ApiPage> {
                       height: 50,
                       child: ElevatedButton(
                         onPressed: () {
-                          setState(() {
-                            buttonColor1 = Colors.white12; // 버튼 색상 변경
-                            buttonColor2 = Colors.black; // 다른 버튼 색상 원래대로 설정
-                            buttonColor3 = Colors.black;
-                            centerText = 'API란 무엇인가?\n룰루랄ㄹ라라ㅏ라 에베베ㅔ\n에베베';
-                          });
+                          _handleapipageButton(context);  // 배포 가이드 버튼 클릭 시 이동하는 함수 호출
                         },
                         style: ElevatedButton.styleFrom(
                           foregroundColor: Colors.white, backgroundColor: buttonColor1,
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.zero, // 직각 테두리로 설정
-
                           ),
                         ),
-                        child: Align( // Align 위젯을 추가하여 텍스트를 가운데 정렬합니다.
-                          alignment: Alignment.center,
-                          child: Text(
-                            'API 가이드',
-                            textAlign: TextAlign.center, // 텍스트를 가운데 정렬합니다.
-                          ),
-                        ),
+                        child: Text('API 가이드'),
                       ),
-                      ),
+                    ),
                     SizedBox(height: 0),
-                      SizedBox(
+                    SizedBox(
                       width: double.infinity, // 버튼의 너비를 컨테이너의 너비와 동일하게 설정
                       height: 50,
                       child: ElevatedButton(
                         onPressed: () {
-                          _handleApiDetailsButton(context);
-                          setState(() {
-                            buttonColor1 = Colors.black;
-                            buttonColor2 = Colors.white12;
-                            buttonColor3 = Colors.black;
-                          });
+                          _handleapiguideButton(context); // 배포 가이드 버튼 클릭 시 이동하는 함수 호출
                         },
                         style: ElevatedButton.styleFrom(
                           foregroundColor: Colors.white, backgroundColor: buttonColor2,
@@ -168,12 +156,7 @@ class _ApiPageState extends State<ApiPage> {
                       height: 50,
                       child: ElevatedButton(
                         onPressed: () {
-                          _handleApiCodeButton(context); // _handleapicodeButton 메서드 호출
-                          setState(() {
-                            buttonColor1 = Colors.black;
-                            buttonColor2 = Colors.black;
-                            buttonColor3 = Colors.white12;
-                          });
+                          _handleapicodeButton(context); // 배포 가이드 버튼 클릭 시 이동하는 함수 호출
                         },
                         style: ElevatedButton.styleFrom(
                           foregroundColor: Colors.white, backgroundColor: buttonColor3,
@@ -185,11 +168,11 @@ class _ApiPageState extends State<ApiPage> {
                         child: Text('코드생성'),
                       ),
                     ),
-                    SizedBox(height: 0),
+                    SizedBox(height: 100),
                   ],
                 ),
               ),
-              SizedBox(width: 20),
+              SizedBox(width: 20),//컨테이너 1,2사이 간격
               Expanded(
                 child: Container(
                   height: 500,
@@ -201,54 +184,7 @@ class _ApiPageState extends State<ApiPage> {
                       width: 2,
                     ),
                   ),
-                  child: Center(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        if (centerText != null) // centerText가 null이 아닐 때만 텍스트와 버튼 출력
-                          Column(
-                            children: [
-                              Text(
-                                centerText!,
-                                style: TextStyle(fontSize: 26,
-                                    fontWeight: FontWeight.w100, color: Colors.white),
-                                textAlign: TextAlign.center, // 텍스트 가운데 정렬
-                              ),
 
-                              SizedBox(height: 30),
-                              ElevatedButton(
-                                onPressed: () {
-                                  _handleApiDetailsButton(context);
-                                  setState(() {
-                                    buttonColor1 = Colors.black;
-                                    buttonColor2 = Colors.white12;
-                                    buttonColor3 = Colors.black;
-                                  });
-                                },
-                                style: ElevatedButton.styleFrom(
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(30.0),
-
-                                  ),
-                                ),child: Padding(
-                                padding: EdgeInsets.symmetric(horizontal: 10, vertical: 15), // 좀 더 적절한 값으로 조정하세요
-                                child: Row(
-                                  mainAxisSize: MainAxisSize.min, // 필요한 만큼의 공간만 차지하도록 설정
-                                  children: [
-                                    Text(
-                                      "API명세 바로가기 !!     ",
-                                      style: TextStyle(fontSize: 18, color: Colors.black),
-                                    ),
-                                    Icon(Icons.arrow_forward), // 아이콘
-                                  ],
-                                ),
-                              ),
-                              ),
-                            ],
-                          ),
-                      ],
-                    ),
-                  ),
                 ),
               ),
             ],
@@ -259,8 +195,7 @@ class _ApiPageState extends State<ApiPage> {
   }
 
 
-
-
+  // API 버튼 처리
   void _handleAPIButton(BuildContext context) {
     Navigator.push(
       context,
@@ -268,6 +203,14 @@ class _ApiPageState extends State<ApiPage> {
     );
   }
 
+  void _handleapiguideButton(BuildContext context) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => apidetails()),
+    );
+  }
+
+  // Deployment 버튼 처리
   void _handleDeploymentButton(BuildContext context) {
     Navigator.push(
       context,
@@ -275,6 +218,7 @@ class _ApiPageState extends State<ApiPage> {
     );
   }
 
+  // 로그인 페이지 버튼 처리
   void _handleLoginPageButton(BuildContext context) {
     Navigator.push(
       context,
@@ -282,21 +226,23 @@ class _ApiPageState extends State<ApiPage> {
     );
   }
 
+  // 이미지 버튼 처리
   void _handleImagePressed(BuildContext context) {
     Navigator.popUntil(context, ModalRoute.withName('/'));
   }
+}
 
-  void _handleApiCodeButton(BuildContext context) { // _handleapicodeButton 메서드 추가
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => apicode()), // 적절한 페이지로 이동
-    );
-  }
 
-  void _handleApiDetailsButton(BuildContext context) { // _handleapidetailsButton 메서드 추가
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => apidetails()), // 적절한 페이지로 이동
-    );
-  }
+void  _handleapipageButton(context) {
+  Navigator.push(
+    context,
+    MaterialPageRoute(builder: (context) => ApiPage()), // sangtae 페이지로 이동
+  );
+}
+
+void _handleapicodeButton(BuildContext context) { // _handleapicodeButton 메서드 추가
+  Navigator.push(
+    context,
+    MaterialPageRoute(builder: (context) => apicode()), // 적절한 페이지로 이동
+  );
 }

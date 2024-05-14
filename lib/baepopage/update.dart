@@ -9,14 +9,14 @@ import 'package:http/http.dart' as http; // http 패키지 추가
 import 'dart:convert'; // JSON 디코딩을 위한 패키지 추가
 
 
-class baepo extends StatefulWidget {
-  const baepo({Key? key});
+class update extends StatefulWidget {
+  const update({Key? key});
 
   @override
-  State<baepo> createState() => _baepoState();
+  State<update> createState() => _updateState();
 }
 
-class _baepoState extends State<baepo> {
+class _updateState extends State<update> {
   Color buttonColor1 = Colors.black; // 기본 색상을 검은색으로 설정
   Color buttonColor2 = Colors.black;
   Color buttonColor3 = Colors.black;
@@ -143,9 +143,9 @@ class _baepoState extends State<baepo> {
                       width: double.infinity, // 버튼의 너비를 컨테이너의 너비와 동일하게 설정
                       height: 50,
                       child: ElevatedButton(
-                          onPressed: () {
-                            _handleDeploymentGuideButton(context); // 배포 가이드 버튼 클릭 시 이동하는 함수 호출
-                          },
+                        onPressed: () {
+                          _handleDeploymentGuideButton(context); // 배포 가이드 버튼 클릭 시 이동하는 함수 호출
+                        },
                         style: ElevatedButton.styleFrom(
                           foregroundColor: Colors.white, backgroundColor: buttonColor2,
                           shape: RoundedRectangleBorder(
@@ -161,9 +161,9 @@ class _baepoState extends State<baepo> {
                       width: double.infinity, // 버튼의 너비를 컨테이너의 너비와 동일하게 설정
                       height: 50,
                       child: ElevatedButton(
-                          onPressed: () {
-                            _handlesangtaeButton(context); // 배포 가이드 버튼 클릭 시 이동하는 함수 호출
-                          },
+                        onPressed: () {
+                          _handlesangtaeButton(context); // 배포 가이드 버튼 클릭 시 이동하는 함수 호출
+                        },
                         style: ElevatedButton.styleFrom(
                           foregroundColor: Colors.white, backgroundColor: buttonColor3,
                           shape: RoundedRectangleBorder(
@@ -197,7 +197,7 @@ class _baepoState extends State<baepo> {
                     children: [
                       SizedBox(height: 50),
                       Text(
-                        '파일 업로드 방식을 선택해주세요.',
+                        '업데이트 할 파일을 업로드해주세요.',
                         style: TextStyle(
                           color: Colors.white,
                           fontSize: 20,
@@ -252,101 +252,30 @@ class _baepoState extends State<baepo> {
                           SizedBox(width: 200),
                         ],
                       ),
-                      SizedBox(height: 40), // 파일 업로드와 워크 플로루 선택 사이 여백
-                      Text(
-                        '코드 생성을 위한 프레임 워크를 선택해주세요.',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 20,
-                          fontWeight: FontWeight.normal,
-                        ),
-                      ),
-                      SizedBox(height: 10), // 텍스트와 체크박스 사이 여백
+
+                      SizedBox(height: 20), // 체크박스와 배포하기 버튼 사이 여백
+
                       Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          SizedBox(width: 550),
-                          Theme(
-                            data: ThemeData(
-                              unselectedWidgetColor: Colors.white, // 선택되지 않은 상태일 때 체크박스의 색상 설정
-                            ),
-                            child: Checkbox(
-                              value: checkBox1,
-                              onChanged: (bool? value) {
-                                setState(() {
-                                  checkBox1 = value!;
-                                  if (checkBox1) checkBox2 = false;
-                                });
-                              },
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(30), // 동글게 만들기 위해 경계를 둥글게 설정
+                          ElevatedButton(
+                            onPressed: () {
+                              // 업데이트 버튼 클릭 시 동작
+                            },
+                            child: Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 10, vertical: 15), // 여백 조정
+                              child: Text(
+                                "업데이트하기",
+                                style: TextStyle(fontSize: 18, color: Colors.black),
                               ),
-                              checkColor: Colors.white, // 체크 표시의 색상 설정
-                              fillColor: MaterialStateColor.resolveWith((states) {
-                                if (states.contains(MaterialState.selected)) { // 클릭 시의 상태 체크
-                                  return Colors.grey; // 클릭 시의 배경색 설정
-                                }
-                                return Colors.transparent; // 일반 상태의 배경색 설정
-                              }),
-                            ),
-                          ),
-                          Text(
-                            'java spring',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 16,
-                            ),
-                          ),
-                          SizedBox(width: 20), // 체크박스 사이 간격
-                          Theme(
-                            data: ThemeData(
-                              unselectedWidgetColor: Colors.white, // 선택되지 않은 상태일 때 체크박스의 색상 설정
-                            ),
-                            child: Checkbox(
-                              value: checkBox2,
-                              onChanged: (bool? value) {
-                                setState(() {
-                                  checkBox2 = value!;
-                                  if (checkBox2) checkBox1 = false;
-                                });
-                              },
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(30), // 동글게 만들기 위해 경계를 둥글게 설정
-                              ),
-                              checkColor: Colors.white, // 체크 표시의 색상 설정
-                              fillColor: MaterialStateColor.resolveWith((states) {
-                                if (states.contains(MaterialState.selected)) { // 클릭 시의 상태 체크
-                                  return Colors.grey; // 클릭 시의 배경색 설정
-                                }
-                                return Colors.transparent; // 일반 상태의 배경색 설정
-                              }),
-                            ),
-                          ),
-                          Text(
-                            'js express',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 16,
                             ),
                           ),
                         ],
                       ),
-                      SizedBox(height: 20), // 체크박스와 배포하기 버튼 사이 여백
-                      ElevatedButton( // 배포하기 버튼
-                        onPressed: () {
-                          // 배포하기 버튼 클릭 시 수행할 작업 추가
-                        },
-                        child: Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 10, vertical: 15), // 여백 조정
-                          child: Text(
-                            "배포하기",
-                            style: TextStyle(fontSize: 18, color: Colors.black),
-                          ),
-                        ),
-                      ),
 
                     ],
                   ),
-                ),
+              ),
               ),
             ],
           ),

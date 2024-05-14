@@ -195,7 +195,7 @@ class _SecondPageState extends State<loginpage> {
                     vertical: 10.0,
                   ),
                   child: Text('Login', style: TextStyle(
-                    color: Colors.black,
+                    color: Colors.black ,
 
                   ),
                   ),

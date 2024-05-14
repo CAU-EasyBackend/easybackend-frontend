@@ -3,6 +3,8 @@ import '../loginpage.dart';
 import '../mainpage/ApiPage.dart';
 import '../mainpage/Deployment.dart';
 import 'baepo.dart';
+import 'update.dart';
+
 
 bool serverOn = false;
 bool serverOff = false;
@@ -331,6 +333,7 @@ class _sangtaeState extends State<sangtae> {
                                     setState(() {
                                       isUpdated = true; // 업데이트 버튼을 눌렀을 때 isUpdated 변수를 true로 설정
                                     });
+                                    _handleupdateButton(context);
                                     // 업데이트 버튼에 대한 작업 수행
                                   },
                                   child: Text(
@@ -344,6 +347,7 @@ class _sangtaeState extends State<sangtae> {
                                     side: BorderSide(color: isUpdated ? Colors.yellow : Colors.grey, width: 2), // 업데이트 여부에 따라 테두리 색상 변경
                                   ),
                                 ),
+
                                 Row(
                                   children: [
                                     SizedBox(width: 50),
@@ -403,6 +407,14 @@ class _sangtaeState extends State<sangtae> {
       MaterialPageRoute(builder: (context) => ApiPage()),
     );
   }
+
+  void _handleupdateButton(BuildContext context) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => update()), // Navigate to UpdatePage
+    );
+  }
+
 
   void _handleDeploymentButton(BuildContext context) {
     Navigator.push(
