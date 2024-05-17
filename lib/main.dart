@@ -1,10 +1,14 @@
-import 'package:easyback/services/api_auths.dart';
+import 'package:easyback/services/APIAuths.dart';
+import 'package:easyback/services/APIDeployInfos.dart';
+import 'package:easyback/services/APITests.dart';
 import 'package:flutter/material.dart';
 import 'mainpage/ApiPage.dart';
 import 'mainpage/Deployment.dart';
 import 'loginpage.dart';
 import 'package:http/http.dart';
 import 'dart:html' as html;
+
+import 'models/Instance.dart';
 
 
 void main() {
@@ -71,7 +75,7 @@ class Home extends StatelessWidget {
           actions: [
             IconButton(
               icon: Icon(Icons.person,color: Colors.white,),
-              onPressed: () {
+              onPressed: () async {
                 _handleloginpageButton(context);
                 // Login icon pressed
               },
