@@ -240,6 +240,7 @@ class _baepoState extends State<baepo> {
 
                                 IconButton(
                                   onPressed: () {
+                                    getFileFromGitHub(userInput);
                                     // 화살표 아이콘을 클릭한 경우 발생할 이벤트 추가
                                     // 예를 들어, 다음 단계로 넘어가는 로직을 추가할 수 있습니다.
                                   },
