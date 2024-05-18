@@ -1,14 +1,22 @@
+import 'package:easyback/services/APIAuths.dart';
+import 'package:easyback/services/APIDeployInfos.dart';
+import 'package:easyback/services/APITests.dart';
 import 'package:flutter/material.dart';
 import 'mainpage/ApiPage.dart';
 import 'mainpage/Deployment.dart';
 import 'loginpage.dart';
 import 'package:http/http.dart';
+import 'dart:html' as html;
+
+import 'models/Instance.dart';
 
 
-void main() => runApp(MaterialApp(
-  home: Home(),
-  debugShowCheckedModeBanner: false, // 디버그 라벨 제거
-));
+void main() {
+  runApp(MaterialApp(
+    home: Home(),
+    debugShowCheckedModeBanner: false, // 디버그 라벨 제거
+  ));
+}
 
 class Home extends StatelessWidget {
   @override
@@ -67,7 +75,7 @@ class Home extends StatelessWidget {
           actions: [
             IconButton(
               icon: Icon(Icons.person,color: Colors.white,),
-              onPressed: () {
+              onPressed: () async {
                 _handleloginpageButton(context);
                 // Login icon pressed
               },
@@ -92,7 +100,8 @@ class Home extends StatelessWidget {
                 SizedBox(height: 20),
                 ElevatedButton(
                   onPressed: () {
-                    _handleloginpageButton(context);
+                    APIAuths.getLogin();
+                    //_handleloginpageButton(context);
                     // "Let's start easybackend" button pressed
                   },
                   style: ElevatedButton.styleFrom(
