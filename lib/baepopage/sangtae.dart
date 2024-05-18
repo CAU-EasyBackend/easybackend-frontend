@@ -2,14 +2,15 @@ import 'package:flutter/material.dart';
 import '../loginpage.dart';
 import '../mainpage/ApiPage.dart';
 import '../mainpage/Deployment.dart';
+import '../services/APIDeployInfos.dart';
 import 'baepo.dart';
 import 'update.dart';
-
+import '../models/Instance.dart'; // Instance 모델 임포트
 
 bool serverOn = false;
 bool serverOff = false;
 bool isUpdated = false;
-
+List<Instance> deployInfoList = []; // 배포 정보를 저장할 리스트 추가
 
 class sangtae extends StatefulWidget {
   const sangtae({Key? key}) : super(key: key);
@@ -19,9 +20,9 @@ class sangtae extends StatefulWidget {
 }
 
 class _sangtaeState extends State<sangtae> {
-  Color buttonColor1 = Colors.black; // 배포 가이드 버튼의 색상
-  Color buttonColor2 = Colors.black; // 파일 업로드 버튼의 색상
-  Color buttonColor3 = Colors.white12; // 상태관리 버튼의 색상
+  Color buttonColor1 = Colors.black;
+  Color buttonColor2 = Colors.black;
+  Color buttonColor3 = Colors.white12;
 
   bool listView1Expanded = false;
   bool listView2Expanded = false;
@@ -30,11 +31,23 @@ class _sangtaeState extends State<sangtae> {
   @override
   void initState() {
     super.initState();
+    _fetchDeployInfos(); // 배포 정보 가져오기
     setState(() {
-      buttonColor1 = Colors.black; // 배포 가이드 버튼 색상 변경
-      buttonColor2 = Colors.black; // 파일 업로드 버튼 색상 변경
-      buttonColor3 = Colors.white12; // 상태관리 버튼 색상 변경
+      buttonColor1 = Colors.black;
+      buttonColor2 = Colors.black;
+      buttonColor3 = Colors.white12;
     });
+  }
+
+  void _fetchDeployInfos() async {
+    try {
+      List<Instance> infos = await APIDeployInfos.getDeployInfos();
+      setState(() {
+        deployInfoList = infos;
+      });
+    } catch (e) {
+      print('Failed to fetch deploy infos: $e');
+    }
   }
 
   @override
@@ -101,40 +114,39 @@ class _sangtaeState extends State<sangtae> {
         ),
       ),
       body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start, // 왼쪽 정렬
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           SizedBox(height: 50),
           Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly, // 가로로 동일한 간격으로 배치
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               Container(
-                width: 200, // 첫 번째 컨테이너의 너비를 설정
+                width: 200,
                 height: 500,
                 decoration: BoxDecoration(
-                  color: Colors.black, // 배경색을 검정으로 설정
-                  borderRadius: BorderRadius.circular(10), // 테두리의 모서리를 둥글게 설정
+                  color: Colors.black,
+                  borderRadius: BorderRadius.circular(10),
                   border: Border.all(
                     color: Colors.white,
                     width: 2,
-                  ), // 테두리를 흰색으로 설정
+                  ),
                 ),
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start, // 왼쪽 정렬
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     SizedBox(height: 2),
                     SizedBox(
-                      width: double.infinity, // 버튼의 너비를 컨테이너의 너비와 동일하게 설정
+                      width: double.infinity,
                       height: 50,
                       child: ElevatedButton(
                         onPressed: () {
-                          _handleDeploymentGuideButton(
-                              context); // 배포 가이드 버튼 클릭 시 이동하는 함수 호출
+                          _handleDeploymentGuideButton(context);
                         },
                         style: ElevatedButton.styleFrom(
                           foregroundColor: Colors.white,
                           backgroundColor: buttonColor1,
                           shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.zero, // 직각 테두리로 설정
+                            borderRadius: BorderRadius.zero,
                           ),
                         ),
                         child: Text('배포 가이드'),
@@ -142,12 +154,11 @@ class _sangtaeState extends State<sangtae> {
                     ),
                     SizedBox(height: 0),
                     SizedBox(
-                      width: double.infinity, // 버튼의 너비를 컨테이너의 너비와 동일하게 설정
+                      width: double.infinity,
                       height: 50,
                       child: ElevatedButton(
                         onPressed: () {
-                          _handlebaepoGuideButton(
-                              context); // 파일 업로드 버튼 클릭 시 이동하는 함수 호출
+                          _handlebaepoGuideButton(context);
                         },
                         style: ElevatedButton.styleFrom(
                           foregroundColor: Colors.white,
@@ -162,11 +173,11 @@ class _sangtaeState extends State<sangtae> {
                     ),
                     SizedBox(height: 0),
                     SizedBox(
-                      width: double.infinity, // 버튼의 너비를 컨테이너의 너비와 동일하게 설정
+                      width: double.infinity,
                       height: 50,
                       child: ElevatedButton(
                         onPressed: () {
-                               // 파일 업로드 버튼 클릭 시 이동하는 함수 호출
+                          // Some action
                         },
                         style: ElevatedButton.styleFrom(
                           foregroundColor: Colors.white,
@@ -186,11 +197,11 @@ class _sangtaeState extends State<sangtae> {
               SizedBox(width: 20),
               Expanded(
                 child: Padding(
-                  padding: EdgeInsets.only(right: 20), // 리스트뷰 오른쪽에 여백 추가
+                  padding: EdgeInsets.only(right: 20),
                   child: Row(
                     children: [
                       Expanded(
-                        child: Container( //두번째 컨테이너
+                        child: Container(
                           decoration: BoxDecoration(
                             color: Colors.black,
                             borderRadius: BorderRadius.circular(10),
@@ -201,30 +212,26 @@ class _sangtaeState extends State<sangtae> {
                           ),
                           child: SizedBox(
                             height: 500,
-                            child: MyListView(handlePopup: _handlePopup), // Pass the handlePopup function
+                            child: MyListView(handlePopup: _handlePopup),
                           ),
                         ),
-
                       ),
-
                       SizedBox(width: 0),
                     ],
                   ),
                 ),
               ),
-              Container(    // 제일 오른쪽 컨테이너
+              Container(
                 width: 900,
                 height: 500,
                 decoration: BoxDecoration(
-                  color: Colors.black, // 배경색을 검정으로 설정
-                  borderRadius: BorderRadius.circular(10), // 테두리의 모서리를 둥글게 설정
+                  color: Colors.black,
+                  borderRadius: BorderRadius.circular(10),
                   border: Border.all(
                     color: Colors.white,
                     width: 2,
-                  ), // 테두리를 흰색으로 설정
+                  ),
                 ),
-
-
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
@@ -259,7 +266,7 @@ class _sangtaeState extends State<sangtae> {
                                 SizedBox(width: 50),
                                 TextButton(
                                   onPressed: () {
-                                    // 버튼 동작 추가
+                                    // Some action
                                   },
                                   child: Text(
                                     '작동중',
@@ -269,13 +276,13 @@ class _sangtaeState extends State<sangtae> {
                                     ),
                                   ),
                                   style: TextButton.styleFrom(
-                                    side: BorderSide(color: Colors.grey, width: 2), // 테두리 색상과 너비 설정
+                                    side: BorderSide(color: Colors.grey, width: 2),
                                   ),
                                 ),
                                 SizedBox(width: 10),
                                 TextButton(
                                   onPressed: () {
-                                    // 버튼 동작 추가
+                                    // Some action
                                   },
                                   child: Text(
                                     '정지 상태',
@@ -285,7 +292,7 @@ class _sangtaeState extends State<sangtae> {
                                     ),
                                   ),
                                   style: TextButton.styleFrom(
-                                    side: BorderSide(color: Colors.grey, width: 2), // 테두리 색상과 너비 설정
+                                    side: BorderSide(color: Colors.grey, width: 2),
                                   ),
                                 ),
                                 SizedBox(width: 50),
@@ -295,12 +302,11 @@ class _sangtaeState extends State<sangtae> {
                                       serverOn = true;
                                       serverOff = false;
                                     });
-                                    // 서버 On에 대한 작업 수행
                                   },
                                   child: Text(
                                     '서버 on',
                                     style: TextStyle(
-                                      color: serverOn ? Colors.green : Colors.white, // 활성화된 경우 초록색, 비활성화된 경우 흰색
+                                      color: serverOn ? Colors.green : Colors.white,
                                       fontSize: 16,
                                     ),
                                   ),
@@ -314,12 +320,11 @@ class _sangtaeState extends State<sangtae> {
                                       serverOn = false;
                                       serverOff = true;
                                     });
-                                    // 서버 Off에 대한 작업 수행
                                   },
                                   child: Text(
                                     '서버 off',
                                     style: TextStyle(
-                                      color: serverOff ? Colors.red : Colors.white, // 활성화된 경우 빨간색, 비활성화된 경우 흰색
+                                      color: serverOff ? Colors.red : Colors.white,
                                       fontSize: 16,
                                     ),
                                   ),
@@ -331,31 +336,28 @@ class _sangtaeState extends State<sangtae> {
                                 TextButton(
                                   onPressed: () {
                                     setState(() {
-                                      isUpdated = true; // 업데이트 버튼을 눌렀을 때 isUpdated 변수를 true로 설정
+                                      isUpdated = true;
                                     });
                                     _handleupdateButton(context);
-                                    // 업데이트 버튼에 대한 작업 수행
                                   },
                                   child: Text(
                                     '업데이트',
                                     style: TextStyle(
-                                      color: isUpdated ? Colors.yellow : Colors.white, // 업데이트 여부에 따라 텍스트 색상 변경
+                                      color: isUpdated ? Colors.yellow : Colors.white,
                                       fontSize: 16,
                                     ),
                                   ),
                                   style: TextButton.styleFrom(
-                                    side: BorderSide(color: isUpdated ? Colors.yellow : Colors.grey, width: 2), // 업데이트 여부에 따라 테두리 색상 변경
+                                    side: BorderSide(color: isUpdated ? Colors.yellow : Colors.grey, width: 2),
                                   ),
                                 ),
-
                                 Row(
                                   children: [
                                     SizedBox(width: 50),
                                     TextButton.icon(
                                       onPressed: () {
-                                        // 버튼 동작 추가
-                               },
-
+                                        // Some action
+                                      },
                                       label: Text(
                                         '서버 삭제',
                                         style: TextStyle(
@@ -370,12 +372,11 @@ class _sangtaeState extends State<sangtae> {
                                     ),
                                   ],
                                 ),
-
-                              ]
-                    ),
+                              ],
+                            ),
                             SizedBox(height: 10),
                             Text(
-                              '로그', // 추가된 텍스트
+                              '로그',
                               style: TextStyle(
                                 color: Colors.white,
                                 fontSize: 18,
@@ -386,14 +387,9 @@ class _sangtaeState extends State<sangtae> {
                         ),
                       ),
                     ),
-
-
                   ],
                 ),
-
-
-              )
-
+              ),
             ],
           ),
         ],
@@ -411,10 +407,9 @@ class _sangtaeState extends State<sangtae> {
   void _handleupdateButton(BuildContext context) {
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => update()), // Navigate to UpdatePage
+      MaterialPageRoute(builder: (context) => update()),
     );
   }
-
 
   void _handleDeploymentButton(BuildContext context) {
     Navigator.push(
@@ -440,21 +435,21 @@ class _sangtaeState extends State<sangtae> {
       builder: (BuildContext context) {
         return AlertDialog(
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(8.0), // 팝업창 모서리를 덜 둥글게 설정
+            borderRadius: BorderRadius.circular(8.0),
           ),
-          backgroundColor: Colors.grey[200], // 팝업창 배경색을 회색으로 설정
+          backgroundColor: Colors.grey[200],
           title: Text(
             '현재 서버의 상태:',
             style: TextStyle(
-              color: Colors.black, // 텍스트 색상을 검정색으로 설정
-              fontSize: 15, // 텍스트 크기를 16로 설정
-              fontWeight: FontWeight.normal, // 텍스트를 굵게 설정
+              color: Colors.black,
+              fontSize: 15,
+              fontWeight: FontWeight.normal,
             ),
           ),
           actions: <Widget>[
             TextButton(
               onPressed: () {
-                Navigator.of(context).pop(); // 팝업 닫기
+                Navigator.of(context).pop();
               },
               child:Text(
                 '확인',
@@ -472,18 +467,16 @@ class _sangtaeState extends State<sangtae> {
   }
 
   void _handleDeploymentGuideButton(BuildContext context) {
-    // Deployment 페이지로 이동
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => Deployment()), // Deployment 페이지로 이동
+      MaterialPageRoute(builder: (context) => Deployment()),
     );
   }
 
   void _handlebaepoGuideButton(BuildContext context) {
-    // Deployment 페이지로 이동
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => baepo()), // Deployment 페이지로 이동
+      MaterialPageRoute(builder: (context) => Baepo()),
     );
   }
 }
@@ -496,7 +489,7 @@ class MyListView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListView(
-      shrinkWrap: true, // 리스트뷰가 필요한 공간만 차지하도록 설정
+      shrinkWrap: true,
       children: [
         _buildExpansionTile(context, '인스턴스', [
           '리인스턴스 1 - 서버목록 1',
@@ -530,15 +523,15 @@ class MyListView extends StatelessWidget {
           ),
         ],
       ),
-      tilePadding: EdgeInsets.symmetric(horizontal: 16), // 화살표를 텍스트 왼쪽에 배치
+      tilePadding: EdgeInsets.symmetric(horizontal: 16),
       children: items.map((item) {
         return ListTile(
           title: Text(
             item,
-            style: TextStyle(color: Colors.white, fontSize: 12), // 텍스트 크기 조정
+            style: TextStyle(color: Colors.white, fontSize: 12),
           ),
           onTap: () {
-            // handlePopup(context); // 리스트뷰 아이템 클릭 시 팝업 열기,일단 보류
+            // handlePopup(context);
           },
         );
       }).toList(),
