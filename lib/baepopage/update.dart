@@ -422,6 +422,6 @@ void _handleDeploymentGuideButton(BuildContext context) {
 void _handlesangtaeButton(BuildContext context) {
   Navigator.push(
     context,
-    MaterialPageRoute(builder: (context) => sangtae()), // sangtae 페이지로 이동
+    MaterialPageRoute(builder: (context) => Sangtae()), // sangtae 페이지로 이동
   );
 }

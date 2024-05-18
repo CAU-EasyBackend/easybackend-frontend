@@ -5,21 +5,21 @@ import '../mainpage/Deployment.dart';
 import '../services/APIDeployInfos.dart';
 import 'baepo.dart';
 import 'update.dart';
-import '../models/Instance.dart'; // Instance 모델 임포트
+import '../models/Instance.dart';
 
 bool serverOn = false;
 bool serverOff = false;
 bool isUpdated = false;
-List<Instance> deployInfoList = []; // 배포 정보를 저장할 리스트 추가
+List<Instance> deployInfoList = [];
 
-class sangtae extends StatefulWidget {
-  const sangtae({Key? key}) : super(key: key);
+class Sangtae extends StatefulWidget {
+  const Sangtae({Key? key}) : super(key: key);
 
   @override
-  State<sangtae> createState() => _sangtaeState();
+  State<Sangtae> createState() => _SangtaeState();
 }
 
-class _sangtaeState extends State<sangtae> {
+class _SangtaeState extends State<Sangtae> {
   Color buttonColor1 = Colors.black;
   Color buttonColor2 = Colors.black;
   Color buttonColor3 = Colors.white12;
@@ -31,7 +31,7 @@ class _sangtaeState extends State<sangtae> {
   @override
   void initState() {
     super.initState();
-    _fetchDeployInfos(); // 배포 정보 가져오기
+    _fetchDeployInfos();
     setState(() {
       buttonColor1 = Colors.black;
       buttonColor2 = Colors.black;
@@ -41,7 +41,7 @@ class _sangtaeState extends State<sangtae> {
 
   void _fetchDeployInfos() async {
     try {
-      List<Instance> infos = await APIDeployInfos.getDeployInfos();
+      List<Instance> infos = await APIDeployInfos.testGetDeployInfos();
       setState(() {
         deployInfoList = infos;
       });
@@ -492,7 +492,7 @@ class MyListView extends StatelessWidget {
       shrinkWrap: true,
       children: [
         _buildExpansionTile(context, '인스턴스', [
-          '리인스턴스 1 - 서버목록 1',
+          '인스턴스 1 - 서버목록 1',
           '리스트뷰 1 - 아이템 2',
           '리스트뷰 1 - 아이템 3',
           '리스트뷰 1 - 아이템 4',
@@ -509,7 +509,8 @@ class MyListView extends StatelessWidget {
     );
   }
 
-  ExpansionTile _buildExpansionTile(BuildContext context, String title, List<String> items) {
+  ExpansionTile _buildExpansionTile(BuildContext context, String title,
+      List<String> items) {
     return ExpansionTile(
       title: Row(
         children: [
@@ -531,7 +532,7 @@ class MyListView extends StatelessWidget {
             style: TextStyle(color: Colors.white, fontSize: 12),
           ),
           onTap: () {
-            // handlePopup(context);
+            handlePopup(context);
           },
         );
       }).toList(),

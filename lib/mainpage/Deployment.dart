@@ -279,7 +279,7 @@ class _DeploymentState extends State<Deployment> {
   void _handlesangtaeButton(BuildContext context) {
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => sangtae()),
+      MaterialPageRoute(builder: (context) => Sangtae()),
     );
   }
 

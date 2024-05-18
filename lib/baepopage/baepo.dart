@@ -498,7 +498,7 @@ class _BaepoState extends State<Baepo> {
   void _handleSangtaeButton(BuildContext context) {
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => sangtae()),
+      MaterialPageRoute(builder: (context) => Sangtae()),
     );
   }
 }
