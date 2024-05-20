@@ -15,7 +15,7 @@ class Instance {
     required this.instanceName,
     required this.instanceNumber,
     required this.status,
-    this.IP,
+    required this.IP,
     required this.servers,
     required this.name,
     required this.description,

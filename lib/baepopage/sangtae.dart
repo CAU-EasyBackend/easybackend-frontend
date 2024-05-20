@@ -24,24 +24,17 @@ class _SangtaeState extends State<Sangtae> {
   Color buttonColor2 = Colors.black;
   Color buttonColor3 = Colors.white12;
 
-  bool listView1Expanded = false;
-  bool listView2Expanded = false;
-  bool listView3Expanded = false;
+  List<Instance> deployInfoList = [];
 
   @override
   void initState() {
     super.initState();
     _fetchDeployInfos();
-    setState(() {
-      buttonColor1 = Colors.black;
-      buttonColor2 = Colors.black;
-      buttonColor3 = Colors.white12;
-    });
   }
 
-  void _fetchDeployInfos() async {
+  Future<void> _fetchDeployInfos() async {
     try {
-      List<Instance> infos = await APIDeployInfos.testGetDeployInfos();
+      List<Instance> infos = await APIDeployInfos.fetchDeployInfos();
       setState(() {
         deployInfoList = infos;
       });
@@ -158,7 +151,7 @@ class _SangtaeState extends State<Sangtae> {
                       height: 50,
                       child: ElevatedButton(
                         onPressed: () {
-                          _handlebaepoGuideButton(context);
+                          _handleBaepoGuideButton(context);
                         },
                         style: ElevatedButton.styleFrom(
                           foregroundColor: Colors.white,
@@ -212,12 +205,15 @@ class _SangtaeState extends State<Sangtae> {
                           ),
                           child: SizedBox(
                             height: 500,
-                            child: MyListView(handlePopup: _handlePopup),
+                             child: MyListView(
+                        deployInfoList: deployInfoList,
+                        handlePopup: _handlePopup
                           ),
+
                         ),
                       ),
-                      SizedBox(width: 0),
-                    ],
+                      ),
+                ],
                   ),
                 ),
               ),
@@ -338,7 +334,7 @@ class _SangtaeState extends State<Sangtae> {
                                     setState(() {
                                       isUpdated = true;
                                     });
-                                    _handleupdateButton(context);
+                                    _handleUpdateButton(context);
                                   },
                                   child: Text(
                                     '업데이트',
@@ -397,6 +393,10 @@ class _SangtaeState extends State<Sangtae> {
     );
   }
 
+// 나머지 코드는 동일합니다.
+}
+
+
   void _handleAPIButton(BuildContext context) {
     Navigator.push(
       context,
@@ -404,7 +404,7 @@ class _SangtaeState extends State<Sangtae> {
     );
   }
 
-  void _handleupdateButton(BuildContext context) {
+  void _handleUpdateButton(BuildContext context) {
     Navigator.push(
       context,
       MaterialPageRoute(builder: (context) => update()),
@@ -473,18 +473,22 @@ class _SangtaeState extends State<Sangtae> {
     );
   }
 
-  void _handlebaepoGuideButton(BuildContext context) {
+  void _handleBaepoGuideButton(BuildContext context) {
     Navigator.push(
       context,
       MaterialPageRoute(builder: (context) => Baepo()),
     );
   }
-}
+
 
 class MyListView extends StatelessWidget {
   final Function(BuildContext) handlePopup;
+  final List<Instance> deployInfoList;
 
-  MyListView({required this.handlePopup});
+  MyListView({
+    required this.deployInfoList,
+    required this.handlePopup
+  });
 
   @override
   Widget build(BuildContext context) {
