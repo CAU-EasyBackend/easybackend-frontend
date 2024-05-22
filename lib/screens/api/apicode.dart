@@ -6,7 +6,7 @@ import '../baepopage/Deployment.dart';
 import 'apidetails.dart';
 
 class apicode extends StatefulWidget {
-  const apicode({Key? key});
+  const apicode({Key? key}) : super(key: key);
 
   @override
   State<apicode> createState() => _apicodeState();
@@ -15,7 +15,10 @@ class apicode extends StatefulWidget {
 class _apicodeState extends State<apicode> {
   Color buttonColor1 = Colors.black;
   Color buttonColor2 = Colors.black;
-  Color buttonColor3 = Colors.white12;
+  Color buttonColor3 = Colors.white38;
+  Color buttonColor4 = Colors.black;
+  Color buttonColor5 = Colors.black;
+  Color buttonColor6 = Colors.black;
   String? centerText;
   String showFileName = "";
   String userInput = "";
@@ -28,6 +31,9 @@ class _apicodeState extends State<apicode> {
   bool fileUploadEnabled = true;
   bool textFieldEnabled = true;
   String fileContent = "";
+
+
+  List<bool> selectedProjects = [false, false, false];
 
   @override
   void initState() {
@@ -46,6 +52,26 @@ class _apicodeState extends State<apicode> {
       }
     });
   }
+  void _handleProjectTap(int index) {
+    setState(() {
+      for (int i = 0; i < selectedProjects.length; i++) {
+        if (i == index) {
+          selectedProjects[i] = true;
+        } else {
+          selectedProjects[i] = false;
+        }
+      }
+      buttonColor4 = getButtonColor(0);
+      buttonColor5 = getButtonColor(1);
+      buttonColor6 = getButtonColor(2);
+
+    });
+  }
+
+  Color getButtonColor(int index) {
+    return selectedProjects[index] ? Colors.white38 : Colors.black;
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -142,61 +168,67 @@ class _apicodeState extends State<apicode> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Expanded(
-                      child: ListView(
-                        children: [
-                          ExpansionTile(
-                            leading: Icon(Icons.arrow_right, color: Colors.white), // 화살표 아이콘 추가
-                            title: Text(
-                              '프로젝트1',
-                              style: TextStyle(color: Colors.white, fontSize: 16),
-                            ),
-                            children: [
-                              ListTile(
-                                title: Text(
-                                  '룰루1',
-                                  style: TextStyle(color: Colors.white, fontSize: 12),
-                                ),
-                                onTap: () {},
-                              ),
-                              ListTile(
-                                title: Text(
-                                  '룰루2',
-                                  style: TextStyle(color: Colors.white, fontSize: 12),
-                                ),
-                                onTap: () {},
-                              ),
-                            ],
+                    SizedBox(height: 2),
+                    SizedBox(
+                      width: double.infinity,
+                      height: 50,
+                      child: ElevatedButton(
+                        onPressed: () {
+                          _handleProjectTap(0);
+                        },
+                        style: ElevatedButton.styleFrom(
+                          foregroundColor: Colors.white,
+                          backgroundColor: buttonColor4,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.zero,
                           ),
-                          ExpansionTile(
-                            leading: Icon(Icons.arrow_right, color: Colors.white), // 화살표 아이콘 추가
-                            title: Text(
-                              '프로젝트2',
-                              style: TextStyle(color: Colors.white, fontSize: 16),
-                            ),
-                            children: [
-                              ListTile(
-                                title: Text(
-                                  '룰루1',
-                                  style: TextStyle(color: Colors.white, fontSize: 12),
-                                ),
-                                onTap: () {},
-                              ),
-                              ListTile(
-                                title: Text(
-                                  '룰루2',
-                                  style: TextStyle(color: Colors.white, fontSize: 12),
-                                ),
-                                onTap: () {},
-                              ),
-                            ],
-                          ),
-                        ],
+                        ),
+                        child: Text('프로젝트 1'),
                       ),
                     ),
+                    SizedBox(height: 0),
+                    SizedBox(
+                      width: double.infinity,
+                      height: 50,
+                      child: ElevatedButton(
+                        onPressed: () {
+                          _handleProjectTap(1);
+                        },
+                        style: ElevatedButton.styleFrom(
+                          foregroundColor: Colors.white,
+                          backgroundColor: buttonColor5,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.zero,
+                            side: BorderSide(color: Colors.white),
+                          ),
+                        ),
+                        child: Text('프로젝트 2'),
+                      ),
+                    ),
+                    SizedBox(height: 0),
+                    SizedBox(
+                      width: double.infinity,
+                      height: 50,
+                      child: ElevatedButton(
+                        onPressed: () {
+                          _handleProjectTap(2);
+                        },
+                        style: ElevatedButton.styleFrom(
+                          foregroundColor: Colors.white,
+                          backgroundColor: buttonColor6,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.zero,
+                            side: BorderSide(color: Colors.white, width: 1),
+                          ),
+                        ),
+                        child: Text('프로젝트 3'),
+                      ),
+                    ),
+                    SizedBox(height: 100),
                   ],
                 ),
               ),
+
               SizedBox(width: 20),
               Expanded(
                 child: Container(
@@ -381,11 +413,11 @@ class _apicodeState extends State<apicode> {
                     ],
                   ),
                 ),
-              ),
-            ],
-          ),
-        ],
-      ),
+              )
+    ]
+    )
+    ]
+      )
     );
   }
 
