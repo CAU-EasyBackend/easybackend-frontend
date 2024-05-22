@@ -310,6 +310,7 @@ class _SangtaeState extends State<Sangtae> {
                                     side: BorderSide(color: serverOn ? Colors.green : Colors.grey, width: 2),
                                   ),
                                 ),
+                                SizedBox(width: 10),
                                 TextButton(
                                   onPressed: () {
                                     setState(() {

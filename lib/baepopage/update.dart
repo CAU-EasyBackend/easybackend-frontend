@@ -207,28 +207,28 @@ class _updateState extends State<update> {
                       SizedBox(height: 30),
                       Row(
                         children: [
-                          SizedBox(width: 170), //파일 편집기와 컨테이너2 사이 여백
+                          SizedBox(width: 170),
                           Expanded(
-                            child: makeFilePicker(), // 파일 선택기 추가
+                            child: makeFilePicker(),
                           ),
-                          SizedBox(width: 30), // 파일 선택기와 취소 버튼 사이 여백
+                          SizedBox(width: 30),
 
-                          SizedBox(width: 100), // 취소 버튼과 텍스트 필드 사이 여백
+                          SizedBox(width: 100),
                           Expanded(
                             child: Stack(
                               alignment: Alignment.centerRight,
                               children: [
                                 TextField(
-                                  enabled: textFieldEnabled, // 텍스트 필드 활성화 여부 설정
+                                  enabled: textFieldEnabled, // 텍스트 필드 활성화여부
                                   onChanged: (value) {
                                     setState(() {
                                       userInput = value;
-                                      fileUploadEnabled = userInput.isEmpty; // 텍스트 필드에 내용이 없을 때 파일 업로드 활성화
+                                      fileUploadEnabled = userInput.isEmpty; // 텍스트 필드에 내용이 없을때 파일 업로드 활성화
                                     });
                                     getFileFromGitHub(userInput);
                                   },
                                   decoration: InputDecoration(
-                                    hintText: '   github URL... ', // 사용자에게 안내할 힌트 텍스트
+                                    hintText: '   github URL... ',
                                     filled: true,
                                     fillColor: Colors.white,
                                     border: OutlineInputBorder(
@@ -240,8 +240,7 @@ class _updateState extends State<update> {
 
                                 IconButton(
                                   onPressed: () {
-                                    // 화살표 아이콘을 클릭한 경우 발생할 이벤트 추가
-                                    // 예를 들어, 다음 단계로 넘어가는 로직을 추가할 수 있습니다.
+
                                   },
                                   icon: Icon(Icons.arrow_forward),
 

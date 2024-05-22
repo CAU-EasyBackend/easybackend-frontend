@@ -26,6 +26,8 @@ class _BaepoState extends State<Baepo> {
 
   bool checkBox1 = false;
   bool checkBox2 = false;
+  bool checkBox3 = false;
+  bool checkBox4 = false;
   bool fileUploadEnabled = true;
   bool textFieldEnabled = true;
   String fileContent = "";
@@ -196,70 +198,55 @@ class _BaepoState extends State<Baepo> {
                     children: [
                       SizedBox(height: 50),
                       Text(
-                        '파일 업로드 방식을 선택해주세요.',
+                        '1.파일 업로드 방식을 선택해주세요.',
                         style: TextStyle(
                           color: Colors.white,
                           fontSize: 20,
                           fontWeight: FontWeight.normal,
                         ),
                       ),
-                      SizedBox(height: 30),
+                      SizedBox(height: 50),
                       Row(
                         children: [
                           SizedBox(width: 170),
-                          Expanded(
-                            child: makeFilePicker(),
-                          ),
-                          SizedBox(width: 30),
-                          SizedBox(width: 100),
-                          Expanded(
-                            child: Stack(
-                              alignment: Alignment.centerRight,
-                              children: [
-                                TextField(
-                                  enabled: textFieldEnabled,
-                                  onChanged: (value) {
-                                    setState(() {
-                                      userInput = value;
-                                      fileUploadEnabled = userInput.isEmpty;
-                                    });
-                                    getFileFromGitHub(userInput);
-                                  },
-                                  decoration: InputDecoration(
-                                    hintText: '   GitHub URL...',
-                                    filled: true,
-                                    fillColor: Colors.white,
-                                    border: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(30.0),
-                                      borderSide: BorderSide.none,
-                                    ),
-                                  ),
-                                ),
-                                IconButton(
-                                  onPressed: () {
-                                    getFileFromGitHub(userInput);
-                                  },
-                                  icon: Icon(Icons.arrow_forward),
-                                ),
-                              ],
-                            ),
-                          ),
-                          SizedBox(width: 200),
-                        ],
-                      ),
-                      SizedBox(height: 40),
-                      Text(
-                        '코드 생성을 위한 프레임 워크를 선택해주세요.',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 20,
-                          fontWeight: FontWeight.normal,
-                        ),
-                      ),
-                      SizedBox(height: 10),
-                      Row(
-                        children: [
-                          SizedBox(width: 550),
+                          // Expanded(
+                          //   child: makeFilePicker(),
+                          // ),
+                          // SizedBox(width: 30),
+                          // SizedBox(width: 100),
+                          // Expanded(
+                          //   child: Stack(
+                          //     alignment: Alignment.centerRight,
+                          //     children: [
+                          //       TextField(
+                          //         enabled: textFieldEnabled,
+                          //         onChanged: (value) {
+                          //           setState(() {
+                          //             userInput = value;
+                          //             fileUploadEnabled = userInput.isEmpty;
+                          //           });
+                          //           getFileFromGitHub(userInput);
+                          //         },
+                          //         decoration: InputDecoration(
+                          //           hintText: '   GitHub URL...',
+                          //           filled: true,
+                          //           fillColor: Colors.white,
+                          //           border: OutlineInputBorder(
+                          //             borderRadius: BorderRadius.circular(30.0),
+                          //             borderSide: BorderSide.none,
+                          //           ),
+                          //         ),
+                          //       ),
+                          //       IconButton(
+                          //         onPressed: () {
+                          //           getFileFromGitHub(userInput);
+                          //         },
+                          //         icon: Icon(Icons.arrow_forward),
+                          //       ),
+                          //     ],
+                          //   ),
+                          // ),
+                          SizedBox(width: 360),
                           Theme(
                             data: ThemeData(
                               unselectedWidgetColor: Colors.white,
@@ -286,8 +273,9 @@ class _BaepoState extends State<Baepo> {
                               ),
                             ),
                           ),
+                          SizedBox(height: 30),
                           Text(
-                            'Java Spring',
+                            'zip으로 다운받기',
                             style: TextStyle(
                               color: Colors.white,
                               fontSize: 16,
@@ -321,6 +309,93 @@ class _BaepoState extends State<Baepo> {
                             ),
                           ),
                           Text(
+                            'github URL',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 16,
+                            ),
+                          ),
+
+
+
+
+                          SizedBox(width: 200),
+                        ],
+                      ),
+                      SizedBox(height: 80),
+                      Text(
+                        '2.코드 생성을 위한 프레임 워크를 선택해주세요.',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 20,
+                          fontWeight: FontWeight.normal,
+                        ),
+                      ),
+                      SizedBox(height: 30),
+                      Row(
+                        children: [
+                          SizedBox(width: 550),
+                          Theme(
+                            data: ThemeData(
+                              unselectedWidgetColor: Colors.white,
+                            ),
+                            child: Checkbox(
+                              value: checkBox3,
+                              onChanged: (bool? value) {
+                                setState(() {
+                                  checkBox3 = value!;
+                                  if (checkBox3) checkBox4 = false;
+                                });
+                              },
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(30),
+                              ),
+                              checkColor: Colors.white,
+                              fillColor: MaterialStateColor.resolveWith(
+                                    (states) {
+                                  if (states.contains(MaterialState.selected)) {
+                                    return Colors.grey;
+                                  }
+                                  return Colors.transparent;
+                                },
+                              ),
+                            ),
+                          ),
+                          Text(
+                            'Java Spring',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 16,
+                            ),
+                          ),
+                          SizedBox(width: 20),
+                          Theme(
+                            data: ThemeData(
+                              unselectedWidgetColor: Colors.white,
+                            ),
+                            child: Checkbox(
+                              value: checkBox4,
+                              onChanged: (bool? value) {
+                                setState(() {
+                                  checkBox4 = value!;
+                                  if (checkBox4) checkBox3 = false;
+                                });
+                              },
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(30),
+                              ),
+                              checkColor: Colors.white,
+                              fillColor: MaterialStateColor.resolveWith(
+                                    (states) {
+                                  if (states.contains(MaterialState.selected)) {
+                                    return Colors.grey;
+                                  }
+                                  return Colors.transparent;
+                                },
+                              ),
+                            ),
+                          ),
+                          Text(
                             'JS Express',
                             style: TextStyle(
                               color: Colors.white,
@@ -329,7 +404,7 @@ class _BaepoState extends State<Baepo> {
                           ),
                         ],
                       ),
-                      SizedBox(height: 20),
+                      SizedBox(height: 60,width: 400),
                       ElevatedButton(
                         onPressed: () {
                           // 배포하기 버튼 클릭 시 수행할 작업 추가
