@@ -1,10 +1,10 @@
 import 'dart:async';
+import 'package:easyback/screens/main_menu.dart';
 import 'package:webview_windows/webview_windows.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import 'package:flutter/material.dart';
-import '../mainpage/ApiPage.dart';
-import '../loginpage.dart';
-import '../mainpage/Deployment.dart';
+import 'ApiPage.dart';
+import '../baepopage/Deployment.dart';
 import 'apicode.dart';
 
 class apidetails extends StatefulWidget {
@@ -70,65 +70,7 @@ class _apidetailsState extends State<apidetails> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.black,
-      appBar: PreferredSize(
-        preferredSize: Size.fromHeight(100),
-        child: AppBar(
-          leading: Container(),
-          title: Row(
-            children: [
-              Padding(
-                padding: EdgeInsets.only(top: 20.0, bottom: 8.0, left: 8.0),
-                child: IconButton(
-                  icon: Image.asset(
-                    'asset/image/great.png',
-                    width: 60,
-                    height: 60,
-                  ),
-                  onPressed: () {
-                    _handleImagePressed(context);
-                  },
-                ),
-              ),
-              Expanded(
-                flex: 4,
-                child: TextButton(
-                  onPressed: () {
-                    _handleAPIButton(context);
-                  },
-                  child: Text(
-                    'API',
-                    style: TextStyle(color: Colors.white),
-                  ),
-                ),
-              ),
-              Expanded(
-                flex: 16,
-                child: Align(
-                  alignment: Alignment.centerLeft,
-                  child: TextButton(
-                    onPressed: () {
-                      _handleDeploymentButton(context);
-                    },
-                    child: Text(
-                      'Deployment',
-                      style: TextStyle(color: Colors.white),
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          ),
-          backgroundColor: Colors.black,
-          actions: [
-            IconButton(
-              icon: Icon(Icons.person, color: Colors.white),
-              onPressed: () {
-                _handleLoginPageButton(context);
-              },
-            ),
-          ],
-        ),
-      ),
+      appBar: MainMenu(),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start, // 왼쪽 정렬
         children: [
@@ -253,40 +195,11 @@ class _apidetailsState extends State<apidetails> {
   }
 }
 
-void _handleDeploymentButton(BuildContext context) {
-    // Deployment 페이지로 이동
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => Deployment()), // Deployment 페이지로 이동
-    );
-  }
-
-  // API 버튼 처리
-  void _handleAPIButton(BuildContext context) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => ApiPage()),
-    );
-  }
-
   void _handleapiguideButton(BuildContext context) {
     Navigator.push(
       context,
       MaterialPageRoute(builder: (context) => ApiPage()),
     );
-  }
-
-  // 로그인 페이지 버튼 처리
-  void _handleLoginPageButton(BuildContext context) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => loginpage()),
-    );
-  }
-
-  // 이미지 버튼 처리
-  void _handleImagePressed(BuildContext context) {
-    Navigator.popUntil(context, ModalRoute.withName('/'));
   }
 
 

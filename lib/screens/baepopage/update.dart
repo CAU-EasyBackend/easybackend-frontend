@@ -1,10 +1,10 @@
 import 'dart:typed_data'; // Import the dart:typed_data library for Uint8List
-import 'package:easyback/baepopage/sangtae.dart';
+import 'package:easyback/screens/baepopage/sangtae.dart';
+import 'package:easyback/screens/main_menu.dart';
 import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart'; // file_picker 라이브러리 추가
-import '../mainpage/ApiPage.dart';
-import '../loginpage.dart';
-import '../mainpage/Deployment.dart';
+import '../api/ApiPage.dart';
+import 'Deployment.dart';
 import 'package:http/http.dart' as http; // http 패키지 추가
 import 'dart:convert'; // JSON 디코딩을 위한 패키지 추가
 
@@ -44,65 +44,7 @@ class _updateState extends State<update> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.black,
-      appBar: PreferredSize(
-        preferredSize: Size.fromHeight(100),
-        child: AppBar(
-          leading: Container(),
-          title: Row(
-            children: [
-              Padding(
-                padding: EdgeInsets.only(top: 20.0, bottom: 8.0, left: 8.0),
-                child: IconButton(
-                  icon: Image.asset(
-                    'asset/image/great.png',
-                    width: 60,
-                    height: 60,
-                  ),
-                  onPressed: () {
-                    _handleImagePressed(context);
-                  },
-                ),
-              ),
-              Expanded(
-                flex: 4,
-                child: TextButton(
-                  onPressed: () {
-                    _handleAPIButton(context);
-                  },
-                  child: Text(
-                    'API',
-                    style: TextStyle(color: Colors.white),
-                  ),
-                ),
-              ),
-              Expanded(
-                flex: 16,
-                child: Align(
-                  alignment: Alignment.centerLeft,
-                  child: TextButton(
-                    onPressed: () {
-                      _handleDeploymentButton(context);
-                    },
-                    child: Text(
-                      'Deployment',
-                      style: TextStyle(color: Colors.white),
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          ),
-          backgroundColor: Colors.black,
-          actions: [
-            IconButton(
-              icon: Icon(Icons.person, color: Colors.white),
-              onPressed: () {
-                _handleLoginPageButton(context);
-              },
-            ),
-          ],
-        ),
-      ),
+      appBar: MainMenu(),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start, // 왼쪽 정렬
         children: [
@@ -378,35 +320,6 @@ class _updateState extends State<update> {
         fileContent = "Error: $e";
       });
     }
-  }
-
-  // API 버튼 처리
-  void _handleAPIButton(BuildContext context) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => ApiPage()),
-    );
-  }
-
-  // Deployment 버튼 처리
-  void _handleDeploymentButton(BuildContext context) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => Deployment()),
-    );
-  }
-
-  // 로그인 페이지 버튼 처리
-  void _handleLoginPageButton(BuildContext context) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => loginpage()),
-    );
-  }
-
-  // 이미지 버튼 처리
-  void _handleImagePressed(BuildContext context) {
-    Navigator.popUntil(context, ModalRoute.withName('/'));
   }
 }
 
