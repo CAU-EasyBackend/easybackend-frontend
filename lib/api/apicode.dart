@@ -19,7 +19,7 @@ class apicode extends StatefulWidget {
 class _apicodeState extends State<apicode> {
   Color buttonColor1 = Colors.black;
   Color buttonColor2 = Colors.black;
-  Color buttonColor3 = Colors.white12;
+  Color buttonColor3 = Colors.white38;
   Color buttonColor4 = Colors.black;
   Color buttonColor5 = Colors.black;
   Color buttonColor6 = Colors.black;
@@ -73,7 +73,7 @@ class _apicodeState extends State<apicode> {
   }
 
   Color getButtonColor(int index) {
-    return selectedProjects[index] ? Colors.white12 : Colors.black;
+    return selectedProjects[index] ? Colors.white38 : Colors.black;
   }
 
 
