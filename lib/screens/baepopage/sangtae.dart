@@ -2,8 +2,8 @@ import 'package:easyback/models/Instance.dart';
 import 'package:easyback/screens/main_menu.dart';
 import 'package:easyback/services/APIDeployInfos.dart';
 import 'package:flutter/material.dart';
-import '../mainpage/ApiPage.dart';
-import '../mainpage/Deployment.dart';
+import '../api/ApiPage.dart';
+import 'Deployment.dart';
 import 'baepo.dart';
 import 'update.dart';
 

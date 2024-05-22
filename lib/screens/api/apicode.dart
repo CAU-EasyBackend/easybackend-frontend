@@ -1,8 +1,8 @@
 import 'package:easyback/screens/main_menu.dart';
 import 'package:flutter/material.dart';
 
-import '../mainpage/ApiPage.dart';
-import '../mainpage/Deployment.dart';
+import 'ApiPage.dart';
+import '../baepopage/Deployment.dart';
 import 'apidetails.dart';
 
 class apicode extends StatefulWidget {

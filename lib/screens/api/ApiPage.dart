@@ -1,9 +1,7 @@
 import 'package:easyback/screens/main_menu.dart';
 import 'package:flutter/material.dart';
-import '../api/apicode.dart';
-import '../api/apidetails.dart';
-import 'Deployment.dart';
-
+import 'apicode.dart';
+import 'apidetails.dart';
 
 class ApiPage extends StatefulWidget {
   const ApiPage({Key? key}) : super(key: key);

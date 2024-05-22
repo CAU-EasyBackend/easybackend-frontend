@@ -3,8 +3,8 @@ import 'package:easyback/screens/baepopage/sangtae.dart';
 import 'package:easyback/screens/main_menu.dart';
 import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart'; // file_picker 라이브러리
-import '../mainpage/ApiPage.dart';
-import '../mainpage/Deployment.dart';
+import '../api/ApiPage.dart';
+import 'Deployment.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert'; // JSON 디코딩 패키지
 

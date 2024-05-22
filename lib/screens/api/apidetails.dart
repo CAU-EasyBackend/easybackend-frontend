@@ -3,8 +3,8 @@ import 'package:easyback/screens/main_menu.dart';
 import 'package:webview_windows/webview_windows.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import 'package:flutter/material.dart';
-import '../mainpage/ApiPage.dart';
-import '../mainpage/Deployment.dart';
+import 'ApiPage.dart';
+import '../baepopage/Deployment.dart';
 import 'apicode.dart';
 
 class apidetails extends StatefulWidget {

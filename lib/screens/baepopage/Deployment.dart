@@ -1,7 +1,7 @@
 import 'package:easyback/screens/main_menu.dart';
 import 'package:flutter/material.dart';
-import '../baepopage/baepo.dart';
-import '../baepopage/sangtae.dart';
+import 'baepo.dart';
+import 'sangtae.dart';
 
 class Deployment extends StatefulWidget {
   const Deployment({Key? key});

@@ -1,5 +1,5 @@
-import 'package:easyback/screens/mainpage/ApiPage.dart';
-import 'package:easyback/screens/mainpage/Deployment.dart';
+import 'package:easyback/screens/api/ApiPage.dart';
+import 'package:easyback/screens/baepopage/Deployment.dart';
 import 'package:flutter/material.dart';
 
 class MainMenu extends StatelessWidget implements PreferredSizeWidget {
