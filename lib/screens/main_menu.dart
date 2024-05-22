@@ -2,6 +2,8 @@ import 'package:easyback/screens/api/ApiPage.dart';
 import 'package:easyback/screens/baepopage/Deployment.dart';
 import 'package:flutter/material.dart';
 
+import '../services/APIAuths.dart';
+
 class MainMenu extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
@@ -56,6 +58,7 @@ class MainMenu extends StatelessWidget implements PreferredSizeWidget {
         IconButton(
           icon: Icon(Icons.person, color: Colors.white),
           onPressed: () async {
+            APIAuths.getLogin();
             _handleloginpageButton(context);
           },
         ),

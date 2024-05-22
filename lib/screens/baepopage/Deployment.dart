@@ -11,22 +11,36 @@ class Deployment extends StatefulWidget {
 }
 
 class _DeploymentState extends State<Deployment> {
-  Color buttonColor1 = Colors.black; // 기본 색상을 검은색으로 설정
+  Color buttonColor1 = Colors.white12;
   Color buttonColor2 = Colors.black;
   Color buttonColor3 = Colors.black;
+  Color buttonColor4 = Colors.black;
+  Color buttonColor5 = Colors.black;
+  Color buttonColor6 = Colors.black;
+  Color buttonColor7 = Colors.black;
+  Color buttonColor8 = Colors.black;
   String? centerText;
 
   @override
   void initState() {
     super.initState();
     setState(() {
-      buttonColor1 = Colors.white12; // 가이드 버튼 색상 변경
-      buttonColor2 = Colors.black; // 다른 버튼 색상 원래대로 설정
-      buttonColor3 = Colors.black;
-      centerText = '배포란 무엇인가?\n룰루랄ㄹ라라ㅏ라 에베베ㅔ\n에베베';
+      buttonColor1 = Colors.white12;
     });
   }
 
+  void _handleButtonPress(int buttonIndex) {
+    setState(() {
+      buttonColor1 = Colors.white12;
+      buttonColor2 = buttonIndex == 2 ? Colors.white12 : Colors.black;
+      buttonColor3 = buttonIndex == 3 ? Colors.white12 : Colors.black;
+      buttonColor4 = buttonIndex == 4 ? Colors.white12 : Colors.black;
+      buttonColor5 = buttonIndex == 5 ? Colors.white12 : Colors.black;
+      buttonColor6 = buttonIndex == 6 ? Colors.white12 : Colors.black;
+      buttonColor7 = buttonIndex == 7 ? Colors.white12 : Colors.black;
+      buttonColor8 = buttonIndex == 8 ? Colors.white12 : Colors.black;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -62,7 +76,6 @@ class _DeploymentState extends State<Deployment> {
                             buttonColor1 = Colors.white12; // 버튼 색상 변경
                             buttonColor2 = Colors.black; // 다른 버튼 색상 원래대로 설정
                             buttonColor3 = Colors.black;
-                            centerText = '배포란 무엇인가?\n룰루랄ㄹ라라ㅏ라 에베베ㅔ\n에베베';
                           });
                         },
                         style: ElevatedButton.styleFrom(
@@ -128,6 +141,59 @@ class _DeploymentState extends State<Deployment> {
                       ),
                     ),
                     SizedBox(height: 0),
+                  ],
+                ),
+              ),
+              SizedBox(width: 20),
+              Container(
+                width: 200,
+                height: 500,
+                decoration: BoxDecoration(
+                  color: Colors.black,
+                  borderRadius: BorderRadius.circular(10),
+                  border: Border.all(color: Colors.white, width: 2),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    SizedBox(height: 2),
+                    SizedBox(
+                      width: double.infinity,
+                      height: 50,
+                      child: ElevatedButton(
+                        onPressed: () {
+                          _handleButtonPress(4);
+                        },
+                        style: ElevatedButton.styleFrom(
+                          foregroundColor: Colors.white,
+                          backgroundColor: buttonColor4,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.zero,
+                          ),
+                        ),
+                        child: Text('배포란 ?'),
+                      ),
+                    ),
+                    SizedBox(height: 0),
+                    SizedBox(
+                      width: double.infinity,
+                      height: 50,
+                      child: ElevatedButton(
+                        onPressed: () {
+                          _handleButtonPress(5);
+                        },
+                        style: ElevatedButton.styleFrom(
+                          foregroundColor: Colors.white,
+                          backgroundColor: buttonColor5,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.zero,
+                            side: BorderSide(color: Colors.white),
+                          ),
+                        ),
+                        child: Text('서비스 이용 시 주의사항'),
+                      ),
+                    ),
+
                   ],
                 ),
               ),
