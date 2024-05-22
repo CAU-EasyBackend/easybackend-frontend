@@ -35,7 +35,7 @@ class _SangtaeState extends State<Sangtae> {
 
   Future<void> _fetchDeployInfos() async {
     try {
-      List<Instance> infos = await APIDeployInfos.testGetDeployInfos();
+      List<Instance> infos = await APIDeployInfos.getDeployInfos();
       setState(() {
         deployInfoList = infos;
       });

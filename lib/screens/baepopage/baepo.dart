@@ -1,12 +1,13 @@
-import 'dart:typed_data'; // Import the dart:typed_data library for Uint8List
+import 'dart:typed_data';
 import 'package:easyback/screens/baepopage/sangtae.dart';
 import 'package:easyback/screens/main_menu.dart';
+import 'package:easyback/services/APIDeployments.dart';
 import 'package:flutter/material.dart';
-import 'package:file_picker/file_picker.dart'; // file_picker 라이브러리
+import 'package:file_picker/file_picker.dart';
 import '../api/ApiPage.dart';
 import 'Deployment.dart';
 import 'package:http/http.dart' as http;
-import 'dart:convert'; // JSON 디코딩 패키지
+import 'dart:convert';
 
 class Baepo extends StatefulWidget {
   const Baepo({Key? key}) : super(key: key);
@@ -31,6 +32,9 @@ class _BaepoState extends State<Baepo> {
   bool fileUploadEnabled = true;
   bool textFieldEnabled = true;
   String fileContent = "";
+
+  PlatformFile? selectedFile;
+  String? selectedGithubURL;
 
   @override
   void initState() {
@@ -140,140 +144,14 @@ class _BaepoState extends State<Baepo> {
                     children: [
                       SizedBox(height: 50),
                       Text(
-                        '1.파일 업로드 방식을 선택해주세요.',
+                        '1. 배포할 백엔드 서버의 프레임 워크를 선택해주세요.',
                         style: TextStyle(
                           color: Colors.white,
                           fontSize: 20,
                           fontWeight: FontWeight.normal,
                         ),
                       ),
-                      SizedBox(height: 50),
-                      Row(
-                        children: [
-                          SizedBox(width: 170),
-                          // Expanded(
-                          //   child: makeFilePicker(),
-                          // ),
-                          // SizedBox(width: 30),
-                          // SizedBox(width: 100),
-                          // Expanded(
-                          //   child: Stack(
-                          //     alignment: Alignment.centerRight,
-                          //     children: [
-                          //       TextField(
-                          //         enabled: textFieldEnabled,
-                          //         onChanged: (value) {
-                          //           setState(() {
-                          //             userInput = value;
-                          //             fileUploadEnabled = userInput.isEmpty;
-                          //           });
-                          //           getFileFromGitHub(userInput);
-                          //         },
-                          //         decoration: InputDecoration(
-                          //           hintText: '   GitHub URL...',
-                          //           filled: true,
-                          //           fillColor: Colors.white,
-                          //           border: OutlineInputBorder(
-                          //             borderRadius: BorderRadius.circular(30.0),
-                          //             borderSide: BorderSide.none,
-                          //           ),
-                          //         ),
-                          //       ),
-                          //       IconButton(
-                          //         onPressed: () {
-                          //           getFileFromGitHub(userInput);
-                          //         },
-                          //         icon: Icon(Icons.arrow_forward),
-                          //       ),
-                          //     ],
-                          //   ),
-                          // ),
-                          SizedBox(width: 360),
-                          Theme(
-                            data: ThemeData(
-                              unselectedWidgetColor: Colors.white,
-                            ),
-                            child: Checkbox(
-                              value: checkBox1,
-                              onChanged: (bool? value) {
-                                setState(() {
-                                  checkBox1 = value!;
-                                  if (checkBox1) checkBox2 = false;
-                                });
-                              },
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(30),
-                              ),
-                              checkColor: Colors.white,
-                              fillColor: MaterialStateColor.resolveWith(
-                                    (states) {
-                                  if (states.contains(MaterialState.selected)) {
-                                    return Colors.grey;
-                                  }
-                                  return Colors.transparent;
-                                },
-                              ),
-                            ),
-                          ),
-                          SizedBox(height: 30),
-                          Text(
-                            'zip으로 다운받기',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 16,
-                            ),
-                          ),
-                          SizedBox(width: 20),
-                          Theme(
-                            data: ThemeData(
-                              unselectedWidgetColor: Colors.white,
-                            ),
-                            child: Checkbox(
-                              value: checkBox2,
-                              onChanged: (bool? value) {
-                                setState(() {
-                                  checkBox2 = value!;
-                                  if (checkBox2) checkBox1 = false;
-                                });
-                              },
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(30),
-                              ),
-                              checkColor: Colors.white,
-                              fillColor: MaterialStateColor.resolveWith(
-                                    (states) {
-                                  if (states.contains(MaterialState.selected)) {
-                                    return Colors.grey;
-                                  }
-                                  return Colors.transparent;
-                                },
-                              ),
-                            ),
-                          ),
-                          Text(
-                            'github URL',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 16,
-                            ),
-                          ),
-
-
-
-
-                          SizedBox(width: 200),
-                        ],
-                      ),
-                      SizedBox(height: 80),
-                      Text(
-                        '2.코드 생성을 위한 프레임 워크를 선택해주세요.',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 20,
-                          fontWeight: FontWeight.normal,
-                        ),
-                      ),
-                      SizedBox(height: 30),
+                      SizedBox(height: 20),
                       Row(
                         children: [
                           SizedBox(width: 550),
@@ -346,19 +224,91 @@ class _BaepoState extends State<Baepo> {
                           ),
                         ],
                       ),
-                      SizedBox(height: 60,width: 400),
-                      ElevatedButton(
-                        onPressed: () {
-                          // 배포하기 버튼 클릭 시 수행할 작업 추가
-                        },
-                        child: Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 10, vertical: 15),
-                          child: Text(
-                            "배포하기",
-                            style: TextStyle(fontSize: 18, color: Colors.black),
-                          ),
+                      SizedBox(height: 20),
+                      Text(
+                        '2. 배포 방식을 선택해주세요.',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 20,
+                          fontWeight: FontWeight.normal,
                         ),
                       ),
+                      SizedBox(height: 20),
+                      Row(
+                        children: [
+                          SizedBox(width: 550),
+                          Theme(
+                            data: ThemeData(
+                              unselectedWidgetColor: Colors.white,
+                            ),
+                            child: Checkbox(
+                              value: checkBox1,
+                              onChanged: (bool? value) {
+                                setState(() {
+                                  checkBox1 = value!;
+                                  if (checkBox1) checkBox2 = false;
+                                });
+                              },
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(30),
+                              ),
+                              checkColor: Colors.white,
+                              fillColor: MaterialStateColor.resolveWith(
+                                    (states) {
+                                  if (states.contains(MaterialState.selected)) {
+                                    return Colors.grey;
+                                  }
+                                  return Colors.transparent;
+                                },
+                              ),
+                            ),
+                          ),
+                          Text(
+                            'zip으로 업로드 하기',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 16,
+                            ),
+                          ),
+                          SizedBox(width: 20),
+                          Theme(
+                            data: ThemeData(
+                              unselectedWidgetColor: Colors.white,
+                            ),
+                            child: Checkbox(
+                              value: checkBox2,
+                              onChanged: (bool? value) {
+                                setState(() {
+                                  checkBox2 = value!;
+                                  if (checkBox2) checkBox1 = false;
+                                });
+                              },
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(30),
+                              ),
+                              checkColor: Colors.white,
+                              fillColor: MaterialStateColor.resolveWith(
+                                    (states) {
+                                  if (states.contains(MaterialState.selected)) {
+                                    return Colors.grey;
+                                  }
+                                  return Colors.transparent;
+                                },
+                              ),
+                            ),
+                          ),
+                          Text(
+                            'github repository URL',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 16,
+                            ),
+                          ),
+                          SizedBox(width: 200),
+                        ],
+                      ),
+                      SizedBox(height: 20),
+                      uploadContainer(),
                     ],
                   ),
                 ),
@@ -370,10 +320,82 @@ class _BaepoState extends State<Baepo> {
     );
   }
 
+  Widget uploadContainer() {
+    if(checkBox1) {
+      return Column(
+        children: [
+          makeFilePicker(),
+          SizedBox(height: 20),
+          ElevatedButton( // 배포하기 버튼
+            onPressed: () async {
+              if(selectedFile != null) {
+                await APIDeployments.deployNewServerZip(selectedFile!);
+              }
+            },
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: 10, vertical: 15), // 여백 조정
+              child: Text(
+                "배포하기",
+                style: TextStyle(fontSize: 18, color: Colors.black),
+              ),
+            ),
+          ),
+        ],
+      );
+    } else if(checkBox2) {
+      return Column(
+        children: [
+          Container(
+            height: 150,
+            width: 300,
+            child: Stack(
+              alignment: Alignment.centerRight,
+              children: [
+                TextField(
+                  onChanged: (value) {
+                    setState(() {
+                      userInput = value;
+                      selectedGithubURL = value;
+                    });
+                  },
+                  decoration: InputDecoration(
+                    hintText: '   GitHub URL...',
+                    filled: true,
+                    fillColor: Colors.white,
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(30.0),
+                      borderSide: BorderSide.none,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          ElevatedButton( // 배포하기 버튼
+            onPressed: () async {
+              if(selectedGithubURL != null) {
+                await APIDeployments.deployNewServerGithub(selectedGithubURL!);
+              }
+            },
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: 10, vertical: 15), // 여백 조정
+              child: Text(
+                "배포하기",
+                style: TextStyle(fontSize: 18, color: Colors.black),
+              ),
+            ),
+          ),
+        ],
+      );
+    } else {
+      return Container();
+    }
+  }
+
   Container makeFilePicker() {
     return Container(
-      height: 170,
-      width: 100,
+      height: 150,
+      width: 300,
       decoration: BoxDecoration(
         color: Colors.black,
         borderRadius: BorderRadius.circular(10),
@@ -396,10 +418,10 @@ class _BaepoState extends State<Baepo> {
                 Uint8List fileBytes = result.files.first.bytes!;
                 debugPrint(fileName);
                 setState(() {
+                  selectedFile = result.files.first;
                   showFileName = "Now File Name: $fileName";
                   textFieldEnabled = false;
                 });
-                getFileFromGitHub(userInput);
               }
             },
             child: Row(
@@ -407,7 +429,7 @@ class _BaepoState extends State<Baepo> {
               crossAxisAlignment: CrossAxisAlignment.end,
               mainAxisSize: MainAxisSize.min,
               children: [
-                SizedBox(height: 50),
+                SizedBox(height: 20),
                 Text(
                   "Find and Upload",
                   style: TextStyle(
@@ -444,36 +466,9 @@ class _BaepoState extends State<Baepo> {
             ),
             child: Text('Cancel Upload'),
           ),
-          SizedBox(height: 20),
         ],
       ),
     );
-  }
-
-  void getFileFromGitHub(String url) async {
-    try {
-      var apiUrl = Uri.parse('https://github.com/CAU-EasyBackend/easybackend-server/blob/241129a21eeb17953ab09d148381c5ddd090b8ed/.gitignore');
-      var requestBody = jsonEncode({'repositoryURL': url});
-      var response = await http.post(
-        apiUrl,
-        headers: {'Content-Type': 'application/json'},
-        body: requestBody,
-      );
-
-      if (response.statusCode == 200) {
-        setState(() {
-          fileContent = response.body;
-        });
-      } else {
-        setState(() {
-          fileContent = "Failed to fetch file: ${response.statusCode}";
-        });
-      }
-    } catch (e) {
-      setState(() {
-        fileContent = "Error: $e";
-      });
-    }
   }
 
   void _handleDeploymentGuideButton(BuildContext context) {
