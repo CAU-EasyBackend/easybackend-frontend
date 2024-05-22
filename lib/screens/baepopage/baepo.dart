@@ -1,9 +1,9 @@
 import 'dart:typed_data'; // Import the dart:typed_data library for Uint8List
-import 'package:easyback/baepopage/sangtae.dart';
+import 'package:easyback/screens/baepopage/sangtae.dart';
+import 'package:easyback/screens/main_menu.dart';
 import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart'; // file_picker 라이브러리
 import '../mainpage/ApiPage.dart';
-import '../loginpage.dart';
 import '../mainpage/Deployment.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert'; // JSON 디코딩 패키지
@@ -42,65 +42,7 @@ class _BaepoState extends State<Baepo> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.black,
-      appBar: PreferredSize(
-        preferredSize: Size.fromHeight(100),
-        child: AppBar(
-          leading: Container(),
-          title: Row(
-            children: [
-              Padding(
-                padding: EdgeInsets.only(top: 20.0, bottom: 8.0, left: 8.0),
-                child: IconButton(
-                  icon: Image.asset(
-                    'asset/image/great.png',
-                    width: 60,
-                    height: 60,
-                  ),
-                  onPressed: () {
-                    _handleImagePressed(context);
-                  },
-                ),
-              ),
-              Expanded(
-                flex: 4,
-                child: TextButton(
-                  onPressed: () {
-                    _handleAPIButton(context);
-                  },
-                  child: Text(
-                    'API',
-                    style: TextStyle(color: Colors.white),
-                  ),
-                ),
-              ),
-              Expanded(
-                flex: 16,
-                child: Align(
-                  alignment: Alignment.centerLeft,
-                  child: TextButton(
-                    onPressed: () {
-                      _handleDeploymentButton(context);
-                    },
-                    child: Text(
-                      'Deployment',
-                      style: TextStyle(color: Colors.white),
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          ),
-          backgroundColor: Colors.black,
-          actions: [
-            IconButton(
-              icon: Icon(Icons.person, color: Colors.white),
-              onPressed: () {
-                _handleLoginPageButton(context);
-              },
-            ),
-          ],
-        ),
-      ),
+      appBar: MainMenu(),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -457,31 +399,6 @@ class _BaepoState extends State<Baepo> {
         fileContent = "Error: $e";
       });
     }
-  }
-
-  void _handleAPIButton(BuildContext context) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => ApiPage()),
-    );
-  }
-
-  void _handleDeploymentButton(BuildContext context) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => Deployment()),
-    );
-  }
-
-  void _handleLoginPageButton(BuildContext context) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => loginpage()),
-    );
-  }
-
-  void _handleImagePressed(BuildContext context) {
-    Navigator.popUntil(context, ModalRoute.withName('/'));
   }
 
   void _handleDeploymentGuideButton(BuildContext context) {

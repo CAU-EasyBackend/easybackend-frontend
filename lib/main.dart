@@ -1,14 +1,6 @@
+import 'package:easyback/screens/main_menu.dart';
 import 'package:easyback/services/APIAuths.dart';
-import 'package:easyback/services/APIDeployInfos.dart';
-import 'package:easyback/services/APITests.dart';
 import 'package:flutter/material.dart';
-import 'mainpage/ApiPage.dart';
-import 'mainpage/Deployment.dart';
-import 'loginpage.dart';
-import 'package:http/http.dart';
-import 'dart:html' as html;
-import 'models/Instance.dart';
-
 
 void main() {
   runApp(MaterialApp(
@@ -21,67 +13,7 @@ class Home extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-
-      appBar: PreferredSize(
-        preferredSize: Size.fromHeight(100),
-        child: AppBar(
-          leading:Container(),
-          title: Row(
-            children: [
-              Padding(
-                padding: EdgeInsets.only(top: 20.0, bottom: 8.0, left: 8.0), // 이미지를 아래쪽으로 이동시키기 위한 패딩
-                child: IconButton(
-                  icon: Image.asset(
-                    'asset/image/great.png', // 이미지 파일 경로 설정
-                    width: 60, // 이미지 너비 설정
-                    height: 60, // 이미지 높이 설정
-                  ),
-                  onPressed: () {
-                    _handleImagePressed(context); // 이미지 클릭 시 실행될 함수
-                  },
-                ),
-              ),
-              Expanded(
-                flex: 4,
-                child: TextButton(
-                  onPressed: () {
-                    _handleAPIButton(context);
-                  },
-                  child: Text(
-                    'API',
-                    style: TextStyle(color: Colors.white),
-                  ),
-                ),
-              ),
-              Expanded(
-                flex: 16,
-                child: Align(
-                  alignment: Alignment.centerLeft,
-                  child: TextButton(
-                    onPressed: () {
-                      _handleDeploymentButton(context);
-                    },
-                    child: Text(
-                      'Deployment',
-                      style: TextStyle(color: Colors.white),
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          ),
-          backgroundColor: Colors.black,//앱바컬러
-          actions: [
-            IconButton(
-              icon: Icon(Icons.person,color: Colors.white,),
-              onPressed: () async {
-                _handleloginpageButton(context);
-                // Login icon pressed
-              },
-            ),
-          ],
-        ),
-      ),
+      appBar: MainMenu(),
       body: Stack(
         children: [
           Container(
@@ -139,31 +71,4 @@ class Home extends StatelessWidget {
       ),
     );
   }
-
-  // Function for handling API button press
-  void _handleAPIButton(BuildContext context) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => ApiPage()),
-    );
-  }
-
-  void _handleDeploymentButton(BuildContext context) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => Deployment()),
-    );
-  }
-
-  void _handleloginpageButton(BuildContext context) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => loginpage()),
-    );
-  }
-
-  void _handleImagePressed(BuildContext context) {
-    Navigator.popUntil(context, ModalRoute.withName('/'));
-  }
-
 }

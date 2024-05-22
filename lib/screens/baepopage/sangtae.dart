@@ -1,11 +1,11 @@
+import 'package:easyback/models/Instance.dart';
+import 'package:easyback/screens/main_menu.dart';
+import 'package:easyback/services/APIDeployInfos.dart';
 import 'package:flutter/material.dart';
-import '../loginpage.dart';
 import '../mainpage/ApiPage.dart';
 import '../mainpage/Deployment.dart';
-import '../services/APIDeployInfos.dart';
 import 'baepo.dart';
 import 'update.dart';
-import '../models/Instance.dart';
 
 bool serverOn = false;
 bool serverOff = false;
@@ -47,65 +47,7 @@ class _SangtaeState extends State<Sangtae> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.black,
-      appBar: PreferredSize(
-        preferredSize: Size.fromHeight(100),
-        child: AppBar(
-          leading: Container(),
-          title: Row(
-            children: [
-              Padding(
-                padding: EdgeInsets.only(top: 20.0, bottom: 8.0, left: 8.0),
-                child: IconButton(
-                  icon: Image.asset(
-                    'asset/image/great.png',
-                    width: 60,
-                    height: 60,
-                  ),
-                  onPressed: () {
-                    _handleImagePressed(context);
-                  },
-                ),
-              ),
-              Expanded(
-                flex: 4,
-                child: TextButton(
-                  onPressed: () {
-                    _handleAPIButton(context);
-                  },
-                  child: Text(
-                    'API',
-                    style: TextStyle(color: Colors.white),
-                  ),
-                ),
-              ),
-              Expanded(
-                flex: 16,
-                child: Align(
-                  alignment: Alignment.centerLeft,
-                  child: TextButton(
-                    onPressed: () {
-                      _handleDeploymentButton(context);
-                    },
-                    child: Text(
-                      'Deployment',
-                      style: TextStyle(color: Colors.white),
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          ),
-          backgroundColor: Colors.black,
-          actions: [
-            IconButton(
-              icon: Icon(Icons.person, color: Colors.white),
-              onPressed: () {
-                _handleLoginPageButton(context);
-              },
-            ),
-          ],
-        ),
-      ),
+      appBar: MainMenu(),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -396,37 +338,11 @@ class _SangtaeState extends State<Sangtae> {
 // 나머지 코드는 동일합니다.
 }
 
-
-  void _handleAPIButton(BuildContext context) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => ApiPage()),
-    );
-  }
-
   void _handleUpdateButton(BuildContext context) {
     Navigator.push(
       context,
       MaterialPageRoute(builder: (context) => update()),
     );
-  }
-
-  void _handleDeploymentButton(BuildContext context) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => Deployment()),
-    );
-  }
-
-  void _handleLoginPageButton(BuildContext context) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => loginpage()),
-    );
-  }
-
-  void _handleImagePressed(BuildContext context) {
-    Navigator.popUntil(context, ModalRoute.withName('/'));
   }
 
   void _handlePopup(BuildContext context) {
