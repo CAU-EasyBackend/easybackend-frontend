@@ -2,7 +2,6 @@ import 'package:easyback/models/Instance.dart';
 import 'package:easyback/screens/main_menu.dart';
 import 'package:easyback/services/APIDeployInfos.dart';
 import 'package:flutter/material.dart';
-import '../api/ApiPage.dart';
 import 'Deployment.dart';
 import 'baepo.dart';
 import 'update.dart';
@@ -29,12 +28,15 @@ class _SangtaeState extends State<Sangtae> {
   @override
   void initState() {
     super.initState();
+    print("test1");
     _fetchDeployInfos();
   }
 
   Future<void> _fetchDeployInfos() async {
     try {
-      List<Instance> infos = await APIDeployInfos.fetchDeployInfos();
+      List<Instance> infos = await APIDeployInfos.testGetDeployInfos();
+      print("test2");
+      print(infos.length);
       setState(() {
         deployInfoList = infos;
       });
@@ -147,15 +149,14 @@ class _SangtaeState extends State<Sangtae> {
                           ),
                           child: SizedBox(
                             height: 500,
-                             child: MyListView(
-                        deployInfoList: deployInfoList,
-                        handlePopup: _handlePopup
+                            child: MyListView(
+                              deployInfoList: deployInfoList,
+                              handlePopup: _handlePopup,
+                            ),
                           ),
-
                         ),
                       ),
-                      ),
-                ],
+                    ],
                   ),
                 ),
               ),
@@ -335,8 +336,7 @@ class _SangtaeState extends State<Sangtae> {
     );
   }
 
-// 나머지 코드는 동일합니다.
-}
+  // 나머지 코드는 동일합니다.
 
   void _handleUpdateButton(BuildContext context) {
     Navigator.push(
@@ -367,7 +367,7 @@ class _SangtaeState extends State<Sangtae> {
               onPressed: () {
                 Navigator.of(context).pop();
               },
-              child:Text(
+              child: Text(
                 '확인',
                 style: TextStyle(
                   color: Colors.black,
@@ -395,7 +395,7 @@ class _SangtaeState extends State<Sangtae> {
       MaterialPageRoute(builder: (context) => Baepo()),
     );
   }
-
+}
 
 class MyListView extends StatelessWidget {
   final Function(BuildContext) handlePopup;
@@ -403,59 +403,42 @@ class MyListView extends StatelessWidget {
 
   MyListView({
     required this.deployInfoList,
-    required this.handlePopup
+    required this.handlePopup,
   });
 
   @override
   Widget build(BuildContext context) {
-    return ListView(
-      shrinkWrap: true,
-      children: [
-        _buildExpansionTile(context, '인스턴스', [
-          '인스턴스 1 - 서버목록 1',
-          '리스트뷰 1 - 아이템 2',
-          '리스트뷰 1 - 아이템 3',
-          '리스트뷰 1 - 아이템 4',
-        ]),
-        _buildExpansionTile(context, '리스트뷰 2', [
-          '리스트뷰 2 - 아이템 1',
-          '리스트뷰 2 - 아이템 2',
-        ]),
-        _buildExpansionTile(context, '리스트뷰 3', [
-          '리스트뷰 3 - 아이템 1',
-          '리스트뷰 3 - 아이템 2',
-        ]),
-      ],
-    );
-  }
-
-  ExpansionTile _buildExpansionTile(BuildContext context, String title,
-      List<String> items) {
-    return ExpansionTile(
-      title: Row(
-        children: [
-          Icon(
-            Icons.arrow_right,
-            color: Colors.white,
+    return ListView.builder(
+      itemCount: deployInfoList.length,
+      itemBuilder: (context, index) {
+        final instance = deployInfoList[index];
+        return ExpansionTile(
+          title: Row(
+            children: [
+              Icon(
+                Icons.arrow_right,
+                color: Colors.white,
+              ),
+              Text(
+                instance.instanceName,
+                style: TextStyle(color: Colors.white),
+              ),
+            ],
           ),
-          Text(
-            title,
-            style: TextStyle(color: Colors.white),
-          ),
-        ],
-      ),
-      tilePadding: EdgeInsets.symmetric(horizontal: 16),
-      children: items.map((item) {
-        return ListTile(
-          title: Text(
-            item,
-            style: TextStyle(color: Colors.white, fontSize: 12),
-          ),
-          onTap: () {
-            handlePopup(context);
-          },
+          tilePadding: EdgeInsets.symmetric(horizontal: 16),
+          children: instance.servers.map((server) {
+            return ListTile(
+              title: Text(
+                server.serverName,
+                style: TextStyle(color: Colors.white, fontSize: 12),
+              ),
+              onTap: () {
+                handlePopup(context);
+              },
+            );
+          }).toList(),
         );
-      }).toList(),
+      },
     );
   }
 }
