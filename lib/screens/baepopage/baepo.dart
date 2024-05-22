@@ -1,6 +1,7 @@
 import 'dart:typed_data';
 import 'package:easyback/screens/baepopage/sangtae.dart';
 import 'package:easyback/screens/main_menu.dart';
+import 'package:easyback/services/APIDeployments.dart';
 import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
 import '../api/ApiPage.dart';
@@ -31,6 +32,8 @@ class _BaepoState extends State<Baepo> {
   bool fileUploadEnabled = true;
   bool textFieldEnabled = true;
   String fileContent = "";
+
+  PlatformFile? selectedFile;
 
   @override
   void initState() {
@@ -323,8 +326,10 @@ class _BaepoState extends State<Baepo> {
           makeFilePicker(),
           SizedBox(height: 20),
           ElevatedButton( // 배포하기 버튼
-            onPressed: () {
-              // 배포하기 버튼 클릭 시 수행할 작업 추가
+            onPressed: () async {
+              if(selectedFile != null) {
+                await APIDeployments.deployNewServerZip(selectedFile!);
+              }
             },
             child: Padding(
               padding: EdgeInsets.symmetric(horizontal: 10, vertical: 15), // 여백 조정
@@ -409,10 +414,10 @@ class _BaepoState extends State<Baepo> {
                 Uint8List fileBytes = result.files.first.bytes!;
                 debugPrint(fileName);
                 setState(() {
+                  selectedFile = result.files.first;
                   showFileName = "Now File Name: $fileName";
                   textFieldEnabled = false;
                 });
-                getFileFromGitHub(userInput);
               }
             },
             child: Row(
@@ -460,32 +465,6 @@ class _BaepoState extends State<Baepo> {
         ],
       ),
     );
-  }
-
-  void getFileFromGitHub(String url) async {
-    try {
-      var apiUrl = Uri.parse('https://github.com/CAU-EasyBackend/easybackend-server/blob/241129a21eeb17953ab09d148381c5ddd090b8ed/.gitignore');
-      var requestBody = jsonEncode({'repositoryURL': url});
-      var response = await http.post(
-        apiUrl,
-        headers: {'Content-Type': 'application/json'},
-        body: requestBody,
-      );
-
-      if (response.statusCode == 200) {
-        setState(() {
-          fileContent = response.body;
-        });
-      } else {
-        setState(() {
-          fileContent = "Failed to fetch file: ${response.statusCode}";
-        });
-      }
-    } catch (e) {
-      setState(() {
-        fileContent = "Error: $e";
-      });
-    }
   }
 
   void _handleDeploymentGuideButton(BuildContext context) {
