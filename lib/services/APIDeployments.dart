@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:file_picker/file_picker.dart';
 import 'package:http/browser_client.dart';
 import 'package:http/http.dart' as http;
@@ -20,6 +22,30 @@ class APIDeployments {
     );
 
     final response = await client.send(request);
+    if(response.statusCode != 200) {
+      throw Exception('Error');
+    }
+
+    return;
+  }
+
+  static Future<void> deployNewServerGithub(String repositoryURL) async {
+    final url = Uri.parse('$baseUrl/deployments/new/github');
+    final client = BrowserClient()..withCredentials = true;
+
+    final requestBody = jsonEncode({
+      'repositoryURL': repositoryURL,
+    });
+
+    final response = await client.post(
+        url,
+        headers: {
+          'Content-Type': 'application/json',
+          'X-Requested-With': 'XMLHttpRequest'
+        },
+        body: requestBody,
+    );
+
     if(response.statusCode != 200) {
       throw Exception('Error');
     }

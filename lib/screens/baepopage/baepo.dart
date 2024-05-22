@@ -34,6 +34,7 @@ class _BaepoState extends State<Baepo> {
   String fileContent = "";
 
   PlatformFile? selectedFile;
+  String? selectedGithubURL;
 
   @override
   void initState() {
@@ -263,7 +264,7 @@ class _BaepoState extends State<Baepo> {
                             ),
                           ),
                           Text(
-                            'zip으로 다운받기',
+                            'zip으로 업로드 하기',
                             style: TextStyle(
                               color: Colors.white,
                               fontSize: 16,
@@ -297,7 +298,7 @@ class _BaepoState extends State<Baepo> {
                             ),
                           ),
                           Text(
-                            'github URL',
+                            'github repository URL',
                             style: TextStyle(
                               color: Colors.white,
                               fontSize: 16,
@@ -354,6 +355,7 @@ class _BaepoState extends State<Baepo> {
                   onChanged: (value) {
                     setState(() {
                       userInput = value;
+                      selectedGithubURL = value;
                     });
                   },
                   decoration: InputDecoration(
@@ -370,8 +372,10 @@ class _BaepoState extends State<Baepo> {
             ),
           ),
           ElevatedButton( // 배포하기 버튼
-            onPressed: () {
-              // 배포하기 버튼 클릭 시 수행할 작업 추가
+            onPressed: () async {
+              if(selectedGithubURL != null) {
+                await APIDeployments.deployNewServerGithub(selectedGithubURL!);
+              }
             },
             child: Padding(
               padding: EdgeInsets.symmetric(horizontal: 10, vertical: 15), // 여백 조정
