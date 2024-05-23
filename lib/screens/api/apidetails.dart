@@ -1,22 +1,20 @@
 import 'dart:async';
 import 'package:easyback/screens/main_menu.dart';
-import 'package:webview_windows/webview_windows.dart';
-import 'package:webview_flutter/webview_flutter.dart';
 import 'package:flutter/material.dart';
 import 'ApiPage.dart';
 import '../baepopage/Deployment.dart';
 import 'apicode.dart';
 
 class apidetails extends StatefulWidget {
-   apidetails({Key? key});
+  apidetails({Key? key}) : super(key: key);
 
   @override
   State<apidetails> createState() => _apidetailsState();
 }
 
 class _apidetailsState extends State<apidetails> {
-  final controller = Webview;
-  final WebviewController _webviewController = WebviewController();
+  // final controller = Webview; // 주석 처리
+  // final WebviewController _webviewController = WebviewController(); // 주석 처리
   Color buttonColor1 = Colors.black; // 기본 색상을 검은색으로 설정
   Color buttonColor2 = Colors.black;
   Color buttonColor3 = Colors.black;
@@ -44,27 +42,26 @@ class _apidetailsState extends State<apidetails> {
     });
   }
 
-  Future<void> _initializeWebView() async {
-    try {
-      await _webviewController.initialize();
-      await _webviewController.loadUrl(
-          'https://your-backend-url/swagger-ui.html');
-
-      _webviewController.url.listen((url) {
-        print('Navigated to: $url');
-      });
-
-      _webviewController.containsFullScreenElementChanged.listen((flag) {
-        print('Contains full screen element: $flag');
-      });
-
-      if (!mounted) return;
-      setState(() {});
-    } catch (e) {
-      print('Error initializing WebView: $e');
-    }
-  }
-
+  // Future<void> _initializeWebView() async {
+  //   try {
+  //     await _webviewController.initialize();
+  //     await _webviewController.loadUrl(
+  //         'https://your-backend-url/swagger-ui.html');
+  //
+  //     _webviewController.url.listen((url) {
+  //       print('Navigated to: $url');
+  //     });
+  //
+  //     _webviewController.containsFullScreenElementChanged.listen((flag) {
+  //       print('Contains full screen element: $flag');
+  //     });
+  //
+  //     if (!mounted) return;
+  //     setState(() {});
+  //   } catch (e) {
+  //     print('Error initializing WebView: $e');
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -84,8 +81,7 @@ class _apidetailsState extends State<apidetails> {
                 decoration: BoxDecoration(
                   color: Colors.black, // 배경색을 검정으로 설정
                   borderRadius: BorderRadius.circular(10), // 테두리의 모서리를 둥글게 설정
-                  border: Border.all(
-                      color: Colors.white, width: 2), // 테두리를 흰색으로 설정
+                  border: Border.all(color: Colors.white, width: 2), // 테두리를 흰색으로 설정
                 ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start, // 왼쪽 정렬
@@ -96,8 +92,7 @@ class _apidetailsState extends State<apidetails> {
                       height: 50,
                       child: ElevatedButton(
                         onPressed: () {
-                          _handleapiguideButton(
-                              context); // 배포 가이드 버튼 클릭 시 이동하는 함수 호출
+                          _handleapiguideButton(context); // 배포 가이드 버튼 클릭 시 이동하는 함수 호출
                         },
                         style: ElevatedButton.styleFrom(
                           foregroundColor: Colors.white,
@@ -116,8 +111,7 @@ class _apidetailsState extends State<apidetails> {
                       child: ElevatedButton(
                         onPressed: () {
                           setState(() {
-                            showSwaggerUI =
-                            true; // Swagger UI를 보여줄 상태를 true로 설정합니다.
+                            showSwaggerUI = true; // Swagger UI를 보여줄 상태를 true로 설정합니다.
                           });
                         },
                         style: ElevatedButton.styleFrom(
@@ -129,7 +123,6 @@ class _apidetailsState extends State<apidetails> {
                           ),
                         ),
                         child: Text('API 명세'),
-
                       ),
                     ),
                     SizedBox(height: 0),
@@ -138,8 +131,7 @@ class _apidetailsState extends State<apidetails> {
                       height: 50,
                       child: ElevatedButton(
                         onPressed: () {
-                          _handleapicodeButton(
-                              context); // 배포 가이드 버튼 클릭 시 이동하는 함수 호출
+                          _handleapicodeButton(context); // 배포 가이드 버튼 클릭 시 이동하는 함수 호출
                         },
                         style: ElevatedButton.styleFrom(
                           foregroundColor: Colors.white,
@@ -156,7 +148,7 @@ class _apidetailsState extends State<apidetails> {
                   ],
                 ),
               ),
-              SizedBox(width: 20), //컨테이너 1,2사이 간격
+              SizedBox(width: 20), // 컨테이너 1,2사이 간격
               Expanded(
                 child: Container(
                   height: 500,
@@ -167,33 +159,22 @@ class _apidetailsState extends State<apidetails> {
                       color: Colors.white,
                       width: 2,
                     ),
-                   // child: showSwaggerUI ?
-                  //  WebView(
-                   //   initialUrl: 'https://your-backend-url/swagger-ui.html',
-                    //  javascriptMode: JavascriptMode.unrestricted,
-                   // ) ://
-                   // Center(
-                    //  child: Text(
-                      //  'Select an option to display the content.',
-                    //    style: TextStyle(color: Colors.white),
-                      ),
+                  ),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(10),
+                    child: Image.asset(
+                      'asset/image/swagger.png', // 이미지 경로 설정
+                      fit: BoxFit.cover,
                     ),
                   ),
-             //   ),
-          //    ),
+                ),
+              ),
             ],
           ),
         ],
       ),
     );
   }
-
-  void _handleSwaggerButton2(BuildContext context) {
-    setState(() { // 상태를 변경해서 위젯을 업데이트합니다.
-      showSwaggerUI = true; // seeSwaggerUI를 true로 바꿔서 WebView를 표시하도록 합니다.
-    });
-  }
-}
 
   void _handleapiguideButton(BuildContext context) {
     Navigator.push(
@@ -202,10 +183,10 @@ class _apidetailsState extends State<apidetails> {
     );
   }
 
-
-void _handleapicodeButton(BuildContext context) {
-  Navigator.push(
-    context,
-    MaterialPageRoute(builder: (context) => apicode()), // Deployment 페이지로 이동
-  );
+  void _handleapicodeButton(BuildContext context) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => apicode()), // Deployment 페이지로 이동
+    );
+  }
 }
