@@ -1,4 +1,6 @@
+import 'package:easyback/models/APISpec.dart';
 import 'package:easyback/screens/main_menu.dart';
+import 'package:easyback/services/APIProjects.dart';
 import 'package:flutter/material.dart';
 
 import 'ApiPage.dart';
@@ -32,13 +34,20 @@ class _apicodeState extends State<apicode> {
   bool textFieldEnabled = true;
   String fileContent = "";
 
-
-  List<bool> selectedProjects = [false, false, false];
+  List<APISpec> projects = [];
+  APISpec? selectedProject;
 
   @override
   void initState() {
     super.initState();
-    setState(() {});
+    _getProjects();
+  }
+
+  Future<void> _getProjects() async {
+    final List<APISpec> projects = await APIProjects.getProjectList();
+    setState(() {
+      this.projects = projects;
+    });
   }
 
   void _handleCheckboxChanged(bool? value, int group, int index) {
@@ -52,26 +61,6 @@ class _apicodeState extends State<apicode> {
       }
     });
   }
-  void _handleProjectTap(int index) {
-    setState(() {
-      for (int i = 0; i < selectedProjects.length; i++) {
-        if (i == index) {
-          selectedProjects[i] = true;
-        } else {
-          selectedProjects[i] = false;
-        }
-      }
-      buttonColor4 = getButtonColor(0);
-      buttonColor5 = getButtonColor(1);
-      buttonColor6 = getButtonColor(2);
-
-    });
-  }
-
-  Color getButtonColor(int index) {
-    return selectedProjects[index] ? Colors.white38 : Colors.black;
-  }
-
 
   @override
   Widget build(BuildContext context) {
@@ -158,77 +147,23 @@ class _apicodeState extends State<apicode> {
               ),
               SizedBox(width: 20),
               Container(
-                width: 200,
-                height: 500,
                 decoration: BoxDecoration(
                   color: Colors.black,
                   borderRadius: BorderRadius.circular(10),
-                  border: Border.all(color: Colors.white, width: 2),
+                  border: Border.all(
+                    color: Colors.white,
+                    width: 2,
+                  ),
                 ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    SizedBox(height: 2),
-                    SizedBox(
-                      width: double.infinity,
-                      height: 50,
-                      child: ElevatedButton(
-                        onPressed: () {
-                          _handleProjectTap(0);
-                        },
-                        style: ElevatedButton.styleFrom(
-                          foregroundColor: Colors.white,
-                          backgroundColor: buttonColor4,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.zero,
-                          ),
-                        ),
-                        child: Text('프로젝트 1'),
-                      ),
-                    ),
-                    SizedBox(height: 0),
-                    SizedBox(
-                      width: double.infinity,
-                      height: 50,
-                      child: ElevatedButton(
-                        onPressed: () {
-                          _handleProjectTap(1);
-                        },
-                        style: ElevatedButton.styleFrom(
-                          foregroundColor: Colors.white,
-                          backgroundColor: buttonColor5,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.zero,
-                            side: BorderSide(color: Colors.white),
-                          ),
-                        ),
-                        child: Text('프로젝트 2'),
-                      ),
-                    ),
-                    SizedBox(height: 0),
-                    SizedBox(
-                      width: double.infinity,
-                      height: 50,
-                      child: ElevatedButton(
-                        onPressed: () {
-                          _handleProjectTap(2);
-                        },
-                        style: ElevatedButton.styleFrom(
-                          foregroundColor: Colors.white,
-                          backgroundColor: buttonColor6,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.zero,
-                            side: BorderSide(color: Colors.white, width: 1),
-                          ),
-                        ),
-                        child: Text('프로젝트 3'),
-                      ),
-                    ),
-                    SizedBox(height: 100),
-                  ],
+                child: SizedBox(
+                  height: 500,
+                  width: 200,
+                  child: ProjectListView(
+                    projects: projects,
+                    handleProjectTap: _handleProjectTap,
+                  ),
                 ),
               ),
-
               SizedBox(width: 20),
               Expanded(
                 child: Container(
@@ -439,6 +374,40 @@ class _apicodeState extends State<apicode> {
     Navigator.push(
       context,
       MaterialPageRoute(builder: (context) => apicode()),
+    );
+  }
+
+  void _handleProjectTap(APISpec? project) {
+    setState(() {
+      selectedProject = project;
+    });
+  }
+}
+
+class ProjectListView extends StatelessWidget {
+  final List<APISpec> projects;
+  final Function(APISpec?) handleProjectTap;
+
+  ProjectListView({
+    required this.projects,
+    required this.handleProjectTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return ListView.builder(
+      itemCount: projects.length,
+      itemBuilder: (context, index) {
+        return ListTile(
+          title: Text(
+            projects[index].projectName,
+            style: TextStyle(color: Colors.white, fontSize: 12),
+          ),
+          onTap: () {
+            handleProjectTap(projects[index]);
+          },
+        );
+      },
     );
   }
 }
