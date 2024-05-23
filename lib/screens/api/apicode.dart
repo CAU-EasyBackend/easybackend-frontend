@@ -1,9 +1,13 @@
+import 'package:easyback/models/APISpec.dart';
 import 'package:easyback/screens/main_menu.dart';
+import 'package:easyback/services/APICodeGens.dart';
+import 'package:easyback/services/APIProjects.dart';
 import 'package:flutter/material.dart';
 
 import 'ApiPage.dart';
 import '../baepopage/Deployment.dart';
 import 'apidetails.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class apicode extends StatefulWidget {
   const apicode({Key? key}) : super(key: key);
@@ -24,54 +28,43 @@ class _apicodeState extends State<apicode> {
   String userInput = "";
   Color defaultColor = Colors.grey[400]!;
 
-  bool checkBox1 = false;
-  bool checkBox2 = false;
-  bool checkBox3 = false;
-  bool checkBox4 = false;
+  bool isSpringSelected = false;
+  bool isExpressSelected = false;
+  bool isZipOptionSelected = false;
+  bool isGithubOptionSelected = false;
   bool fileUploadEnabled = true;
   bool textFieldEnabled = true;
   String fileContent = "";
 
+  List<APISpec> projects = [];
+  APISpec? selectedProject;
 
-  List<bool> selectedProjects = [false, false, false];
+  bool _isLoading = false;
 
   @override
   void initState() {
     super.initState();
-    setState(() {});
+    _getProjects();
+  }
+
+  Future<void> _getProjects() async {
+    final List<APISpec> projects = await APIProjects.getProjectList();
+    setState(() {
+      this.projects = projects;
+    });
   }
 
   void _handleCheckboxChanged(bool? value, int group, int index) {
     setState(() {
       if (group == 1) {
-        checkBox1 = index == 1 ? value! : false;
-        checkBox2 = index == 2 ? value! : false;
+        isSpringSelected = index == 1 ? value! : false;
+        isExpressSelected = index == 2 ? value! : false;
       } else if (group == 2) {
-        checkBox3 = index == 3 ? value! : false;
-        checkBox4 = index == 4 ? value! : false;
+        isZipOptionSelected = index == 3 ? value! : false;
+        isGithubOptionSelected = index == 4 ? value! : false;
       }
     });
   }
-  void _handleProjectTap(int index) {
-    setState(() {
-      for (int i = 0; i < selectedProjects.length; i++) {
-        if (i == index) {
-          selectedProjects[i] = true;
-        } else {
-          selectedProjects[i] = false;
-        }
-      }
-      buttonColor4 = getButtonColor(0);
-      buttonColor5 = getButtonColor(1);
-      buttonColor6 = getButtonColor(2);
-
-    });
-  }
-
-  Color getButtonColor(int index) {
-    return selectedProjects[index] ? Colors.white38 : Colors.black;
-  }
-
 
   @override
   Widget build(BuildContext context) {
@@ -158,77 +151,23 @@ class _apicodeState extends State<apicode> {
               ),
               SizedBox(width: 20),
               Container(
-                width: 200,
-                height: 500,
                 decoration: BoxDecoration(
                   color: Colors.black,
                   borderRadius: BorderRadius.circular(10),
-                  border: Border.all(color: Colors.white, width: 2),
+                  border: Border.all(
+                    color: Colors.white,
+                    width: 2,
+                  ),
                 ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    SizedBox(height: 2),
-                    SizedBox(
-                      width: double.infinity,
-                      height: 50,
-                      child: ElevatedButton(
-                        onPressed: () {
-                          _handleProjectTap(0);
-                        },
-                        style: ElevatedButton.styleFrom(
-                          foregroundColor: Colors.white,
-                          backgroundColor: buttonColor4,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.zero,
-                          ),
-                        ),
-                        child: Text('프로젝트 1'),
-                      ),
-                    ),
-                    SizedBox(height: 0),
-                    SizedBox(
-                      width: double.infinity,
-                      height: 50,
-                      child: ElevatedButton(
-                        onPressed: () {
-                          _handleProjectTap(1);
-                        },
-                        style: ElevatedButton.styleFrom(
-                          foregroundColor: Colors.white,
-                          backgroundColor: buttonColor5,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.zero,
-                            side: BorderSide(color: Colors.white),
-                          ),
-                        ),
-                        child: Text('프로젝트 2'),
-                      ),
-                    ),
-                    SizedBox(height: 0),
-                    SizedBox(
-                      width: double.infinity,
-                      height: 50,
-                      child: ElevatedButton(
-                        onPressed: () {
-                          _handleProjectTap(2);
-                        },
-                        style: ElevatedButton.styleFrom(
-                          foregroundColor: Colors.white,
-                          backgroundColor: buttonColor6,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.zero,
-                            side: BorderSide(color: Colors.white, width: 1),
-                          ),
-                        ),
-                        child: Text('프로젝트 3'),
-                      ),
-                    ),
-                    SizedBox(height: 100),
-                  ],
+                child: SizedBox(
+                  height: 500,
+                  width: 200,
+                  child: ProjectListView(
+                    projects: projects,
+                    handleProjectTap: _handleProjectTap,
+                  ),
                 ),
               ),
-
               SizedBox(width: 20),
               Expanded(
                 child: Container(
@@ -241,10 +180,21 @@ class _apicodeState extends State<apicode> {
                       width: 2,
                     ),
                   ),
-                  child: Column(
+                  child: _isLoading
+                      ? Center(child: CircularProgressIndicator())
+                      : Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      SizedBox(height: 50),
+                      SizedBox(height: 40),
+                      Text(
+                        '코드 생성 할 프로젝트 이름: ${selectedProject?.projectName ?? '선택된 프로젝트 없음'}',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 20,
+                          fontWeight: FontWeight.normal,
+                        ),
+                      ),
+                      SizedBox(height: 40),
                       Text(
                         '1. 코드 생성을 위한 프레임 워크를 선택해주세요.',
                         style: TextStyle(
@@ -253,7 +203,7 @@ class _apicodeState extends State<apicode> {
                           fontWeight: FontWeight.normal,
                         ),
                       ),
-                      SizedBox(height: 30),
+                      SizedBox(height: 20),
                       Row(
                         children: [
                           SizedBox(width: 400),
@@ -262,7 +212,7 @@ class _apicodeState extends State<apicode> {
                               unselectedWidgetColor: Colors.white,
                             ),
                             child: Checkbox(
-                              value: checkBox1,
+                              value: isSpringSelected,
                               onChanged: (bool? value) {
                                 _handleCheckboxChanged(value, 1, 1);
                               },
@@ -294,7 +244,7 @@ class _apicodeState extends State<apicode> {
                               unselectedWidgetColor: Colors.white,
                             ),
                             child: Checkbox(
-                              value: checkBox2,
+                              value: isExpressSelected,
                               onChanged: (bool? value) {
                                 _handleCheckboxChanged(value, 1, 2);
                               },
@@ -321,7 +271,7 @@ class _apicodeState extends State<apicode> {
                           ),
                         ],
                       ),
-                      SizedBox(height: 80),
+                      SizedBox(height: 40),
                       Text(
                         '2. 코드 제공받을 방식을 선택해주세요.',
                         style: TextStyle(
@@ -339,7 +289,7 @@ class _apicodeState extends State<apicode> {
                               unselectedWidgetColor: Colors.white,
                             ),
                             child: Checkbox(
-                              value: checkBox3,
+                              value: isZipOptionSelected,
                               onChanged: (bool? value) {
                                 _handleCheckboxChanged(value, 2, 3);
                               },
@@ -370,7 +320,7 @@ class _apicodeState extends State<apicode> {
                               unselectedWidgetColor: Colors.white,
                             ),
                             child: Checkbox(
-                              value: checkBox4,
+                              value: isGithubOptionSelected,
                               onChanged: (bool? value) {
                                 _handleCheckboxChanged(value, 2, 4);
                               },
@@ -397,10 +347,51 @@ class _apicodeState extends State<apicode> {
                           ),
                         ],
                       ),
-                      SizedBox(height: 60),
+                      SizedBox(height: 40),
                       ElevatedButton(
-                        onPressed: () {
-                          // Code generation logic here
+                        onPressed: () async {
+                          if(selectedProject == null) {
+                            return;
+                          }
+                          if(!isSpringSelected && !isExpressSelected) {
+                            return;
+                          }
+                          if(!isZipOptionSelected && !isGithubOptionSelected) {
+                            return;
+                          }
+
+                          String frameworkType = isSpringSelected ? 'spring' : 'express';
+                          setState(() {
+                            _isLoading = true;
+                          });
+                          if(isZipOptionSelected) {
+                            await APICodeGens.generateCodeFromZip(selectedProject!.projectId, frameworkType);
+                          } else {
+                            String url = await APICodeGens.generateCodeFromGithub(selectedProject!.projectId, frameworkType);
+                            await showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return AlertDialog(
+                                  title: Text('GitHub URL'),
+                                  content: InkWell(
+                                    child: Text(url),
+                                    onTap: () => launch(url),
+                                  ),
+                                  actions: [
+                                    TextButton(
+                                      child: Text('Close'),
+                                      onPressed: () {
+                                        Navigator.of(context).pop();
+                                      },
+                                    ),
+                                  ],
+                                );
+                              },
+                            );
+                          }
+                          setState(() {
+                            _isLoading = false;
+                          });
                         },
                         child: Padding(
                           padding: EdgeInsets.symmetric(horizontal: 10, vertical: 15),
@@ -439,6 +430,40 @@ class _apicodeState extends State<apicode> {
     Navigator.push(
       context,
       MaterialPageRoute(builder: (context) => apicode()),
+    );
+  }
+
+  void _handleProjectTap(APISpec? project) {
+    setState(() {
+      selectedProject = project;
+    });
+  }
+}
+
+class ProjectListView extends StatelessWidget {
+  final List<APISpec> projects;
+  final Function(APISpec?) handleProjectTap;
+
+  ProjectListView({
+    required this.projects,
+    required this.handleProjectTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return ListView.builder(
+      itemCount: projects.length,
+      itemBuilder: (context, index) {
+        return ListTile(
+          title: Text(
+            projects[index].projectName,
+            style: TextStyle(color: Colors.white, fontSize: 12),
+          ),
+          onTap: () {
+            handleProjectTap(projects[index]);
+          },
+        );
+      },
     );
   }
 }
