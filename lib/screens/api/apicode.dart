@@ -1,5 +1,6 @@
 import 'package:easyback/models/APISpec.dart';
 import 'package:easyback/screens/main_menu.dart';
+import 'package:easyback/services/APICodeGens.dart';
 import 'package:easyback/services/APIProjects.dart';
 import 'package:flutter/material.dart';
 
@@ -26,16 +27,18 @@ class _apicodeState extends State<apicode> {
   String userInput = "";
   Color defaultColor = Colors.grey[400]!;
 
-  bool checkBox1 = false;
-  bool checkBox2 = false;
-  bool checkBox3 = false;
-  bool checkBox4 = false;
+  bool isSpringSelected = false;
+  bool isExpressSelected = false;
+  bool isZipOptionSelected = false;
+  bool isGithubOptionSelected = false;
   bool fileUploadEnabled = true;
   bool textFieldEnabled = true;
   String fileContent = "";
 
   List<APISpec> projects = [];
   APISpec? selectedProject;
+
+  bool _isLoading = false;
 
   @override
   void initState() {
@@ -53,11 +56,11 @@ class _apicodeState extends State<apicode> {
   void _handleCheckboxChanged(bool? value, int group, int index) {
     setState(() {
       if (group == 1) {
-        checkBox1 = index == 1 ? value! : false;
-        checkBox2 = index == 2 ? value! : false;
+        isSpringSelected = index == 1 ? value! : false;
+        isExpressSelected = index == 2 ? value! : false;
       } else if (group == 2) {
-        checkBox3 = index == 3 ? value! : false;
-        checkBox4 = index == 4 ? value! : false;
+        isZipOptionSelected = index == 3 ? value! : false;
+        isGithubOptionSelected = index == 4 ? value! : false;
       }
     });
   }
@@ -176,10 +179,21 @@ class _apicodeState extends State<apicode> {
                       width: 2,
                     ),
                   ),
-                  child: Column(
+                  child: _isLoading
+                      ? Center(child: CircularProgressIndicator())
+                      : Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      SizedBox(height: 50),
+                      SizedBox(height: 40),
+                      Text(
+                        '코드 생성 할 프로젝트 이름: ${selectedProject?.projectName ?? '선택된 프로젝트 없음'}',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 20,
+                          fontWeight: FontWeight.normal,
+                        ),
+                      ),
+                      SizedBox(height: 40),
                       Text(
                         '1. 코드 생성을 위한 프레임 워크를 선택해주세요.',
                         style: TextStyle(
@@ -188,7 +202,7 @@ class _apicodeState extends State<apicode> {
                           fontWeight: FontWeight.normal,
                         ),
                       ),
-                      SizedBox(height: 30),
+                      SizedBox(height: 20),
                       Row(
                         children: [
                           SizedBox(width: 400),
@@ -197,7 +211,7 @@ class _apicodeState extends State<apicode> {
                               unselectedWidgetColor: Colors.white,
                             ),
                             child: Checkbox(
-                              value: checkBox1,
+                              value: isSpringSelected,
                               onChanged: (bool? value) {
                                 _handleCheckboxChanged(value, 1, 1);
                               },
@@ -229,7 +243,7 @@ class _apicodeState extends State<apicode> {
                               unselectedWidgetColor: Colors.white,
                             ),
                             child: Checkbox(
-                              value: checkBox2,
+                              value: isExpressSelected,
                               onChanged: (bool? value) {
                                 _handleCheckboxChanged(value, 1, 2);
                               },
@@ -256,7 +270,7 @@ class _apicodeState extends State<apicode> {
                           ),
                         ],
                       ),
-                      SizedBox(height: 80),
+                      SizedBox(height: 40),
                       Text(
                         '2. 코드 제공받을 방식을 선택해주세요.',
                         style: TextStyle(
@@ -274,7 +288,7 @@ class _apicodeState extends State<apicode> {
                               unselectedWidgetColor: Colors.white,
                             ),
                             child: Checkbox(
-                              value: checkBox3,
+                              value: isZipOptionSelected,
                               onChanged: (bool? value) {
                                 _handleCheckboxChanged(value, 2, 3);
                               },
@@ -305,7 +319,7 @@ class _apicodeState extends State<apicode> {
                               unselectedWidgetColor: Colors.white,
                             ),
                             child: Checkbox(
-                              value: checkBox4,
+                              value: isGithubOptionSelected,
                               onChanged: (bool? value) {
                                 _handleCheckboxChanged(value, 2, 4);
                               },
@@ -332,10 +346,31 @@ class _apicodeState extends State<apicode> {
                           ),
                         ],
                       ),
-                      SizedBox(height: 60),
+                      SizedBox(height: 40),
                       ElevatedButton(
-                        onPressed: () {
-                          // Code generation logic here
+                        onPressed: () async {
+                          if(selectedProject == null) {
+                            return;
+                          }
+                          if(!isSpringSelected && !isExpressSelected) {
+                            return;
+                          }
+                          if(!isZipOptionSelected && !isGithubOptionSelected) {
+                            return;
+                          }
+
+                          String frameworkType = isSpringSelected ? 'spring' : 'express';
+                          setState(() {
+                            _isLoading = true;
+                          });
+                          if(isZipOptionSelected) {
+                            await APICodeGens.generateCodeFromZip(selectedProject!.projectId, frameworkType);
+                          } else {
+
+                          }
+                          setState(() {
+                            _isLoading = false;
+                          });
                         },
                         child: Padding(
                           padding: EdgeInsets.symmetric(horizontal: 10, vertical: 15),
