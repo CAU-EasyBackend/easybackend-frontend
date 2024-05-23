@@ -20,15 +20,18 @@ class _BaepoState extends State<Baepo> {
   Color buttonColor1 = Colors.black;
   Color buttonColor2 = Colors.black;
   Color buttonColor3 = Colors.black;
+
   String? centerText;
   String showFileName = "";
   String userInput = "";
   Color defaultColor = Colors.grey[400]!;
 
+  bool isSpringSelected = false;
+  bool isExpressSelected = false;
+
   bool checkBox1 = false;
   bool checkBox2 = false;
-  bool checkBox3 = false;
-  bool checkBox4 = false;
+
   bool fileUploadEnabled = true;
   bool textFieldEnabled = true;
   String fileContent = "";
@@ -160,11 +163,13 @@ class _BaepoState extends State<Baepo> {
                               unselectedWidgetColor: Colors.white,
                             ),
                             child: Checkbox(
-                              value: checkBox3,
+                              value: isSpringSelected,
                               onChanged: (bool? value) {
                                 setState(() {
-                                  checkBox3 = value!;
-                                  if (checkBox3) checkBox4 = false;
+                                  isSpringSelected = value!;
+                                  if(isSpringSelected) {
+                                    isExpressSelected = false;
+                                  }
                                 });
                               },
                               shape: RoundedRectangleBorder(
@@ -194,11 +199,13 @@ class _BaepoState extends State<Baepo> {
                               unselectedWidgetColor: Colors.white,
                             ),
                             child: Checkbox(
-                              value: checkBox4,
+                              value: isExpressSelected,
                               onChanged: (bool? value) {
                                 setState(() {
-                                  checkBox4 = value!;
-                                  if (checkBox4) checkBox3 = false;
+                                  isExpressSelected = value!;
+                                  if(isExpressSelected) {
+                                    isSpringSelected = false;
+                                  }
                                 });
                               },
                               shape: RoundedRectangleBorder(
@@ -329,7 +336,11 @@ class _BaepoState extends State<Baepo> {
           ElevatedButton( // 배포하기 버튼
             onPressed: () async {
               if(selectedFile != null) {
-                await APIDeployments.deployNewServerZip(selectedFile!);
+                if(isSpringSelected)
+                  await APIDeployments.deployNewServerZip(selectedFile!, "spring");
+                else if(isExpressSelected) {
+                  await APIDeployments.deployNewServerZip(selectedFile!, "express");
+                }
               }
             },
             child: Padding(
@@ -374,7 +385,11 @@ class _BaepoState extends State<Baepo> {
           ElevatedButton( // 배포하기 버튼
             onPressed: () async {
               if(selectedGithubURL != null) {
-                await APIDeployments.deployNewServerGithub(selectedGithubURL!);
+                if(isSpringSelected) {
+                  await APIDeployments.deployNewServerGithub(selectedGithubURL!, 'spring');
+                } else if(isExpressSelected) {
+                  await APIDeployments.deployNewServerGithub(selectedGithubURL!, 'express');
+                }
               }
             },
             child: Padding(
