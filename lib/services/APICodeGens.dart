@@ -48,4 +48,32 @@ class APICodeGens {
 
     return;
   }
+
+  static Future<String> generateCodeFromGithub(String projectId, String frameworkType) async {
+    final url = Uri.parse('$baseUrl/codeGens/github');
+    final client = BrowserClient()..withCredentials = true;
+
+    final requestBody = jsonEncode({
+      'projectId': projectId,
+      'frameworkType': frameworkType,
+    });
+
+    final response = await client.post(
+      url,
+      headers: {
+        'Content-Type': 'application/json',
+        'X-Requested-With': 'XMLHttpRequest'
+      },
+      body: requestBody,
+    );
+
+    if(response.statusCode != 200) {
+      throw Exception('Error');
+    }
+
+    final dynamic body = jsonDecode(response.body);
+    final dynamic result = body['result'];
+
+    return result['repositoryURL'];
+  }
 }

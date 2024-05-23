@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'ApiPage.dart';
 import '../baepopage/Deployment.dart';
 import 'apidetails.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class apicode extends StatefulWidget {
   const apicode({Key? key}) : super(key: key);
@@ -366,7 +367,27 @@ class _apicodeState extends State<apicode> {
                           if(isZipOptionSelected) {
                             await APICodeGens.generateCodeFromZip(selectedProject!.projectId, frameworkType);
                           } else {
-
+                            String url = await APICodeGens.generateCodeFromGithub(selectedProject!.projectId, frameworkType);
+                            await showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return AlertDialog(
+                                  title: Text('GitHub URL'),
+                                  content: InkWell(
+                                    child: Text(url),
+                                    onTap: () => launch(url),
+                                  ),
+                                  actions: [
+                                    TextButton(
+                                      child: Text('Close'),
+                                      onPressed: () {
+                                        Navigator.of(context).pop();
+                                      },
+                                    ),
+                                  ],
+                                );
+                              },
+                            );
                           }
                           setState(() {
                             _isLoading = false;
