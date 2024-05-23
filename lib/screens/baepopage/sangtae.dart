@@ -1,6 +1,7 @@
 import 'package:easyback/models/Instance.dart';
 import 'package:easyback/models/Server.dart';
 import 'package:easyback/screens/baepopage/deploy_menu.dart';
+import 'package:easyback/screens/baepopage/server_update_popup.dart';
 import 'package:easyback/screens/main_menu.dart';
 import 'package:easyback/services/APIDeployInfos.dart';
 import 'package:flutter/material.dart';
@@ -356,26 +357,25 @@ class _SangtaeState extends State<Sangtae> {
                                     SizedBox(width: 50),
                                     TextButton(
                                       onPressed: () {
-                                        setState(() {
-                                          isUpdated = true;
-                                        });
-                                        _handleUpdateButton(context);
+                                        showDialog(
+                                          context: context,
+                                          builder: (BuildContext context) {
+                                            return ServerUpdatePopup(instance: selectedInstance!, server: selectedServer!);
+                                          },
+                                        );
                                       },
                                       child: Text(
                                         '서버 업데이트',
                                         style: TextStyle(
-                                          color: isUpdated
-                                              ? Colors.yellow
-                                              : Colors.white,
+                                          color: Colors.white,
                                           fontSize: 16,
                                         ),
                                       ),
                                       style: TextButton.styleFrom(
                                         side: BorderSide(
-                                            color: isUpdated
-                                                ? Colors.yellow
-                                                : Colors.grey,
-                                            width: 2),
+                                            color: Colors.grey,
+                                            width: 2
+                                        ),
                                       ),
                                     ),
                                     SizedBox(width: 50),

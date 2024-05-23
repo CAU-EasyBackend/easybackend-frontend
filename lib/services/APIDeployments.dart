@@ -34,7 +34,7 @@ class APIDeployments {
     final url = Uri.parse('$baseUrl/deployments/$instanceId/update/zip');
     final client = BrowserClient()..withCredentials = true;
 
-    final request = http.MultipartRequest('POST', url);
+    final request = http.MultipartRequest('PATCH', url);
     request.headers['X-Requested-With'] = 'XMLHttpRequest';
     request.files.add(
       http.MultipartFile.fromBytes(
@@ -87,7 +87,7 @@ class APIDeployments {
       'frameworkType': frameworkType,
     });
 
-    final response = await client.post(
+    final response = await client.patch(
       url,
       headers: {
         'Content-Type': 'application/json',
