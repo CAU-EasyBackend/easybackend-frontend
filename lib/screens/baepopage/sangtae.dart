@@ -1,5 +1,6 @@
 import 'package:easyback/models/Instance.dart';
 import 'package:easyback/models/Server.dart';
+import 'package:easyback/screens/baepopage/deploy_menu.dart';
 import 'package:easyback/screens/main_menu.dart';
 import 'package:easyback/services/APIDeployInfos.dart';
 import 'package:flutter/material.dart';
@@ -18,10 +19,6 @@ class Sangtae extends StatefulWidget {
 }
 
 class _SangtaeState extends State<Sangtae> {
-  Color buttonColor1 = Colors.black;
-  Color buttonColor2 = Colors.black;
-  Color buttonColor3 = Colors.white12;
-
   List<Instance> deployInfoList = [];
 
   Instance? selectedInstance;
@@ -56,80 +53,7 @@ class _SangtaeState extends State<Sangtae> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              Container(
-                width: 200,
-                height: 500,
-                decoration: BoxDecoration(
-                  color: Colors.black,
-                  borderRadius: BorderRadius.circular(10),
-                  border: Border.all(
-                    color: Colors.white,
-                    width: 2,
-                  ),
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    SizedBox(height: 2),
-                    SizedBox(
-                      width: double.infinity,
-                      height: 50,
-                      child: ElevatedButton(
-                        onPressed: () {
-                          _handleDeploymentGuideButton(context);
-                        },
-                        style: ElevatedButton.styleFrom(
-                          foregroundColor: Colors.white,
-                          backgroundColor: buttonColor1,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.zero,
-                          ),
-                        ),
-                        child: Text('배포 가이드'),
-                      ),
-                    ),
-                    SizedBox(height: 0),
-                    SizedBox(
-                      width: double.infinity,
-                      height: 50,
-                      child: ElevatedButton(
-                        onPressed: () {
-                          _handleBaepoGuideButton(context);
-                        },
-                        style: ElevatedButton.styleFrom(
-                          foregroundColor: Colors.white,
-                          backgroundColor: buttonColor2,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.zero,
-                            side: BorderSide(color: Colors.white),
-                          ),
-                        ),
-                        child: Text('파일 업로드'),
-                      ),
-                    ),
-                    SizedBox(height: 0),
-                    SizedBox(
-                      width: double.infinity,
-                      height: 50,
-                      child: ElevatedButton(
-                        onPressed: () {
-                          // Some action
-                        },
-                        style: ElevatedButton.styleFrom(
-                          foregroundColor: Colors.white,
-                          backgroundColor: buttonColor3,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.zero,
-                            side: BorderSide(color: Colors.white, width: 1),
-                          ),
-                        ),
-                        child: Text('상태관리'),
-                      ),
-                    ),
-                    SizedBox(height: 0),
-                  ],
-                ),
-              ),
+              DeployMenu(currentPage: CurrentPage.statusManagement),
               SizedBox(width: 20),
               Expanded(
                 child: Padding(
@@ -535,20 +459,6 @@ class _SangtaeState extends State<Sangtae> {
       selectedInstance = instance;
       selectedServer = server;
     });
-  }
-
-  void _handleDeploymentGuideButton(BuildContext context) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => Deployment()),
-    );
-  }
-
-  void _handleBaepoGuideButton(BuildContext context) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => Baepo()),
-    );
   }
 }
 

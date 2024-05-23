@@ -1,4 +1,5 @@
 import 'dart:typed_data';
+import 'package:easyback/screens/baepopage/deploy_menu.dart';
 import 'package:easyback/screens/baepopage/sangtae.dart';
 import 'package:easyback/screens/main_menu.dart';
 import 'package:easyback/services/APIDeployments.dart';
@@ -17,10 +18,6 @@ class Baepo extends StatefulWidget {
 }
 
 class _BaepoState extends State<Baepo> {
-  Color buttonColor1 = Colors.black;
-  Color buttonColor2 = Colors.black;
-  Color buttonColor3 = Colors.black;
-
   String? centerText;
   String showFileName = "";
   String userInput = "";
@@ -43,7 +40,6 @@ class _BaepoState extends State<Baepo> {
   void initState() {
     super.initState();
     setState(() {
-      buttonColor2 = Colors.white12;
     });
   }
 
@@ -59,77 +55,7 @@ class _BaepoState extends State<Baepo> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              Container(
-                width: 200,
-                height: 500,
-                decoration: BoxDecoration(
-                  color: Colors.black,
-                  borderRadius: BorderRadius.circular(10),
-                  border: Border.all(color: Colors.white, width: 2),
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    SizedBox(height: 2),
-                    SizedBox(
-                      width: double.infinity,
-                      height: 50,
-                      child: ElevatedButton(
-                        onPressed: () {
-                          _handleDeploymentGuideButton(context);
-                        },
-                        style: ElevatedButton.styleFrom(
-                          foregroundColor: Colors.white,
-                          backgroundColor: buttonColor1,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.zero,
-                          ),
-                        ),
-                        child: Text('배포 가이드'),
-                      ),
-                    ),
-                    SizedBox(height: 0),
-                    SizedBox(
-                      width: double.infinity,
-                      height: 50,
-                      child: ElevatedButton(
-                        onPressed: () {
-                          _handleFileUploadButton(context);
-                        },
-                        style: ElevatedButton.styleFrom(
-                          foregroundColor: Colors.white,
-                          backgroundColor: buttonColor2,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.zero,
-                            side: BorderSide(color: Colors.white),
-                          ),
-                        ),
-                        child: Text('파일 업로드'),
-                      ),
-                    ),
-                    SizedBox(height: 0),
-                    SizedBox(
-                      width: double.infinity,
-                      height: 50,
-                      child: ElevatedButton(
-                        onPressed: () {
-                          _handleSangtaeButton(context);
-                        },
-                        style: ElevatedButton.styleFrom(
-                          foregroundColor: Colors.white,
-                          backgroundColor: buttonColor3,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.zero,
-                            side: BorderSide(color: Colors.white, width: 1),
-                          ),
-                        ),
-                        child: Text('상태관리'),
-                      ),
-                    ),
-                    SizedBox(height: 100),
-                  ],
-                ),
-              ),
+              DeployMenu(currentPage: CurrentPage.deployServer),
               SizedBox(width: 20),
               Expanded(
                 child: Container(
@@ -483,24 +409,6 @@ class _BaepoState extends State<Baepo> {
           ),
         ],
       ),
-    );
-  }
-
-  void _handleDeploymentGuideButton(BuildContext context) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => Deployment()),
-    );
-  }
-
-  void _handleFileUploadButton(BuildContext context) {
-    // Add functionality for file upload button
-  }
-
-  void _handleSangtaeButton(BuildContext context) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => Sangtae()),
     );
   }
 }
