@@ -1,6 +1,7 @@
 import 'dart:typed_data';
 import 'package:easyback/screens/baepopage/deploy_menu.dart';
 import 'package:easyback/screens/baepopage/sangtae.dart';
+import 'package:easyback/screens/loading_dialog.dart';
 import 'package:easyback/screens/main_menu.dart';
 import 'package:easyback/services/APIDeployments.dart';
 import 'package:flutter/material.dart';
@@ -36,6 +37,8 @@ class _BaepoState extends State<Baepo> {
   PlatformFile? selectedFile;
   String? selectedGithubURL;
 
+  bool _isLoading = false;
+
   @override
   void initState() {
     super.initState();
@@ -68,7 +71,9 @@ class _BaepoState extends State<Baepo> {
                       width: 2,
                     ),
                   ),
-                  child: Column(
+                  child: _isLoading
+                      ? Center(child: CircularProgressIndicator())
+                      : Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       SizedBox(height: 50),
@@ -77,8 +82,7 @@ class _BaepoState extends State<Baepo> {
                         style: TextStyle(
                           color: Colors.white,
                           fontSize: 20,
-                          fontWeight: FontWeight.normal,
-                        ),
+                          fontWeight: FontWeight.normal,                ),
                       ),
                       SizedBox(height: 20),
                       Row(
@@ -93,7 +97,7 @@ class _BaepoState extends State<Baepo> {
                               onChanged: (bool? value) {
                                 setState(() {
                                   isSpringSelected = value!;
-                                  if(isSpringSelected) {
+                                  if (isSpringSelected) {
                                     isExpressSelected = false;
                                   }
                                 });
@@ -129,7 +133,7 @@ class _BaepoState extends State<Baepo> {
                               onChanged: (bool? value) {
                                 setState(() {
                                   isExpressSelected = value!;
-                                  if(isExpressSelected) {
+                                  if (isExpressSelected) {
                                     isSpringSelected = false;
                                   }
                                 });
@@ -262,10 +266,30 @@ class _BaepoState extends State<Baepo> {
           ElevatedButton( // 배포하기 버튼
             onPressed: () async {
               if(selectedFile != null) {
-                if(isSpringSelected)
+                if(isSpringSelected) {
+                  setState(() {
+                    _isLoading = true;
+                  });
                   await APIDeployments.deployNewServerZip(selectedFile!, "spring");
-                else if(isExpressSelected) {
+                  setState(() {
+                    _isLoading = false;
+                  });
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => Sangtae()),
+                  );
+                } else if(isExpressSelected) {
+                  setState(() {
+                    _isLoading = true;
+                  });
                   await APIDeployments.deployNewServerZip(selectedFile!, "express");
+                  setState(() {
+                    _isLoading = false;
+                  });
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => Sangtae()),
+                  );
                 }
               }
             },
@@ -310,11 +334,31 @@ class _BaepoState extends State<Baepo> {
           ),
           ElevatedButton( // 배포하기 버튼
             onPressed: () async {
-              if(selectedGithubURL != null) {
+              if(_isLoading == false && selectedGithubURL != null) {
                 if(isSpringSelected) {
+                  setState(() {
+                    _isLoading = true;
+                  });
                   await APIDeployments.deployNewServerGithub(selectedGithubURL!, 'spring');
+                  setState(() {
+                    _isLoading = false;
+                  });
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => Sangtae()),
+                  );
                 } else if(isExpressSelected) {
+                  setState(() {
+                    _isLoading = true;
+                  });
                   await APIDeployments.deployNewServerGithub(selectedGithubURL!, 'express');
+                  setState(() {
+                    _isLoading = false;
+                  });
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => Sangtae()),
+                  );
                 }
               }
             },
