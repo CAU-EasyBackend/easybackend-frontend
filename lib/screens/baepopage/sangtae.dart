@@ -188,25 +188,17 @@ class _SangtaeState extends State<Sangtae> {
                                     SizedBox(width: 50),
                                     TextButton(
                                       onPressed: () {
-                                        setState(() {
-                                          isUpdated = true;
-                                        });
-                                        _handleUpdateButton(context);
                                       },
                                       child: Text(
                                         '로그 확인',
                                         style: TextStyle(
-                                          color: isUpdated
-                                              ? Colors.yellow
-                                              : Colors.white,
+                                          color: Colors.white,
                                           fontSize: 16,
                                         ),
                                       ),
                                       style: TextButton.styleFrom(
                                         side: BorderSide(
-                                            color: isUpdated
-                                                ? Colors.yellow
-                                                : Colors.grey,
+                                            color: Colors.grey,
                                             width: 2),
                                       ),
                                     ),
@@ -381,25 +373,17 @@ class _SangtaeState extends State<Sangtae> {
                                     SizedBox(width: 50),
                                     TextButton(
                                       onPressed: () {
-                                        setState(() {
-                                          isUpdated = true;
-                                        });
-                                        _handleUpdateButton(context);
                                       },
                                       child: Text(
                                         '버전 관리',
                                         style: TextStyle(
-                                          color: isUpdated
-                                              ? Colors.yellow
-                                              : Colors.white,
+                                          color: Colors.white,
                                           fontSize: 16,
                                         ),
                                       ),
                                       style: TextButton.styleFrom(
                                         side: BorderSide(
-                                            color: isUpdated
-                                                ? Colors.yellow
-                                                : Colors.grey,
+                                            color: Colors.grey,
                                             width: 2),
                                       ),
                                     ),
