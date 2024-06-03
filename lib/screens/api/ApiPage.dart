@@ -154,6 +154,9 @@ class _ApiPageState extends State<ApiPage> {
                       child: ElevatedButton(
                         onPressed: () {
                           _handleButtonPress(4);
+                          setState(() {
+                            centerText = 'api란\n \n다른 소프트웨어 애플리케이션과 통신하여\n 데이터를 주고받고 기능을 공유할 수 있도록 도와주는 도구나 기능입니다. ';
+                          });
                         },
                         style: ElevatedButton.styleFrom(
                           foregroundColor: Colors.white,
@@ -172,6 +175,9 @@ class _ApiPageState extends State<ApiPage> {
                       child: ElevatedButton(
                         onPressed: () {
                           _handleButtonPress(5);
+                          setState(() {
+                            centerText = 'API 명세서는\n\n 소프트웨어 개발자나 이용자에게 제공되는 문서로,\n 특정 API의 기능, 사용 방법, 엔드포인트 및 매개변수\n 등에 대한 세부 정보를 제공합니다.';
+                          });
                         },
                         style: ElevatedButton.styleFrom(
                           foregroundColor: Colors.white,
@@ -182,6 +188,7 @@ class _ApiPageState extends State<ApiPage> {
                           ),
                         ),
                         child: Text('API 명세서란?'),
+
                       ),
                     ),
                     SizedBox(height: 0),
@@ -191,6 +198,9 @@ class _ApiPageState extends State<ApiPage> {
                       child: ElevatedButton(
                         onPressed: () {
                           _handleButtonPress(6);
+                          setState(() {
+                            centerText = 'JSON은\n \n데이터를 표현하고 교환하기 위한 경량의 형식으로,\n 텍스트로 이루어진 키-값 쌍이나 배열로 구성됩니다.\n 주로 웹 애플리케이션과 서버 간 데이터 통신에 사용되며,\n 읽고 쓰기 쉽고 기계가 파싱하기 쉽도록 설계되어 있습니다.';
+                          });
                         },
                         style: ElevatedButton.styleFrom(
                           foregroundColor: Colors.white,
@@ -210,6 +220,9 @@ class _ApiPageState extends State<ApiPage> {
                       child: ElevatedButton(
                         onPressed: () {
                           _handleButtonPress(7);
+                          setState(() {
+                            centerText = 'HTTP는\n\n하이퍼텍스트 전송 프로토콜로, 클라이언트와 서버 간에\n 데이터를 주고받는 데 사용됩니다.\n 주로 웹 브라우저와 웹 서버 간에 \nHTML 페이지, 이미지, 동영상 등의 리소스를 전송하는 데 쓰입니다.\n 요청과 응답은 헤더와 본문으로 구성되며,\n 헤더에는 요청 또는 응답에 대한 메타데이터가 포함됩니다.';
+                          });
                         },
                         style: ElevatedButton.styleFrom(
                           foregroundColor: Colors.white,
@@ -228,6 +241,9 @@ class _ApiPageState extends State<ApiPage> {
                       child: ElevatedButton(
                         onPressed: () {
                           _handleButtonPress(8);
+                          setState(() {
+                            centerText = '백엔드란 \n\n백엔드는 웹 애플리케이션이나 모바일 앱의 뒷단을 담당하는 부분으로,\n 데이터베이스 관리, 서버 측 로직 실행, 인증 및 보안, API 엔드포인트 제공,\n 성능 최적화 등의 역할을 합니다.';
+                          });
                         },
                         style: ElevatedButton.styleFrom(
                           foregroundColor: Colors.white,
@@ -270,33 +286,7 @@ class _ApiPageState extends State<ApiPage> {
                                     color: Colors.white),
                                 textAlign: TextAlign.center, // 텍스트 가운데 정렬
                               ),
-                              SizedBox(height: 30),
-                              ElevatedButton(
-                                onPressed: () {
-                                  _handleApiDetailsButton(context);
-                                  _handleButtonPress(2);
-                                },
-                                style: ElevatedButton.styleFrom(
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(30.0),
-                                  ),
-                                ),
-                                child: Padding(
-                                  padding: EdgeInsets.symmetric(
-                                      horizontal: 10, vertical: 15),
-                                  child: Row(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      Text(
-                                        "API명세 바로가기 !!     ",
-                                        style: TextStyle(
-                                            fontSize: 18, color: Colors.black),
-                                      ),
-                                      Icon(Icons.arrow_forward),
-                                    ],
-                                  ),
-                                ),
-                              ),
+
                             ],
                           ),
                       ],

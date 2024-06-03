@@ -42,7 +42,7 @@ class _DeploymentState extends State<Deployment> {
       buttonColor8 = buttonIndex == 8 ? Colors.white12 : Colors.black;
     });
   }
-  
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -75,6 +75,9 @@ class _DeploymentState extends State<Deployment> {
                       child: ElevatedButton(
                         onPressed: () {
                           _handleButtonPress(4);
+                          setState(() {
+                            centerText = '배포란 개발된 소프트웨어나 애플리케이션을 사용자에게 제공하는 것을 의미합니다.';
+                          });
                         },
                         style: ElevatedButton.styleFrom(
                           foregroundColor: Colors.white,
@@ -93,6 +96,9 @@ class _DeploymentState extends State<Deployment> {
                       child: ElevatedButton(
                         onPressed: () {
                           _handleButtonPress(5);
+                          setState(() {
+                            centerText = '서비스 이용 시 주의사항은 샤랄라 샤랄라.';
+                          });
                         },
                         style: ElevatedButton.styleFrom(
                           foregroundColor: Colors.white,
@@ -105,7 +111,6 @@ class _DeploymentState extends State<Deployment> {
                         child: Text('서비스 이용 시 주의사항'),
                       ),
                     ),
-
                   ],
                 ),
               ),
@@ -125,42 +130,16 @@ class _DeploymentState extends State<Deployment> {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        if (centerText != null) // centerText가 null이 아닐 때만 텍스트와 버튼 출력
+                        if (centerText != null)
                           Column(
                             children: [
                               Text(
                                 centerText!,
                                 style: TextStyle(fontSize: 26,
                                     fontWeight: FontWeight.w100, color: Colors.white),
-                                textAlign: TextAlign.center, // 텍스트 가운데 정렬
+                                textAlign: TextAlign.center,
                               ),
 
-                              SizedBox(height: 30),
-                              ElevatedButton(
-                                onPressed: () {
-                                  _handlebaepoButton(context);
-                                  setState(() {
-                                  });
-                                },
-                                style: ElevatedButton.styleFrom(
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(30.0),
-
-                                  ),
-                                ),child: Padding(
-                                  padding: EdgeInsets.symmetric(horizontal: 10, vertical: 15), // 좀 더 적절한 값으로 조정하세요
-                                  child: Row(
-                                    mainAxisSize: MainAxisSize.min, // 필요한 만큼의 공간만 차지하도록 설정
-                                    children: [
-                                      Text(
-                                        "배포 바로가기 !!     ",
-                                        style: TextStyle(fontSize: 18, color: Colors.black),
-                                      ),
-                                      Icon(Icons.arrow_forward), // 아이콘
-                                    ],
-                                  ),
-                                ),
-                              ),
                             ],
                           ),
                       ],

@@ -452,18 +452,35 @@ class _SangtaeState extends State<Sangtae> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('로그'),
+          backgroundColor: Colors.black,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10.0), // 테두리 모양을 조정
+            side: BorderSide(
+              color: Colors.white, // 테두리 색상을 흰색으로 설정
+              width: 2.0, // 테두리 두께를 2로 설정
+            ),
+          ),
+          title: Text('로그', style: TextStyle(
+            color: Colors.white,
+          ),),
           content: Container(
             width: 100,
             child: SingleChildScrollView(
               child: Text(
                 '우ㅜㄴㅁ루라ㅜㄴ;ㅏ우라눙라ㅜㅇ나뤼나ㅜㅇ리ㅏ누라ㅣㅣㅣㅣㅣ111111111111156546546512316545645135156453153484321351ㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣ',
+                style: TextStyle(
+                  color: Colors.white,
+                ),
               ),
             ),
           ),
           actions: <Widget>[
             TextButton(
-              child: Text('확인'),
+              child: Text('확인',
+                style: TextStyle(
+                  color: Colors.white,
+                ),
+              ),
               onPressed: () {
                 Navigator.of(context).pop();
               },
