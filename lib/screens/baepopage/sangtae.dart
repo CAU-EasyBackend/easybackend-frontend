@@ -33,8 +33,8 @@ class _SangtaeState extends State<Sangtae> {
 
   Future<void> _fetchDeployInfos() async {
     try {
-      List<Instance> infos = await APIDeployInfos.getDeployInfos();
-      //List<Instance> infos = await APIDeployInfos.testGetDeployInfos();
+      // List<Instance> infos = await APIDeployInfos.getDeployInfos();
+      List<Instance> infos = await APIDeployInfos.testGetDeployInfos();
       setState(() {
         deployInfoList = infos;
       });
@@ -189,6 +189,7 @@ class _SangtaeState extends State<Sangtae> {
                                     SizedBox(width: 50),
                                     TextButton(
                                       onPressed: () {
+                                        _showLogConfirmationDialog(context);
                                       },
                                       child: Text(
                                         '로그 확인',
@@ -444,6 +445,33 @@ class _SangtaeState extends State<Sangtae> {
       selectedInstance = instance;
       selectedServer = server;
     });
+  }
+
+  void _showLogConfirmationDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('로그'),
+          content: Container(
+            width: 100,
+            child: SingleChildScrollView(
+              child: Text(
+                '우ㅜㄴㅁ루라ㅜㄴ;ㅏ우라눙라ㅜㅇ나뤼나ㅜㅇ리ㅏ누라ㅣㅣㅣㅣㅣ111111111111156546546512316545645135156453153484321351ㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣ',
+              ),
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: Text('확인'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 }
 

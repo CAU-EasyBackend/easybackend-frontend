@@ -173,7 +173,7 @@ class _BaepoState extends State<Baepo> {
                       SizedBox(height: 20),
                       Row(
                         children: [
-                          SizedBox(width: 550),
+                          SizedBox(width: 470),
                           Theme(
                             data: ThemeData(
                               unselectedWidgetColor: Colors.white,
@@ -200,6 +200,7 @@ class _BaepoState extends State<Baepo> {
                               ),
                             ),
                           ),
+
                           Text(
                             'zip으로 업로드 하기',
                             style: TextStyle(
@@ -241,7 +242,6 @@ class _BaepoState extends State<Baepo> {
                               fontSize: 16,
                             ),
                           ),
-                          SizedBox(width: 200),
                         ],
                       ),
                       SizedBox(height: 20),
@@ -392,44 +392,51 @@ class _BaepoState extends State<Baepo> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          InkWell(
-            onTap: () async {
-              FilePickerResult? result = await FilePicker.platform.pickFiles(
-                type: FileType.custom,
-                allowedExtensions: ['zip'],
-              );
-              if (result != null && result.files.isNotEmpty) {
-                String fileName = result.files.first.name;
-                Uint8List fileBytes = result.files.first.bytes!;
-                debugPrint(fileName);
-                setState(() {
-                  selectedFile = result.files.first;
-                  showFileName = "Now File Name: $fileName";
-                  textFieldEnabled = false;
-                });
-              }
-            },
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.end,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                SizedBox(height: 20),
-                Text(
-                  "Find and Upload",
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    color: defaultColor,
-                    fontSize: 20,
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 50), // Adjust the padding as needed
+            child: InkWell(
+              onTap: () async {
+                FilePickerResult? result = await FilePicker.platform.pickFiles(
+                  type: FileType.custom,
+                  allowedExtensions: ['zip'],
+                );
+                if (result != null && result.files.isNotEmpty) {
+                  String fileName = result.files.first.name;
+                  Uint8List fileBytes = result.files.first.bytes!;
+                  debugPrint(fileName);
+                  setState(() {
+                    selectedFile = result.files.first;
+                    showFileName = "Now File Name: $fileName";
+                    textFieldEnabled = false;
+                  });
+                }
+              },
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.end,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  SizedBox(height: 40),
+                  Center( // Center align the text
+                    child: Text(
+                      "Find and Upload",
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: defaultColor,
+                        fontSize: 20,
+                      ),
+                    ),
                   ),
-                ),
-                Icon(
-                  Icons.upload_rounded,
-                  color: defaultColor,
-                ),
-              ],
+                  Icon(
+                    Icons.upload_rounded,
+                    color: defaultColor,
+                  ),
+                ],
+              ),
             ),
           ),
+
+
           Text("(*.zip)", style: TextStyle(color: defaultColor)),
           const SizedBox(height: 10),
           Expanded(
@@ -450,7 +457,9 @@ class _BaepoState extends State<Baepo> {
               onPrimary: Colors.white,
             ),
             child: Text('Cancel Upload'),
+
           ),
+          SizedBox(height: 20),
         ],
       ),
     );

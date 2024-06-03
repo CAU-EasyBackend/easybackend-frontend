@@ -13,8 +13,8 @@ class apidetails extends StatefulWidget {
 }
 
 class _apidetailsState extends State<apidetails> {
-  // final controller = Webview; // 주석 처리
-  // final WebviewController _webviewController = WebviewController(); // 주석 처리
+  // final controller = Webview;
+  // final WebviewController _webviewController = WebviewController();
   Color buttonColor1 = Colors.black; // 기본 색상을 검은색으로 설정
   Color buttonColor2 = Colors.black;
   Color buttonColor3 = Colors.black;

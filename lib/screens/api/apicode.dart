@@ -199,7 +199,7 @@ class _apicodeState extends State<apicode> {
                         '1. 코드 생성을 위한 프레임 워크를 선택해주세요.',
                         style: TextStyle(
                           color: Colors.white,
-                          fontSize: 20,
+                          fontSize: 18,
                           fontWeight: FontWeight.normal,
                         ),
                       ),
@@ -276,7 +276,7 @@ class _apicodeState extends State<apicode> {
                         '2. 코드 제공받을 방식을 선택해주세요.',
                         style: TextStyle(
                           color: Colors.white,
-                          fontSize: 20,
+                          fontSize: 18,
                           fontWeight: FontWeight.normal,
                         ),
                       ),
