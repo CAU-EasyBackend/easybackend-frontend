@@ -78,6 +78,7 @@ class _apicodeState extends State<apicode> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
+              SizedBox(width: 20),
               Container(
                 width: 200,
                 height: 500,
@@ -404,7 +405,8 @@ class _apicodeState extends State<apicode> {
                     ],
                   ),
                 ),
-              )
+              ),
+              SizedBox(width: 20),
     ]
     )
     ]

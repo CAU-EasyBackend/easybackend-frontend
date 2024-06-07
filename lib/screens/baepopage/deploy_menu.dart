@@ -1,7 +1,7 @@
-import 'package:easyback/screens/baepopage/Deployment.dart';
-import 'package:easyback/screens/baepopage/baepo.dart';
-import 'package:easyback/screens/baepopage/sangtae.dart';
 import 'package:flutter/material.dart';
+import 'baepo.dart';
+import 'Deployment.dart';
+import 'sangtae.dart';
 
 enum CurrentPage {
   deploymentGuide,
@@ -11,8 +11,8 @@ enum CurrentPage {
 
 class DeployMenu extends StatelessWidget {
   final CurrentPage currentPage;
-  Color defaultButtonColor = Colors.black;
-  Color selectedButtonColor = Colors.white12;
+  final Color defaultButtonColor = Colors.black;
+  final Color selectedButtonColor = Colors.white38;
 
   DeployMenu({Key? key, required this.currentPage}) : super(key: key);
 
@@ -31,16 +31,13 @@ class DeployMenu extends StatelessWidget {
         children: [
           SizedBox(height: 2),
           _buildButton(context, '배포 가이드', _handleDeploymentGuideButton,
-              isSelected: currentPage == CurrentPage.deploymentGuide
-          ),
+              isSelected: currentPage == CurrentPage.deploymentGuide),
           SizedBox(height: 0),
           _buildButton(context, '서버 배포', _handleFileUploadButton,
-              isSelected: currentPage == CurrentPage.deployServer
-          ),
+              isSelected: currentPage == CurrentPage.deployServer),
           SizedBox(height: 0),
           _buildButton(context, '배포 상태 관리', _handleSangtaeButton,
-              isSelected: currentPage == CurrentPage.statusManagement
-          ),
+              isSelected: currentPage == CurrentPage.statusManagement),
           SizedBox(height: 100),
         ],
       ),
@@ -58,6 +55,7 @@ class DeployMenu extends StatelessWidget {
           backgroundColor: isSelected ? selectedButtonColor : defaultButtonColor,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.zero,
+            side: BorderSide(color: Colors.white), // 버튼의 테두리를 흰색으로 설정
           ),
         ),
         child: Text(text),

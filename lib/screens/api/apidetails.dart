@@ -1,8 +1,6 @@
-import 'dart:async';
 import 'package:easyback/screens/main_menu.dart';
 import 'package:flutter/material.dart';
 import 'ApiPage.dart';
-import '../baepopage/Deployment.dart';
 import 'apicode.dart';
 
 class apidetails extends StatefulWidget {
@@ -15,9 +13,14 @@ class apidetails extends StatefulWidget {
 class _apidetailsState extends State<apidetails> {
   // final controller = Webview;
   // final WebviewController _webviewController = WebviewController();
-  Color buttonColor1 = Colors.black; // 기본 색상을 검은색으로 설정
+  Color buttonColor1 = Colors.black;
   Color buttonColor2 = Colors.black;
   Color buttonColor3 = Colors.black;
+  Color buttonColor4 = Colors.black;
+  Color buttonColor5 = Colors.black;
+  Color buttonColor6 = Colors.black;
+  Color buttonColor7 = Colors.black;
+  Color buttonColor8 = Colors.black;
   String? centerText;
   String showFileName = ""; // 선택된 파일 이름을 표시할 변수
   String userInput = ""; // 사용자 입력을 저장할 변수
@@ -38,7 +41,7 @@ class _apidetailsState extends State<apidetails> {
     // No specific initialization required for webview_flutter
 
     setState(() {
-      buttonColor2 = Colors.white12;
+      buttonColor2 = Colors.white38;
     });
   }
 
@@ -63,6 +66,19 @@ class _apidetailsState extends State<apidetails> {
   //   }
   // }
 
+  void _handleButtonPress(int buttonIndex) {
+    setState(() {
+      buttonColor1 = Colors.white38;
+      buttonColor2 = buttonIndex == 2 ? Colors.white38 : Colors.black;
+      buttonColor3 = buttonIndex == 3 ? Colors.white38 : Colors.black;
+      buttonColor4 = buttonIndex == 4 ? Colors.white38 : Colors.black;
+      buttonColor5 = buttonIndex == 5 ? Colors.white38 : Colors.black;
+      buttonColor6 = buttonIndex == 6 ? Colors.white38 : Colors.black;
+      buttonColor7 = buttonIndex == 7 ? Colors.white38 : Colors.black;
+      buttonColor8 = buttonIndex == 8 ? Colors.white38 : Colors.black;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -73,8 +89,8 @@ class _apidetailsState extends State<apidetails> {
         children: [
           SizedBox(height: 50),
           Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly, // 가로로 동일한 간격으로 배치
             children: [
+              SizedBox(width: 20),
               Container(
                 width: 200, // 첫 번째 컨테이너의 너비를 설정
                 height: 500,
@@ -148,9 +164,90 @@ class _apidetailsState extends State<apidetails> {
                   ],
                 ),
               ),
-              SizedBox(width: 20), // 컨테이너 1,2사이 간격
+              SizedBox(width: 20),
+
+
+              Container(
+                  width: 200, // 첫 번째 컨테이너의 너비를 설정
+                  height: 500,//컨테이너 3
+                decoration: BoxDecoration(
+                  color: Colors.black,
+                  borderRadius: BorderRadius.circular(10),
+                  border: Border.all(
+                    color: Colors.white,
+                    width: 2,
+                  ),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start, // 왼쪽 정렬
+                  children: [
+                    SizedBox(height: 2),
+                    SizedBox(
+                      width: 200, // 버튼의 너비를 설정
+                      height: 50,
+                      child: ElevatedButton(
+                        onPressed: () {
+                         //클릭시 이벤트 추가
+                        },
+                        style: ElevatedButton.styleFrom(
+                          foregroundColor: Colors.white,
+                          backgroundColor: buttonColor4,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.zero, // 직각 테두리로 설정
+                          ),
+                        ),
+                        child: Text('하이'),
+                      ),
+                    ),
+                    SizedBox(height: 0),
+                    SizedBox(
+                      width: 200,
+                      height: 50,
+                      child: ElevatedButton(
+                        onPressed: () {
+                          setState(() {
+
+                          });
+                        },
+                        style: ElevatedButton.styleFrom(
+                          foregroundColor: Colors.white,
+                          backgroundColor: buttonColor5,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.zero,
+                            side: BorderSide(color: Colors.white),
+                          ),
+                        ),
+                        child: Text('하이루'),
+                      ),
+                    ),
+                    SizedBox(height: 0),
+                    SizedBox(
+                      width: 200, // 버튼의 너비를 설정
+                      height: 50,
+                      child: ElevatedButton(
+                        onPressed: () {
+
+                        },
+                        style: ElevatedButton.styleFrom(
+                          foregroundColor: Colors.white,
+                          backgroundColor: buttonColor6,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.zero,
+                            side: BorderSide(color: Colors.white, width: 1),
+                          ),
+                        ),
+                        child: Text('코드생성'),
+                      ),
+                    ),
+                    SizedBox(height: 100),
+                  ],
+                ),
+              ),
+              SizedBox(width: 20),
+
               Expanded(
-                child: Container(
+                child:
+                Container(//컨테이너 3
                   height: 500,
                   decoration: BoxDecoration(
                     color: Colors.black,
@@ -162,13 +259,10 @@ class _apidetailsState extends State<apidetails> {
                   ),
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(10),
-                    child: Image.asset(
-                      'asset/image/swagger.png', // 이미지 경로 설정
-                      fit: BoxFit.cover,
-                    ),
                   ),
                 ),
               ),
+              SizedBox(width: 20),
             ],
           ),
         ],

@@ -55,6 +55,7 @@ class _SangtaeState extends State<Sangtae> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
+              SizedBox(width: 20),
               DeployMenu(currentPage: CurrentPage.statusManagement),
               SizedBox(width: 20),
               Expanded(
@@ -421,6 +422,7 @@ class _SangtaeState extends State<Sangtae> {
                                 : SizedBox.shrink(),
                           ),
                         ),
+                        SizedBox(width: 20),
                       ],
                     ),
                   ),
@@ -464,7 +466,7 @@ class _SangtaeState extends State<Sangtae> {
             color: Colors.white,
           ),),
           content: Container(
-            width: 100,
+            width: 550,
             child: SingleChildScrollView(
               child: Text(
                 '우ㅜㄴㅁ루라ㅜㄴ;ㅏ우라눙라ㅜㅇ나뤼나ㅜㅇ리ㅏ누라ㅣㅣㅣㅣㅣ111111111111156546546512316545645135156453153484321351ㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣ',

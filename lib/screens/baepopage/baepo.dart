@@ -58,6 +58,7 @@ class _BaepoState extends State<Baepo> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
+              SizedBox(width: 20),
               DeployMenu(currentPage: CurrentPage.deployServer),
               SizedBox(width: 20),
               Expanded(
@@ -250,6 +251,7 @@ class _BaepoState extends State<Baepo> {
                   ),
                 ),
               ),
+              SizedBox(width: 20),
             ],
           ),
         ],

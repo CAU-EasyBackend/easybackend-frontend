@@ -12,7 +12,7 @@ class Deployment extends StatefulWidget {
 }
 
 class _DeploymentState extends State<Deployment> {
-  Color buttonColor1 = Colors.white12;
+  Color buttonColor1 = Colors.white38;
   Color buttonColor2 = Colors.black;
   Color buttonColor3 = Colors.black;
   Color buttonColor4 = Colors.black;
@@ -26,20 +26,20 @@ class _DeploymentState extends State<Deployment> {
   void initState() {
     super.initState();
     setState(() {
-      buttonColor1 = Colors.white12;
+      buttonColor1 = Colors.white38;
     });
   }
 
   void _handleButtonPress(int buttonIndex) {
     setState(() {
-      buttonColor1 = Colors.white12;
-      buttonColor2 = buttonIndex == 2 ? Colors.white12 : Colors.black;
-      buttonColor3 = buttonIndex == 3 ? Colors.white12 : Colors.black;
-      buttonColor4 = buttonIndex == 4 ? Colors.white12 : Colors.black;
-      buttonColor5 = buttonIndex == 5 ? Colors.white12 : Colors.black;
-      buttonColor6 = buttonIndex == 6 ? Colors.white12 : Colors.black;
-      buttonColor7 = buttonIndex == 7 ? Colors.white12 : Colors.black;
-      buttonColor8 = buttonIndex == 8 ? Colors.white12 : Colors.black;
+      buttonColor1 = Colors.white38;
+      buttonColor2 = buttonIndex == 2 ? Colors.white38 : Colors.black;
+      buttonColor3 = buttonIndex == 3 ? Colors.white38 : Colors.black;
+      buttonColor4 = buttonIndex == 4 ? Colors.white38 : Colors.black;
+      buttonColor5 = buttonIndex == 5 ? Colors.white38 : Colors.black;
+      buttonColor6 = buttonIndex == 6 ? Colors.white38 : Colors.black;
+      buttonColor7 = buttonIndex == 7 ? Colors.white38 : Colors.black;
+      buttonColor8 = buttonIndex == 8 ? Colors.white38 : Colors.black;
     });
   }
 
@@ -55,6 +55,7 @@ class _DeploymentState extends State<Deployment> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly, // 가로로 동일한 간격으로 배치
             children: [
+              SizedBox(width: 20),
               DeployMenu(currentPage: CurrentPage.deploymentGuide),
               SizedBox(width: 20),
               Container(
@@ -76,7 +77,7 @@ class _DeploymentState extends State<Deployment> {
                         onPressed: () {
                           _handleButtonPress(4);
                           setState(() {
-                            centerText = '배포란 개발된 소프트웨어나 애플리케이션을 사용자에게 제공하는 것을 의미합니다.';
+                            centerText = '배포란 \n\n개발된 소프트웨어나 애플리케이션을\n 사용자에게 제공하는 것을 의미합니다.';
                           });
                         },
                         style: ElevatedButton.styleFrom(
@@ -97,7 +98,7 @@ class _DeploymentState extends State<Deployment> {
                         onPressed: () {
                           _handleButtonPress(5);
                           setState(() {
-                            centerText = '서비스 이용 시 주의사항은 샤랄라 샤랄라.';
+                            centerText = '주의사항은 \n\n샤랄라 샤랄라.';
                           });
                         },
                         style: ElevatedButton.styleFrom(
@@ -147,6 +148,7 @@ class _DeploymentState extends State<Deployment> {
                   ),
                 ),
               ),
+              SizedBox(width: 20),
             ],
           ),
         ],

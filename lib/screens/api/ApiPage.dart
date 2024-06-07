@@ -11,7 +11,7 @@ class ApiPage extends StatefulWidget {
 }
 
 class _ApiPageState extends State<ApiPage> {
-  Color buttonColor1 = Colors.white12;
+  Color buttonColor1 = Colors.white38;
   Color buttonColor2 = Colors.black;
   Color buttonColor3 = Colors.black;
   Color buttonColor4 = Colors.black;
@@ -21,24 +21,25 @@ class _ApiPageState extends State<ApiPage> {
   Color buttonColor8 = Colors.black;
   String? centerText;
 
+
   @override
   void initState() {
     super.initState();
     setState(() {
-      buttonColor1 = Colors.white12;
+      buttonColor1 = Colors.white38;
     });
   }
 
   void _handleButtonPress(int buttonIndex) {
     setState(() {
-      buttonColor1 = Colors.white12;
-      buttonColor2 = buttonIndex == 2 ? Colors.white12 : Colors.black;
-      buttonColor3 = buttonIndex == 3 ? Colors.white12 : Colors.black;
-      buttonColor4 = buttonIndex == 4 ? Colors.white12 : Colors.black;
-      buttonColor5 = buttonIndex == 5 ? Colors.white12 : Colors.black;
-      buttonColor6 = buttonIndex == 6 ? Colors.white12 : Colors.black;
-      buttonColor7 = buttonIndex == 7 ? Colors.white12 : Colors.black;
-      buttonColor8 = buttonIndex == 8 ? Colors.white12 : Colors.black;
+      buttonColor1 = Colors.white38;
+      buttonColor2 = buttonIndex == 2 ? Colors.white38 : Colors.black;
+      buttonColor3 = buttonIndex == 3 ? Colors.white38 : Colors.black;
+      buttonColor4 = buttonIndex == 4 ? Colors.white38 : Colors.black;
+      buttonColor5 = buttonIndex == 5 ? Colors.white38 : Colors.black;
+      buttonColor6 = buttonIndex == 6 ? Colors.white38 : Colors.black;
+      buttonColor7 = buttonIndex == 7 ? Colors.white38 : Colors.black;
+      buttonColor8 = buttonIndex == 8 ? Colors.white38 : Colors.black;
     });
   }
 
@@ -54,6 +55,7 @@ class _ApiPageState extends State<ApiPage> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly, // 가로로 동일한 간격으로 배치
             children: [
+              SizedBox(width: 20),
               Container(
                 width: 200, // 첫 번째 컨테이너의 너비를 설정
                 height: 500,
@@ -131,11 +133,15 @@ class _ApiPageState extends State<ApiPage> {
                         child: Text('코드생성'),
                       ),
                     ),
-                    SizedBox(height: 0),
+                    SizedBox(height: 100),
                   ],
                 ),
               ),
-              SizedBox(width: 20),
+              SizedBox(width: 20), // 간격
+              Container(
+                width: 0, // 투명 컨테이너 너비
+              ),
+
               Container(
                 width: 200,
                 height: 500,
@@ -144,7 +150,7 @@ class _ApiPageState extends State<ApiPage> {
                   borderRadius: BorderRadius.circular(10),
                   border: Border.all(color: Colors.white, width: 2),
                 ),
-                child: Column(
+                  child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     SizedBox(height: 2),
@@ -286,7 +292,6 @@ class _ApiPageState extends State<ApiPage> {
                                     color: Colors.white),
                                 textAlign: TextAlign.center, // 텍스트 가운데 정렬
                               ),
-
                             ],
                           ),
                       ],
@@ -294,6 +299,7 @@ class _ApiPageState extends State<ApiPage> {
                   ),
                 ),
               ),
+              SizedBox(width: 20),
             ],
           ),
         ],
