@@ -77,6 +77,12 @@ class _apidetailsState extends State<apidetails> {
       buttonColor7 = buttonIndex == 7 ? Colors.white38 : Colors.black;
       buttonColor8 = buttonIndex == 8 ? Colors.white38 : Colors.black;
     });
+  }  void _handlePlusButton() {
+    print("Plus button pressed");
+  }
+
+  void _handleDeleteButton() {
+    print("Delete button pressed");
   }
 
   @override
@@ -173,6 +179,46 @@ class _apidetailsState extends State<apidetails> {
                 decoration: BoxDecoration(
                   color: Colors.black,
                   borderRadius: BorderRadius.circular(10),
+                  border: Border.all(color: Colors.white, width: 2),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start, // 왼쪽 정렬
+                  children: [
+                    Expanded(
+                      child: Align(
+                        alignment: Alignment.bottomCenter,
+                        child: Container(
+                          width: double.infinity,
+                          height: 100,
+                          color: Colors.black, // 컨테이너 색상 설정
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.end,
+                            children: [
+                              IconButton(
+                                icon: Icon(Icons.add, color: Colors.white),
+                                onPressed: _handlePlusButton,
+                              ),
+                              SizedBox(height: 10),
+                              IconButton(
+                                icon: Icon(Icons.delete, color: Colors.white),
+                                onPressed: _handleDeleteButton,
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              SizedBox(width: 20),
+              Container(
+                width: 200,
+                height: 500,
+                decoration: BoxDecoration(
+                  color: Colors.black,
+                  borderRadius: BorderRadius.circular(10),
                   border: Border.all(
                     color: Colors.white,
                     width: 2,
@@ -181,92 +227,115 @@ class _apidetailsState extends State<apidetails> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start, // 왼쪽 정렬
                   children: [
-                    SizedBox(height: 2),
-                    SizedBox(
-                      width: 200, // 버튼의 너비를 설정
-                      height: 50,
-                      child: ElevatedButton(
-                        onPressed: () {
-                         //클릭시 이벤트 추가
-                        },
-                        style: ElevatedButton.styleFrom(
-                          foregroundColor: Colors.white,
-                          backgroundColor: buttonColor4,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.zero, // 직각 테두리로 설정
-                          ),
-                        ),
-                        child: Text('하이'),
-                      ),
-                    ),
-                    SizedBox(height: 0),
-                    SizedBox(
-                      width: 200,
-                      height: 50,
-                      child: ElevatedButton(
-                        onPressed: () {
-                          setState(() {
 
-                          });
-                        },
-                        style: ElevatedButton.styleFrom(
-                          foregroundColor: Colors.white,
-                          backgroundColor: buttonColor5,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.zero,
-                            side: BorderSide(color: Colors.white),
-                          ),
-                        ),
-                        child: Text('하이루'),
-                      ),
-                    ),
-                    SizedBox(height: 0),
-                    SizedBox(
-                      width: 200, // 버튼의 너비를 설정
-                      height: 50,
-                      child: ElevatedButton(
-                        onPressed: () {
-
-                        },
-                        style: ElevatedButton.styleFrom(
-                          foregroundColor: Colors.white,
-                          backgroundColor: buttonColor6,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.zero,
-                            side: BorderSide(color: Colors.white, width: 1),
-                          ),
-                        ),
-                        child: Text('코드생성'),
-                      ),
-                    ),
                     SizedBox(height: 100),
+                    Expanded(
+                      child: Align(
+                        alignment: Alignment.bottomCenter,
+                        child: Container(
+                          width: double.infinity,
+                          height: 100,
+                          color: Colors.black, // 컨테이너 색상 설정
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.end,
+                            children: [
+                              IconButton(
+                                icon: Icon(Icons.add, color: Colors.white),
+                                onPressed: _handlePlusButton,
+                              ),
+                              SizedBox(height: 10),
+                              IconButton(
+                                icon: Icon(Icons.delete, color: Colors.white),
+                                onPressed: _handleDeleteButton,
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
                   ],
                 ),
               ),
+
               SizedBox(width: 20),
 
               Expanded(
-                child:
-                Container(//컨테이너 3
-                  height: 500,
-                  decoration: BoxDecoration(
-                    color: Colors.black,
-                    borderRadius: BorderRadius.circular(10),
-                    border: Border.all(
-                      color: Colors.white,
-                      width: 2,
+                child: Column(
+                  children: [
+                    Container(
+                      height: 500,
+                      width: 850,
+                      decoration: BoxDecoration(
+                        color: Colors.black,
+                        borderRadius: BorderRadius.circular(10),
+                        border: Border.all(
+                          color: Colors.white,
+                          width: 2,
+                        ),
+                      ),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(10),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            SizedBox(height: 20), // 중간 공백
+
+                            Container(
+                              width: 700,
+                              height: 200,
+                              decoration: BoxDecoration(
+                                color: Colors.grey,
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              child: Center(
+                                child: Text(
+                                  '룰루 ',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 16,
+                                  ),
+                                ),
+                              ),
+                            ),
+                            SizedBox(height: 20), // 중간 공백
+
+                            SizedBox(height: 20), // 중간 공백 추가
+                            Container(
+                              width: 700,
+                              height: 200,
+                              decoration: BoxDecoration(
+                                color: Colors.grey,
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              child: Center(
+                                child: Text(
+                                  '룰루 ',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 16,
+                                  ),
+                                ),
+                              ),
+
+
+                            ),
+                            SizedBox(height: 20), // 중간 공백
+
+                          ],
+                        ),
+                      ),
                     ),
-                  ),
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
+                    // 중간 공백
+
+                  ],
                 ),
-              ),
-              SizedBox(width: 20),
+              )
+
             ],
-          ),
-        ],
-      ),
+                ),
+    ]
+    ),
     );
   }
 

@@ -139,7 +139,7 @@ class _ApiPageState extends State<ApiPage> {
               ),
               SizedBox(width: 20), // 간격
               Container(
-                width: 0, // 투명 컨테이너 너비
+                width: 0, // 투명 컨테이너
               ),
 
               Container(

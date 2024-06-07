@@ -237,13 +237,14 @@ class _SangtaeState extends State<Sangtae> {
                                 : SizedBox.shrink(),
                           ),
                         ),
+
                       ],
                     ),
                   ),
-                  SizedBox(height: 10),
+                  SizedBox(height: 20),
                   Container(
                     width: 900,
-                    height: 300,
+                    height: 290,
                     decoration: BoxDecoration(
                       color: Colors.black,
                       borderRadius: BorderRadius.circular(10),
@@ -430,9 +431,10 @@ class _SangtaeState extends State<Sangtae> {
               )
             ],
           ),
-        ],
-      ),
-    );
+
+              ],
+      )
+            );
   }
 
   void _handleUpdateButton(BuildContext context) {
@@ -456,29 +458,44 @@ class _SangtaeState extends State<Sangtae> {
         return AlertDialog(
           backgroundColor: Colors.black,
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10.0), // 테두리 모양을 조정
+            borderRadius: BorderRadius.circular(10.0),
             side: BorderSide(
-              color: Colors.white, // 테두리 색상을 흰색으로 설정
-              width: 2.0, // 테두리 두께를 2로 설정
+              color: Colors.white,
+              width: 2.0,
             ),
           ),
-          title: Text('로그', style: TextStyle(
-            color: Colors.white,
-          ),),
+          title: Text(
+            '로그',
+            style: TextStyle(
+              color: Colors.white,
+            ),
+          ),
           content: Container(
             width: 550,
-            child: SingleChildScrollView(
-              child: Text(
-                '우ㅜㄴㅁ루라ㅜㄴ;ㅏ우라눙라ㅜㅇ나뤼나ㅜㅇ리ㅏ누라ㅣㅣㅣㅣㅣ111111111111156546546512316545645135156453153484321351ㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣ',
-                style: TextStyle(
-                  color: Colors.white,
+            height: 300, // Adjust the height as needed
+            child: Scrollbar(
+              child: SingleChildScrollView( //스크롤 가능
+                child: Text(
+                  '우ㅜㄴㅁ루라ㅜㄴ;ㅏ우라눙라ㅜㅇ나뤼나ㅜㅇ리ㅏ누라ㅣㅣㅣㅣㅣ11111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111\n'
+                      '\n'
+                      '\n'  '\n'
+                      '\n'
+                      '\n'  '\n'
+                      '\n'  '\n'
+                      '\n'
+
+                      '156546546512316545645135156453153484321351ㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣ',
+                  style: TextStyle(
+                    color: Colors.white,
+                  ),
                 ),
               ),
             ),
           ),
           actions: <Widget>[
             TextButton(
-              child: Text('확인',
+              child: Text(
+                '확인',
                 style: TextStyle(
                   color: Colors.white,
                 ),
@@ -492,6 +509,7 @@ class _SangtaeState extends State<Sangtae> {
       },
     );
   }
+
 }
 
 class MyListView extends StatelessWidget {
