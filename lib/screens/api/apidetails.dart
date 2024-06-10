@@ -1,4 +1,5 @@
 import 'package:easyback/screens/main_menu.dart';
+import 'package:easyback/services/APIOpenAPISpec.dart';
 import 'package:flutter/material.dart';
 import 'ApiPage.dart';
 import 'apicode.dart';
@@ -131,7 +132,8 @@ class _apidetailsState extends State<apidetails> {
                       width: double.infinity,
                       height: 50,
                       child: ElevatedButton(
-                        onPressed: () {
+                        onPressed: () async {
+                          //await APIOpenAPISpec.getAPIObject('664fe646f67ab0617034fd56');
                           setState(() {
                             showSwaggerUI = true; // Swagger UI를 보여줄 상태를 true로 설정합니다.
                           });
