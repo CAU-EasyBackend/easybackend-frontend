@@ -1,5 +1,9 @@
+import 'package:easyback/models/APISpec.dart';
+import 'package:easyback/models/OpenAPISpec.dart';
+import 'package:easyback/screens/api/ProjectListView.dart';
 import 'package:easyback/screens/main_menu.dart';
 import 'package:easyback/services/APIOpenAPISpec.dart';
+import 'package:easyback/services/APIProjects.dart';
 import 'package:flutter/material.dart';
 import 'ApiPage.dart';
 import 'apicode.dart';
@@ -34,38 +38,27 @@ class _apidetailsState extends State<apidetails> {
   bool textFieldEnabled = true;
   String fileContent = ""; // 파일 내용을 저장할 변수 추가
 
+  List<APISpec> projects = [];
+  APISpec? selectedProject;
+  OpenAPISpec? openAPISpec;
+  Operation? selectedOperation;
+
   @override
   void initState() {
     super.initState();
-
-    // Initialize the WebView controller if using webview_flutter
-    // No specific initialization required for webview_flutter
+    _getProjects();
 
     setState(() {
       buttonColor2 = Colors.white38;
     });
   }
 
-  // Future<void> _initializeWebView() async {
-  //   try {
-  //     await _webviewController.initialize();
-  //     await _webviewController.loadUrl(
-  //         'https://your-backend-url/swagger-ui.html');
-  //
-  //     _webviewController.url.listen((url) {
-  //       print('Navigated to: $url');
-  //     });
-  //
-  //     _webviewController.containsFullScreenElementChanged.listen((flag) {
-  //       print('Contains full screen element: $flag');
-  //     });
-  //
-  //     if (!mounted) return;
-  //     setState(() {});
-  //   } catch (e) {
-  //     print('Error initializing WebView: $e');
-  //   }
-  // }
+  Future<void> _getProjects() async {
+    final List<APISpec> projects = await APIProjects.getProjectList();
+    setState(() {
+      this.projects = projects;
+    });
+  }
 
   void _handleButtonPress(int buttonIndex) {
     setState(() {
@@ -173,8 +166,6 @@ class _apidetailsState extends State<apidetails> {
                 ),
               ),
               SizedBox(width: 20),
-
-
               Container(
                   width: 200, // 첫 번째 컨테이너의 너비를 설정
                   height: 500,//컨테이너 3
@@ -186,6 +177,14 @@ class _apidetailsState extends State<apidetails> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start, // 왼쪽 정렬
                   children: [
+                    SizedBox(
+                      height: 400,
+                      width: 200,
+                      child: ProjectListView(
+                        projects: projects,
+                        handleProjectTap: _handleProjectTap,
+                      ),
+                    ),
                     Expanded(
                       child: Align(
                         alignment: Alignment.bottomCenter,
@@ -193,7 +192,7 @@ class _apidetailsState extends State<apidetails> {
                           width: double.infinity,
                           height: 100,
                           color: Colors.black, // 컨테이너 색상 설정
-                          child: Column(
+                          child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             crossAxisAlignment: CrossAxisAlignment.end,
                             children: [
@@ -201,7 +200,7 @@ class _apidetailsState extends State<apidetails> {
                                 icon: Icon(Icons.add, color: Colors.white),
                                 onPressed: _handlePlusButton,
                               ),
-                              SizedBox(height: 10),
+                              SizedBox(width: 10),
                               IconButton(
                                 icon: Icon(Icons.delete, color: Colors.white),
                                 onPressed: _handleDeleteButton,
@@ -227,18 +226,83 @@ class _apidetailsState extends State<apidetails> {
                   ),
                 ),
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start, // 왼쪽 정렬
+                  crossAxisAlignment: CrossAxisAlignment.center, // 왼쪽 정렬
                   children: [
-
-                    SizedBox(height: 100),
+                    SizedBox(height: 10),
+                    const Text(
+                      'Server URL',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 16,
+                      ),
+                    ),
+                    TextField(
+                      controller: TextEditingController(
+                        text: openAPISpec?.servers.servers[0].url,
+                      ),
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 14,
+                      ),
+                    ),
+                    SizedBox(height: 10),
+                    const Text(
+                      'API List',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 16,
+                      ),
+                    ),
+                    SizedBox(height: 10),
+                    SizedBox(
+                      height: 300,
+                      width: 200,
+                      child: selectedProject != null
+                          ? ListView(
+                        children: (openAPISpec?.paths.paths.entries.map((entry) {
+                          String path = entry.key;
+                          Path pathObject = entry.value;
+                          return ExpansionTile(
+                            title: Text(
+                              path,
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 14,
+                              ),
+                            ),
+                            children: pathObject.operations.entries.map((opEntry) {
+                              String method = opEntry.key;
+                              Operation operation = opEntry.value;
+                              return ListTile(
+                                title: Text(
+                                  method,
+                                  style: const TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 12,
+                                  )
+                                ),
+                                onTap: () {
+                                  setState(() {
+                                    selectedOperation = operation;
+                                  });
+                                },
+                              );
+                            }).toList(),
+                          );
+                        }).toList()) ?? [],
+                      ) : Container(),
+                    ),
                     Expanded(
                       child: Align(
                         alignment: Alignment.bottomCenter,
                         child: Container(
                           width: double.infinity,
-                          height: 100,
+                          height: 50,
                           color: Colors.black, // 컨테이너 색상 설정
-                          child: Column(
+                          child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             crossAxisAlignment: CrossAxisAlignment.end,
                             children: [
@@ -246,7 +310,7 @@ class _apidetailsState extends State<apidetails> {
                                 icon: Icon(Icons.add, color: Colors.white),
                                 onPressed: _handlePlusButton,
                               ),
-                              SizedBox(height: 10),
+                              SizedBox(width: 10),
                               IconButton(
                                 icon: Icon(Icons.delete, color: Colors.white),
                                 onPressed: _handleDeleteButton,
@@ -259,9 +323,7 @@ class _apidetailsState extends State<apidetails> {
                   ],
                 ),
               ),
-
               SizedBox(width: 20),
-
               Expanded(
                 child: Column(
                   children: [
@@ -339,6 +401,15 @@ class _apidetailsState extends State<apidetails> {
     ]
     ),
     );
+  }
+
+  Future<void> _handleProjectTap(APISpec? project) async {
+    final OpenAPISpec openAPISpec = await APIOpenAPISpec.getAPIObject(project!.projectId);
+    setState(() {
+      selectedProject = project;
+      this.openAPISpec = openAPISpec;
+      selectedOperation = null;
+    });
   }
 
   void _handleapiguideButton(BuildContext context) {

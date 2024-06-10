@@ -19,8 +19,8 @@ class APIOpenAPISpec {
     }
 
     final dynamic body = jsonDecode(response.body);
-    final OpenAPISpec apiSpec = OpenAPISpec.fromJson(body['result']['apiSpec']);
+    final OpenAPISpec openAPISpec = OpenAPISpec.fromJson(body['result']['apiSpec']);
 
-    return apiSpec;
+    return openAPISpec;
   }
 }
