@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:easyback/models/APISpec.dart';
 import 'package:easyback/models/OpenAPISpec.dart';
 import 'package:easyback/screens/api/ProjectListView.dart';
@@ -41,7 +43,13 @@ class _apidetailsState extends State<apidetails> {
   List<APISpec> projects = [];
   APISpec? selectedProject;
   OpenAPISpec? openAPISpec;
+
+  String? selectedEndpoint;
+  String? selectedMethod;
   Operation? selectedOperation;
+
+  TextEditingController _urlController = TextEditingController();
+  Map<String, TextEditingController> _responseController = {};
 
   @override
   void initState() {
@@ -238,14 +246,18 @@ class _apidetailsState extends State<apidetails> {
                       ),
                     ),
                     TextField(
-                      controller: TextEditingController(
-                        text: openAPISpec?.servers.servers[0].url,
-                      ),
+                      controller: _urlController,
                       textAlign: TextAlign.center,
                       style: const TextStyle(
                         color: Colors.white,
                         fontSize: 14,
                       ),
+                      enabled: openAPISpec != null,
+                      onChanged: (text) {
+                        setState(() {
+                          openAPISpec!.servers.servers[0].url = text;
+                        });
+                      },
                     ),
                     SizedBox(height: 10),
                     const Text(
@@ -262,7 +274,7 @@ class _apidetailsState extends State<apidetails> {
                       width: 200,
                       child: selectedProject != null
                           ? ListView(
-                        children: (openAPISpec?.paths.paths.entries.map((entry) {
+                        children: openAPISpec!.paths.paths.entries.map((entry) {
                           String path = entry.key;
                           Path pathObject = entry.value;
                           return ExpansionTile(
@@ -286,13 +298,16 @@ class _apidetailsState extends State<apidetails> {
                                 ),
                                 onTap: () {
                                   setState(() {
+                                    selectedEndpoint = path;
+                                    selectedMethod = method;
                                     selectedOperation = operation;
+                                    _initResponseControllers();
                                   });
                                 },
                               );
                             }).toList(),
                           );
-                        }).toList()) ?? [],
+                        }).toList(),
                       ) : Container(),
                     ),
                     Expanded(
@@ -338,66 +353,121 @@ class _apidetailsState extends State<apidetails> {
                           width: 2,
                         ),
                       ),
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(10),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
+                      child: Padding(
+                        padding: const EdgeInsets.all(20),
+                        child: selectedOperation != null
+                            ? Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            SizedBox(height: 20), // 중간 공백
-
-                            Container(
-                              width: 700,
-                              height: 200,
-                              decoration: BoxDecoration(
-                                color: Colors.grey,
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                              child: Center(
-                                child: Text(
-                                  '룰루 ',
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 16,
-                                  ),
-                                ),
+                            Text(
+                              'URL: ${openAPISpec!.servers.servers[0].url}$selectedEndpoint',
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 18,
                               ),
                             ),
-                            SizedBox(height: 20), // 중간 공백
-
-                            SizedBox(height: 20), // 중간 공백 추가
-                            Container(
-                              width: 700,
-                              height: 200,
-                              decoration: BoxDecoration(
-                                color: Colors.grey,
-                                borderRadius: BorderRadius.circular(10),
+                            const SizedBox(height: 10),
+                            Text(
+                              'Method: $selectedMethod',
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 18,
                               ),
-                              child: Center(
-                                child: Text(
-                                  '룰루 ',
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 16,
-                                  ),
+                            ),
+                            const SizedBox(height: 20),
+                            ExpansionTile(
+                              title: const Text(
+                                'Parameters',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 18,
                                 ),
                               ),
-
-
+                              children: [
+                                Text(
+                                  selectedOperation!.parameters != null
+                                      ? selectedOperation!.parameters!.toJson().toString()
+                                      : 'No Parameters',
+                                  style: const TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 14,
+                                  ),
+                                ),
+                              ],
                             ),
-                            SizedBox(height: 20), // 중간 공백
-
+                            ExpansionTile(
+                              title: const Text(
+                                'Request Body',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 18,
+                                ),
+                              ),
+                              children: [
+                                Text(
+                                  selectedOperation!.requestBody != null
+                                      ? selectedOperation!.requestBody!.toJson().toString()
+                                      : 'No Request Body',
+                                  style: const TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 14,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            ExpansionTile(
+                              title: const Text(
+                                'Responses',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 18,
+                                ),
+                              ),
+                              children: selectedOperation!.responses.responses.entries.map((entry) {
+                                String code = entry.key;
+                                Response response = entry.value;
+                                return ExpansionTile(
+                                  title: Row(
+                                    children: [
+                                      Text(
+                                        'Code: $code',
+                                        style: const TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 14,
+                                        ),
+                                      ),
+                                      const SizedBox(width: 10),
+                                      Text(
+                                        response.content.mediaTypes.entries.first.key,
+                                        style: const TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 14,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  children: [
+                                    TextField(
+                                      controller: _responseController[code],
+                                      style: const TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 14,
+                                      ),
+                                      maxLines: null,
+                                    ),
+                                  ],
+                                );
+                              }).toList(),
+                            ),
                           ],
-                        ),
+                        ) : Container(),
                       ),
                     ),
-                    // 중간 공백
-
                   ],
                 ),
               )
-
             ],
-                ),
+          ),
     ]
     ),
     );
@@ -408,8 +478,25 @@ class _apidetailsState extends State<apidetails> {
     setState(() {
       selectedProject = project;
       this.openAPISpec = openAPISpec;
+      _urlController.text = openAPISpec.servers.servers[0].url;
       selectedOperation = null;
     });
+  }
+
+  void _initResponseControllers() {
+    for(var controller in _responseController.values) {
+      controller.dispose();
+    }
+    _responseController = {};
+    if(selectedOperation != null) {
+      for(var entry in selectedOperation!.responses.responses.entries) {
+        Example? example = entry.value.content.mediaTypes.entries.first.value.example;
+        String prettyJson = example != null ? JsonEncoder.withIndent('  ').convert(example) : '';
+
+        _responseController[entry.key] = TextEditingController();
+        _responseController[entry.key]!.text = prettyJson;
+      }
+    }
   }
 
   void _handleapiguideButton(BuildContext context) {

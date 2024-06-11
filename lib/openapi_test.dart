@@ -36,11 +36,29 @@ void main() {
             "200": {
               "description": "Successful response",
               "content": {
-                "text/plain": {
+                "application/json": {
                   "schema": {
-                    "type": "string"
+                    "type": "object",
+                    "properties": {
+                      "result": {
+                        "type": "object",
+                        "properties": {
+                          "message1": {
+                            "type": "string"
+                          },
+                          "message2": {
+                            "type": "string"
+                          }
+                        }
+                      }
+                    }
                   },
-                  "example": "ver.1"
+                  "example": {
+                    "result": {
+                      "message1": "Hello",
+                      "message2": "World"
+                    }
+                  }
                 }
               }
             }
@@ -54,35 +72,14 @@ void main() {
   Map<String, dynamic> json = jsonDecode(jsonString);
   OpenAPISpec openAPISpec = OpenAPISpec.fromJson(json);
 
-  print(openAPISpec.openapi);
-  print(openAPISpec.info.title);
-  print(openAPISpec.servers.servers[0].url);
-
   Paths paths = openAPISpec.paths;
-  for(String path in paths.paths.keys) {
-    print(path);
-    Path elem = paths.paths[path] as Path;
-    Operation get = elem.operations['get'] as Operation;
+  Path path = paths.paths['/echo']!;
+  Operation operation = path.operations['get']!;
+  Response response = operation.responses.responses['200']!;
+  Content content = response.content;
+  MediaType mediaType = content.mediaTypes['application/json']!;
+  Example? example = mediaType.example;
 
-    Parameters parameters = get.parameters!;
-    for(Parameter param in parameters.parameters) {
-      print(param.name);
-      print(param.in_);
-      print(param.required);
-      print(param.schema.type);
-    }
-
-    Responses responses = get.responses;
-    for(String status in responses.responses.keys) {
-      print(status);
-      Response response = responses.responses[status] as Response;
-
-      Content content = response.content;
-      for(String type in content.mediaTypes.keys) {
-        print(type);
-        MediaType mediaType = content.mediaTypes[type] as MediaType;
-        print(mediaType.schema.type);
-      }
-    }
-  }
+  String prettyJson = example != null ? JsonEncoder.withIndent('  ').convert(example) : '';
+  print(prettyJson);
 }

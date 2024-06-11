@@ -202,26 +202,61 @@ class Content {
 
 class MediaType {
   Schema schema;
+  Example? example;
 
   MediaType.fromJson(Map<String, dynamic> json)
-      : schema = Schema.fromJson(json['schema']);
+      : schema = Schema.fromJson(json['schema']),
+        example = json['example'] != null ? Example.fromJson(json['example']) : null;
 
   Map<String, dynamic> toJson() {
     return {
       'schema': schema.toJson(),
+      'example': example?.toJson(),
     };
   }
 }
 
 class Schema {
   String type;
+  Schema? items;
+  Map<String, Schema>? properties;
 
   Schema.fromJson(Map<String, dynamic> json)
-      : type = json['type'];
+      : type = json['type'],
+        items = json['items'] != null ? Schema.fromJson(json['items']) : null,
+        properties = json['properties'] != null
+            ? (json['properties'] as Map<String, dynamic>)
+                .map((key, value) => MapEntry(key, Schema.fromJson(value)))
+            : null;
 
   Map<String, dynamic> toJson() {
     return {
       'type': type,
+      'items': items?.toJson(),
+      'properties': properties?.map((key, value) => MapEntry(key, value.toJson())),
     };
+  }
+}
+
+class Example {
+  Map<String, dynamic> value;
+
+  Example.fromJson(Map<String, dynamic> json)
+      : value = _parseJson(json);
+
+  static Map<String, dynamic> _parseJson(Map<String, dynamic> json) {
+    Map<String, dynamic> result = {};
+    for(var key in json.keys) {
+      if(json[key] is Map<String, dynamic>) {
+        result[key] = _parseJson(json[key]);
+      } else {
+        result[key] = json[key].toString();
+      }
+    }
+    return result;
+  }
+
+  Map<String, dynamic> toJson() {
+    return value;
   }
 }
