@@ -1,4 +1,5 @@
 import 'package:easyback/models/APISpec.dart';
+import 'package:easyback/screens/api/ProjectListView.dart';
 import 'package:easyback/screens/main_menu.dart';
 import 'package:easyback/services/APICodeGens.dart';
 import 'package:easyback/services/APIProjects.dart';
@@ -439,33 +440,5 @@ class _apicodeState extends State<apicode> {
     setState(() {
       selectedProject = project;
     });
-  }
-}
-
-class ProjectListView extends StatelessWidget {
-  final List<APISpec> projects;
-  final Function(APISpec?) handleProjectTap;
-
-  ProjectListView({
-    required this.projects,
-    required this.handleProjectTap,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return ListView.builder(
-      itemCount: projects.length,
-      itemBuilder: (context, index) {
-        return ListTile(
-          title: Text(
-            projects[index].projectName,
-            style: TextStyle(color: Colors.white, fontSize: 12),
-          ),
-          onTap: () {
-            handleProjectTap(projects[index]);
-          },
-        );
-      },
-    );
   }
 }
