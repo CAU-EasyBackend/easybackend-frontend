@@ -69,17 +69,18 @@ void main() {
   }
   ''';
 
-  Map<String, dynamic> json = jsonDecode(jsonString);
-  OpenAPISpec openAPISpec = OpenAPISpec.fromJson(json);
+  String changeExample = '''
+  {
+    "result": {
+      "message1": "Hi",
+      "message2": "There"
+    }
+  }
+  ''';
 
-  Paths paths = openAPISpec.paths;
-  Path path = paths.paths['/echo']!;
-  Operation operation = path.operations['get']!;
-  Response response = operation.responses.responses['200']!;
-  Content content = response.content;
-  MediaType mediaType = content.mediaTypes['application/json']!;
-  Example? example = mediaType.example;
-
-  String prettyJson = example != null ? JsonEncoder.withIndent('  ').convert(example) : '';
-  print(prettyJson);
+  String changeExample2 = '''
+  {
+    "result": "hi"
+  }
+  ''';
 }

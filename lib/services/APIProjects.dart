@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:easyback/models/APISpec.dart';
+import 'package:easyback/models/OpenAPISpec.dart';
 import 'package:http/browser_client.dart';
 
 class APIProjects {
@@ -25,5 +26,23 @@ class APIProjects {
         .toList();
 
     return projects;
+  }
+
+  static Future<void> saveProject(String projectName, OpenAPISpec openAPISpec) async {
+    final url = Uri.parse('$baseUrl/projects/apiSpec/save');
+    final client = BrowserClient()..withCredentials = true;
+
+    final response = await client.put(
+        url,
+        headers: { 'X-Requested-With': 'XMLHttpRequest', 'Content-Type': 'application/json' },
+        body: jsonEncode({
+          'projectName': projectName,
+          'api': openAPISpec.toJson(),
+        }),
+    );
+
+    if(response.statusCode != 200) {
+      throw Exception('Failed to save project');
+    }
   }
 }

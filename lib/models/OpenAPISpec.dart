@@ -1,20 +1,26 @@
+import 'dart:convert';
+
 class OpenAPISpec {
   String openapi;
   Info info;
-  Servers servers;
-  Paths paths;
+  List<OpenAPIServer> servers;
+  Map<String, Path> paths;
 
   OpenAPISpec.fromJson(Map<String, dynamic> json)
       : openapi = json['openapi'],
         info = Info.fromJson(json['info']),
-        servers = Servers.fromJson(json),
-        paths = Paths.fromJson(json);
+        servers = (json['servers'] as List)
+            .map((e) => OpenAPIServer.fromJson(e))
+            .toList(),
+        paths = (json['paths'] as Map<String, dynamic>)
+            .map((key, value) => MapEntry(key, Path.fromJson(value)));
 
   Map<String, dynamic> toJson() {
     return {
       'openapi': openapi,
       'info': info.toJson(),
-      'servers': servers.toJson(),
+      'servers': servers.map((e) => e.toJson()).toList(),
+      'paths': paths.map((key, value) => MapEntry(key, value.toJson())),
     };
   }
 }
@@ -32,21 +38,6 @@ class Info {
   }
 }
 
-class Servers {
-  List<OpenAPIServer> servers;
-
-  Servers.fromJson(Map<String, dynamic> json)
-      : servers = (json['servers'] as List)
-            .map((e) => OpenAPIServer.fromJson(e))
-            .toList();
-
-  Map<String, dynamic> toJson() {
-    return {
-      'servers': servers.map((e) => e.toJson()).toList(),
-    };
-  }
-}
-
 class OpenAPIServer {
   String url;
 
@@ -56,20 +47,6 @@ class OpenAPIServer {
   Map<String, dynamic> toJson() {
     return {
       'url': url,
-    };
-  }
-}
-
-class Paths {
-  Map<String, Path> paths;
-
-  Paths.fromJson(Map<String, dynamic> json)
-      : paths = (json['paths'] as Map<String, dynamic>)
-            .map((key, value) => MapEntry(key, Path.fromJson(value)));
-
-  Map<String, dynamic> toJson() {
-    return {
-      'paths': paths.map((key, value) => MapEntry(key, value.toJson())),
     };
   }
 }
@@ -87,39 +64,27 @@ class Path {
 }
 
 class Operation {
-  Parameters? parameters;
+  List<Parameter>? parameters;
   RequestBody? requestBody;
-  Responses responses;
+  Map<String, Response> responses;
 
   Operation.fromJson(Map<String, dynamic> json)
       : parameters = json['parameters'] != null
-            ? Parameters.fromJson(json)
+            ? (json['parameters'] as List)
+                .map((e) => Parameter.fromJson(e))
+                .toList()
             : null,
         requestBody = json['requestBody'] != null
             ? RequestBody.fromJson(json['requestBody'])
             : null,
-        responses = Responses.fromJson(json);
+        responses = (json['responses'] as Map<String, dynamic>)
+            .map((key, value) => MapEntry(key, Response.fromJson(value)));
 
   Map<String, dynamic> toJson() {
     return {
-      'parameters': parameters?.toJson(),
+      'parameters': parameters?.map((e) => e.toJson()).toList(),
       'requestBody': requestBody?.toJson(),
-      'responses': responses.toJson(),
-    };
-  }
-}
-
-class Parameters {
-  List<Parameter> parameters;
-
-  Parameters.fromJson(Map<String, dynamic> json)
-      : parameters = (json['parameters'] as List)
-            .map((e) => Parameter.fromJson(e))
-            .toList();
-
-  Map<String, dynamic> toJson() {
-    return {
-      'parameters': parameters.map((e) => e.toJson()).toList(),
+      'responses': responses.map((key, value) => MapEntry(key, value.toJson())),
     };
   }
 }
@@ -147,56 +112,64 @@ class Parameter {
 }
 
 class RequestBody {
-  Content content;
+  Map<String, MediaType> content;
 
   RequestBody.fromJson(Map<String, dynamic> json)
-      : content = Content.fromJson(json['content']);
-
-  Map<String, dynamic> toJson() {
-    return {
-      'content': content.toJson(),
-    };
-  }
-}
-
-class Responses {
-  Map<String, Response> responses;
-
-  Responses.fromJson(Map<String, dynamic> json)
-      : responses = (json['responses'] as Map<String, dynamic>)
-            .map((key, value) => MapEntry(key, Response.fromJson(value)));
-
-  Map<String, dynamic> toJson() {
-    return {
-      'responses': responses.map((key, value) => MapEntry(key, value.toJson())),
-    };
-  }
-}
-
-class Response {
-  Content content;
-
-  Response.fromJson(Map<String, dynamic> json)
-      : content = Content.fromJson(json);
-
-  Map<String, dynamic> toJson() {
-    return {
-      'content': content.toJson(),
-    };
-  }
-}
-
-class Content {
-  Map<String, MediaType> mediaTypes;
-
-  Content.fromJson(Map<String, dynamic> json)
-      : mediaTypes = (json['content'] as Map<String, dynamic>)
+      : content = (json['content'] as Map<String, dynamic>)
             .map((key, value) => MapEntry(key, MediaType.fromJson(value)));
 
   Map<String, dynamic> toJson() {
     return {
-      'mediaTypes': mediaTypes.map((key, value) => MapEntry(key, value.toJson())),
+      'content': content.map((key, value) => MapEntry(key, value.toJson())),
     };
+  }
+
+  static RequestBody createRequestBodyByExample(String jsonString) {
+    Map<String, dynamic> json = jsonDecode(jsonString);
+
+    Schema schema = Schema.createSchemaByExample(json);
+    Example example = Example.fromJson(json);
+    MediaType mediaType = MediaType.fromJson({
+      'schema': schema.toJson(),
+      'example': example.toJson(),
+    });
+
+    return RequestBody.fromJson({
+      'content': {
+        'application/json': mediaType.toJson(),
+      }
+    });
+  }
+}
+
+class Response {
+  Map<String, MediaType> content;
+
+  Response.fromJson(Map<String, dynamic> json)
+      : content = (json['content'] as Map<String, dynamic>)
+            .map((key, value) => MapEntry(key, MediaType.fromJson(value)));
+
+  Map<String, dynamic> toJson() {
+    return {
+      'content': content.map((key, value) => MapEntry(key, value.toJson())),
+    };
+  }
+
+  static Response createResponseByExample(String jsonString) {
+    Map<String, dynamic> json = jsonDecode(jsonString);
+
+    Schema schema = Schema.createSchemaByExample(json);
+    Example example = Example.fromJson(json);
+    MediaType mediaType = MediaType.fromJson({
+      'schema': schema.toJson(),
+      'example': example.toJson(),
+    });
+
+    return Response.fromJson({
+      'content': {
+        'application/json': mediaType.toJson(),
+      }
+    });
   }
 }
 
@@ -235,6 +208,24 @@ class Schema {
       'items': items?.toJson(),
       'properties': properties?.map((key, value) => MapEntry(key, value.toJson())),
     };
+  }
+
+  static Schema createSchemaByExample(dynamic value) {
+    if(value is Map<String, dynamic>) {
+      return Schema.fromJson({
+        'type': 'object',
+        'properties': value.map((k, v) => MapEntry(k, Schema.createSchemaByExample(v).toJson())),
+      });
+    } else if(value is List) {
+      return Schema.fromJson({
+        'type': 'array',
+        'items': Schema.createSchemaByExample(value[0]),
+      });
+    } else {
+      return Schema.fromJson({
+        'type': 'string'
+      });
+    }
   }
 }
 
