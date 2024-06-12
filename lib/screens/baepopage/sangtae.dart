@@ -33,8 +33,8 @@ class _SangtaeState extends State<Sangtae> {
 
   Future<void> _fetchDeployInfos() async {
     try {
-      // List<Instance> infos = await APIDeployInfos.getDeployInfos();
-      List<Instance> infos = await APIDeployInfos.testGetDeployInfos();
+       List<Instance> infos = await APIDeployInfos.getDeployInfos();
+      //List<Instance> infos = await APIDeployInfos.testGetDeployInfos();
       setState(() {
         deployInfoList = infos;
       });
@@ -451,7 +451,10 @@ class _SangtaeState extends State<Sangtae> {
     });
   }
 
-  void _showLogConfirmationDialog(BuildContext context) {
+  Future<void> _showLogConfirmationDialog(BuildContext context) async {
+
+    final logData=await APIDeployInfos.fetchLogData(selectedInstance!.instanceId);
+
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -476,15 +479,7 @@ class _SangtaeState extends State<Sangtae> {
             child: Scrollbar(
               child: SingleChildScrollView( //스크롤 가능
                 child: Text(
-                  '우ㅜㄴㅁ루라ㅜㄴ;ㅏ우라눙라ㅜㅇ나뤼나ㅜㅇ리ㅏ누라ㅣㅣㅣㅣㅣ11111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111\n'
-                      '\n'
-                      '\n'  '\n'
-                      '\n'
-                      '\n'  '\n'
-                      '\n'  '\n'
-                      '\n'
-
-                      '156546546512316545645135156453153484321351ㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣ',
+                 logData,
                   style: TextStyle(
                     color: Colors.white,
                   ),
