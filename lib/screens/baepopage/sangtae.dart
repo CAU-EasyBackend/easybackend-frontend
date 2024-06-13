@@ -4,13 +4,13 @@ import 'package:easyback/screens/baepopage/deploy_menu.dart';
 import 'package:easyback/screens/baepopage/server_update_popup.dart';
 import 'package:easyback/screens/main_menu.dart';
 import 'package:easyback/services/APIDeployInfos.dart';
+import 'package:easyback/services/APIDeployments.dart';
 import 'package:flutter/material.dart';
 import 'Deployment.dart';
 import 'baepo.dart';
 import 'update.dart';
 
 bool serverOn = true;
-bool isUpdated = false;
 
 class Sangtae extends StatefulWidget {
   const Sangtae({Key? key}) : super(key: key);
@@ -25,6 +25,8 @@ class _SangtaeState extends State<Sangtae> {
   Instance? selectedInstance;
   Server? selectedServer;
   int selectedVersion = 1;
+
+  bool _isLoading = false;
 
   @override
   void initState() {
@@ -41,6 +43,17 @@ class _SangtaeState extends State<Sangtae> {
       });
     } catch (e) {
       print('Failed to fetch deploy infos: $e');
+    }
+  }
+
+  Future<void> _versionManage() async {
+    try {
+      _isLoading = true;
+      await APIDeployments.versionManage(selectedInstance!.instanceId, selectedVersion.toString());
+      _fetchDeployInfos();
+      _isLoading = false;
+    } catch (e) {
+      print('Failed to update version: $e');
     }
   }
 
@@ -212,7 +225,7 @@ class _SangtaeState extends State<Sangtae> {
                           child: Padding(
                             padding: const EdgeInsets.only(left: 20.0),
                             child: selectedServer != null
-                                ? Column(
+                                ? (_isLoading ? Center(child: CircularProgressIndicator()) : Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 SizedBox(height: 10),
@@ -351,7 +364,8 @@ class _SangtaeState extends State<Sangtae> {
                                     ),
                                     SizedBox(width: 10),
                                     TextButton(
-                                      onPressed: () {
+                                      onPressed: () async {
+                                        await _versionManage();
                                       },
                                       child: Text(
                                         '선택한 버전으로 변경',
@@ -369,7 +383,7 @@ class _SangtaeState extends State<Sangtae> {
                                   ],
                                 ),
                               ],
-                            )
+                            ))
                                 : SizedBox.shrink(),
                           ),
                         ),
@@ -387,13 +401,6 @@ class _SangtaeState extends State<Sangtae> {
             );
   }
 
-  void _handleUpdateButton(BuildContext context) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => update()),
-    );
-  }
-
   void _handlePopup(Instance instance, Server? server) {
     setState(() {
       selectedInstance = instance;
@@ -403,7 +410,6 @@ class _SangtaeState extends State<Sangtae> {
   }
 
   Future<void> _showLogConfirmationDialog(BuildContext context) async {
-
     final logData=await APIDeployInfos.fetchLogData(selectedInstance!.instanceId);
 
     showDialog(
