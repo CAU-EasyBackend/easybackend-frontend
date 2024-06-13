@@ -27,13 +27,16 @@ class OpenAPISpec {
 
 class Info {
   String title;
+  String version;
 
   Info.fromJson(Map<String, dynamic> json)
-      : title = json['title'];
+      : title = json['title'],
+        version = json['version'];
 
   Map<String, dynamic> toJson() {
     return {
       'title': title,
+      'version': version,
     };
   }
 }
@@ -81,11 +84,17 @@ class Operation {
             .map((key, value) => MapEntry(key, Response.fromJson(value)));
 
   Map<String, dynamic> toJson() {
-    return {
-      'parameters': parameters?.map((e) => e.toJson()).toList(),
-      'requestBody': requestBody?.toJson(),
-      'responses': responses.map((key, value) => MapEntry(key, value.toJson())),
-    };
+    final Map<String, dynamic> data = {};
+
+    if(parameters != null) {
+      data['parameters'] = parameters?.map((e) => e.toJson()).toList();
+    }
+    if(requestBody != null) {
+      data['requestBody'] = requestBody?.toJson();
+    }
+    data['responses'] = responses.map((key, value) => MapEntry(key, value.toJson()));
+
+    return data;
   }
 }
 
@@ -143,14 +152,17 @@ class RequestBody {
 }
 
 class Response {
+  String description;
   Map<String, MediaType> content;
 
   Response.fromJson(Map<String, dynamic> json)
-      : content = (json['content'] as Map<String, dynamic>)
+      : description = json['description'],
+        content = (json['content'] as Map<String, dynamic>)
             .map((key, value) => MapEntry(key, MediaType.fromJson(value)));
 
   Map<String, dynamic> toJson() {
     return {
+      'description': description,
       'content': content.map((key, value) => MapEntry(key, value.toJson())),
     };
   }
@@ -166,6 +178,7 @@ class Response {
     });
 
     return Response.fromJson({
+      'description': 'new',
       'content': {
         'application/json': mediaType.toJson(),
       }
@@ -182,10 +195,14 @@ class MediaType {
         example = json['example'] != null ? Example.fromJson(json['example']) : null;
 
   Map<String, dynamic> toJson() {
-    return {
-      'schema': schema.toJson(),
-      'example': example?.toJson(),
-    };
+    final Map<String, dynamic> data = {};
+
+    data['schema'] = schema.toJson();
+    if(example != null) {
+      data['example'] = example?.toJson();
+    }
+
+    return data;
   }
 }
 
@@ -203,11 +220,17 @@ class Schema {
             : null;
 
   Map<String, dynamic> toJson() {
-    return {
-      'type': type,
-      'items': items?.toJson(),
-      'properties': properties?.map((key, value) => MapEntry(key, value.toJson())),
-    };
+    final Map<String, dynamic> data = {};
+
+    data['type'] = type;
+    if(items != null) {
+      data['items'] = items?.toJson();
+    }
+    if(properties != null) {
+      data['properties'] = properties?.map((key, value) => MapEntry(key, value.toJson()));
+    }
+
+    return data;
   }
 
   static Schema createSchemaByExample(dynamic value) {

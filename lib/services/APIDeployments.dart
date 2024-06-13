@@ -102,4 +102,22 @@ class APIDeployments {
 
     return;
   }
+
+  static Future<void> versionManage(String instanceId, String selectedVersion) async {
+    final url = Uri.parse('$baseUrl/deployments/$instanceId/versionManage/$selectedVersion');
+    final client = BrowserClient()..withCredentials = true;
+
+    final response = await client.patch(
+      url,
+      headers: {
+        'X-Requested-With': 'XMLHttpRequest'
+      },
+    );
+
+    if(response.statusCode != 200) {
+      throw Exception('Error');
+    }
+
+    return;
+  }
 }

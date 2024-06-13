@@ -4,13 +4,13 @@ import 'package:easyback/screens/baepopage/deploy_menu.dart';
 import 'package:easyback/screens/baepopage/server_update_popup.dart';
 import 'package:easyback/screens/main_menu.dart';
 import 'package:easyback/services/APIDeployInfos.dart';
+import 'package:easyback/services/APIDeployments.dart';
 import 'package:flutter/material.dart';
 import 'Deployment.dart';
 import 'baepo.dart';
 import 'update.dart';
 
 bool serverOn = true;
-bool isUpdated = false;
 
 class Sangtae extends StatefulWidget {
   const Sangtae({Key? key}) : super(key: key);
@@ -24,6 +24,9 @@ class _SangtaeState extends State<Sangtae> {
 
   Instance? selectedInstance;
   Server? selectedServer;
+  int selectedVersion = 1;
+
+  bool _isLoading = false;
 
   @override
   void initState() {
@@ -33,13 +36,24 @@ class _SangtaeState extends State<Sangtae> {
 
   Future<void> _fetchDeployInfos() async {
     try {
-       List<Instance> infos = await APIDeployInfos.getDeployInfos();
+      List<Instance> infos = await APIDeployInfos.getDeployInfos();
       //List<Instance> infos = await APIDeployInfos.testGetDeployInfos();
       setState(() {
         deployInfoList = infos;
       });
     } catch (e) {
       print('Failed to fetch deploy infos: $e');
+    }
+  }
+
+  Future<void> _versionManage() async {
+    try {
+      _isLoading = true;
+      await APIDeployments.versionManage(selectedInstance!.instanceId, selectedVersion.toString());
+      _fetchDeployInfos();
+      _isLoading = false;
+    } catch (e) {
+      print('Failed to update version: $e');
     }
   }
 
@@ -142,54 +156,6 @@ class _SangtaeState extends State<Sangtae> {
                                     SizedBox(width: 50),
                                     TextButton(
                                       onPressed: () {
-                                        setState(() {
-                                          serverOn = true;
-                                        });
-                                      },
-                                      child: Text(
-                                        '인스턴스 on',
-                                        style: TextStyle(
-                                          color: serverOn
-                                              ? Colors.green
-                                              : Colors.white,
-                                          fontSize: 16,
-                                        ),
-                                      ),
-                                      style: TextButton.styleFrom(
-                                        side: BorderSide(
-                                            color: serverOn
-                                                ? Colors.green
-                                                : Colors.grey,
-                                            width: 2),
-                                      ),
-                                    ),
-                                    SizedBox(width: 10),
-                                    TextButton(
-                                      onPressed: () {
-                                        setState(() {
-                                          serverOn = false;
-                                        });
-                                      },
-                                      child: Text(
-                                        '인스턴스 off',
-                                        style: TextStyle(
-                                          color: !serverOn
-                                              ? Colors.red
-                                              : Colors.white,
-                                          fontSize: 16,
-                                        ),
-                                      ),
-                                      style: TextButton.styleFrom(
-                                        side: BorderSide(
-                                            color: !serverOn
-                                                ? Colors.red
-                                                : Colors.grey,
-                                            width: 2),
-                                      ),
-                                    ),
-                                    SizedBox(width: 50),
-                                    TextButton(
-                                      onPressed: () {
                                         _showLogConfirmationDialog(context);
                                       },
                                       child: Text(
@@ -208,7 +174,6 @@ class _SangtaeState extends State<Sangtae> {
                                     SizedBox(width: 50),
                                     Row(
                                       children: [
-                                        SizedBox(width: 50),
                                         TextButton.icon(
                                           onPressed: () {
                                             if(selectedInstance!=null) {
@@ -262,7 +227,7 @@ class _SangtaeState extends State<Sangtae> {
                           child: Padding(
                             padding: const EdgeInsets.only(left: 20.0),
                             child: selectedServer != null
-                                ? Column(
+                                ? (_isLoading ? Center(child: CircularProgressIndicator()) : Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 SizedBox(height: 10),
@@ -377,11 +342,35 @@ class _SangtaeState extends State<Sangtae> {
                                       ),
                                     ),
                                     SizedBox(width: 50),
+                                    DropdownButton(
+                                      value: selectedVersion,
+                                      dropdownColor: Colors.black,
+                                      items: List.generate(
+                                        selectedServer!.latestVersion,
+                                            (index) => DropdownMenuItem<int>(
+                                          value: index + 1,
+                                          child: Text(
+                                            '${index + 1}',
+                                            style: const TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 18,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                      onChanged: (int? newValue) {
+                                        setState(() {
+                                          selectedVersion = newValue!;
+                                        });
+                                      },
+                                    ),
+                                    SizedBox(width: 10),
                                     TextButton(
-                                      onPressed: () {
+                                      onPressed: () async {
+                                        await _versionManage();
                                       },
                                       child: Text(
-                                        '버전 관리',
+                                        '선택한 버전으로 변경',
                                         style: TextStyle(
                                           color: Colors.white,
                                           fontSize: 16,
@@ -393,35 +382,10 @@ class _SangtaeState extends State<Sangtae> {
                                             width: 2),
                                       ),
                                     ),
-                                    SizedBox(width: 50),
-                                    Row(
-                                      children: [
-                                        SizedBox(width: 50),
-                                        TextButton.icon(
-                                          onPressed: () {
-                                            // Some action
-                                          },
-                                          label: Text(
-                                            '서버 삭제',
-                                            style: TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 16,
-                                            ),
-                                          ),
-                                          icon: Icon(
-                                              Icons.delete_forever_outlined,
-                                              color: Colors.white),
-                                          style: TextButton.styleFrom(
-                                            side: BorderSide(
-                                                color: Colors.grey, width: 2),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
                                   ],
                                 ),
                               ],
-                            )
+                            ))
                                 : SizedBox.shrink(),
                           ),
                         ),
@@ -439,22 +403,15 @@ class _SangtaeState extends State<Sangtae> {
             );
   }
 
-  void _handleUpdateButton(BuildContext context) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => update()),
-    );
-  }
-
   void _handlePopup(Instance instance, Server? server) {
     setState(() {
       selectedInstance = instance;
       selectedServer = server;
+      selectedVersion = server?.runningVersion ?? 1;
     });
   }
 
   Future<void> _showLogConfirmationDialog(BuildContext context) async {
-
     final logData=await APIDeployInfos.fetchLogData(selectedInstance!.instanceId);
 
     showDialog(
