@@ -25,6 +25,7 @@ class _SangtaeState extends State<Sangtae> {
   Instance? selectedInstance;
   Server? selectedServer;
   int selectedVersion = 1;
+  bool selectedServerOn = false;
 
   bool _isLoading = false;
 
@@ -48,10 +49,21 @@ class _SangtaeState extends State<Sangtae> {
 
   Future<void> _versionManage() async {
     try {
-      _isLoading = true;
+      setState(() {
+        _isLoading = true;
+      });
       await APIDeployments.versionManage(selectedInstance!.instanceId, selectedVersion.toString());
-      _fetchDeployInfos();
-      _isLoading = false;
+      await _fetchDeployInfos();
+      setState(() {
+        for(Instance instance in deployInfoList) {
+          if(instance.instanceId == selectedInstance!.instanceId) {
+            selectedInstance = instance;
+            selectedServer = instance.servers.firstWhere((element) => element.serverName == selectedServer!.serverName);
+          }
+        }
+        selectedServerOn = true;
+        _isLoading = false;
+      });
     } catch (e) {
       print('Failed to update version: $e');
     }
@@ -271,15 +283,13 @@ class _SangtaeState extends State<Sangtae> {
                                   children: [
                                     SizedBox(width: 50),
                                     TextButton(
-                                      onPressed: () {
-                                        setState(() {
-                                          serverOn = true;
-                                        });
-                                      },
+                                      onPressed: !selectedServerOn ? () async {
+                                        _serverOnOff(true);
+                                      } : null,
                                       child: Text(
                                         '서버 on',
                                         style: TextStyle(
-                                          color: serverOn
+                                          color: selectedServerOn
                                               ? Colors.green
                                               : Colors.white,
                                           fontSize: 16,
@@ -287,7 +297,7 @@ class _SangtaeState extends State<Sangtae> {
                                       ),
                                       style: TextButton.styleFrom(
                                         side: BorderSide(
-                                            color: serverOn
+                                            color: selectedServerOn
                                                 ? Colors.green
                                                 : Colors.grey,
                                             width: 2),
@@ -295,15 +305,13 @@ class _SangtaeState extends State<Sangtae> {
                                     ),
                                     SizedBox(width: 10),
                                     TextButton(
-                                      onPressed: () {
-                                        setState(() {
-                                          serverOn = false;
-                                        });
-                                      },
+                                      onPressed: selectedServerOn ? () async {
+                                        _serverOnOff(false);
+                                      } : null,
                                       child: Text(
                                         '서버 off',
                                         style: TextStyle(
-                                          color: !serverOn
+                                          color: !selectedServerOn
                                               ? Colors.red
                                               : Colors.white,
                                           fontSize: 16,
@@ -311,7 +319,7 @@ class _SangtaeState extends State<Sangtae> {
                                       ),
                                       style: TextButton.styleFrom(
                                         side: BorderSide(
-                                            color: !serverOn
+                                            color: !selectedServerOn
                                                 ? Colors.red
                                                 : Colors.grey,
                                             width: 2),
@@ -366,8 +374,8 @@ class _SangtaeState extends State<Sangtae> {
                                     ),
                                     SizedBox(width: 10),
                                     TextButton(
-                                      onPressed: () async {
-                                        await _versionManage();
+                                      onPressed: () {
+                                        _versionManage();
                                       },
                                       child: Text(
                                         '선택한 버전으로 변경',
@@ -403,11 +411,45 @@ class _SangtaeState extends State<Sangtae> {
             );
   }
 
-  void _handlePopup(Instance instance, Server? server) {
+  Future<void> _serverOnOff(bool toggle) async {
+    setState(() {
+      _isLoading = true;
+    });
+    if(toggle) {
+      bool success = await APIDeployments.versionManage(selectedInstance!.instanceId, selectedVersion.toString());
+      if(success) {
+        setState(() {
+          selectedServerOn = true;
+        });
+      }
+    } else {
+      bool success = await APIDeployments.terminateServer(selectedInstance!.instanceId);
+      if(success) {
+        setState(() {
+          selectedServerOn = false;
+        });
+      }
+    }
+    setState(() {
+      _isLoading = false;
+    });
+  }
+
+  Future<void> _handlePopup(Instance instance, Server? server) async {
+    bool isAlive = false;
+    if(server != null) {
+      setState(() {
+        _isLoading = true;
+      });
+      isAlive = await APIDeployments.checkServerAlive(instance.instanceId);
+    }
+
     setState(() {
       selectedInstance = instance;
       selectedServer = server;
       selectedVersion = server?.runningVersion ?? 1;
+      selectedServerOn = isAlive;
+      _isLoading = false;
     });
   }
 

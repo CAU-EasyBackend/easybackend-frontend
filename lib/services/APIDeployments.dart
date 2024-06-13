@@ -103,7 +103,7 @@ class APIDeployments {
     return;
   }
 
-  static Future<void> versionManage(String instanceId, String selectedVersion) async {
+  static Future<bool> versionManage(String instanceId, String selectedVersion) async {
     final url = Uri.parse('$baseUrl/deployments/$instanceId/versionManage/$selectedVersion');
     final client = BrowserClient()..withCredentials = true;
 
@@ -118,6 +118,44 @@ class APIDeployments {
       throw Exception('Error');
     }
 
-    return;
+    return true;
+  }
+
+  static Future<bool> checkServerAlive(String instanceId) async {
+    final url = Uri.parse('$baseUrl/deployments/$instanceId/status/server');
+    final client = BrowserClient()..withCredentials = true;
+
+    final response = await client.get(
+      url,
+      headers: {
+        'X-Requested-With': 'XMLHttpRequest'
+      },
+    );
+
+    if(response.statusCode != 200) {
+      throw Exception('Error');
+    }
+
+    final dynamic body = jsonDecode(response.body);
+    final bool isAlive = body['result'];
+
+    return isAlive;
+  }
+
+  static Future<bool> terminateServer(String instanceId) async {
+    final url = Uri.parse('$baseUrl/deployments/$instanceId/terminate/server');
+    final client = BrowserClient()..withCredentials = true;
+
+    final response = await client.post(
+      url,
+      headers: {
+        'X-Requested-With': 'XMLHttpRequest'
+      },
+    );
+
+    if(response.statusCode != 200) {
+      return false;
+    }
+    return true;
   }
 }
