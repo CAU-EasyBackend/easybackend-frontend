@@ -341,7 +341,7 @@ class _apicodeState extends State<apicode> {
                             ),
                           ),
                           Text(
-                            'github repositery 생성',
+                            'github repository 생성',
                             style: TextStyle(
                               color: Colors.white,
                               fontSize: 16,
