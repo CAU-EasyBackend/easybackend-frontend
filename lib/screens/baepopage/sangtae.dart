@@ -211,7 +211,9 @@ class _SangtaeState extends State<Sangtae> {
                                         SizedBox(width: 50),
                                         TextButton.icon(
                                           onPressed: () {
-                                            // Some action
+                                            if(selectedInstance!=null) {
+                                              _showDeleteConfirmationDialog(context);
+                                            }
                                           },
                                           label: Text(
                                             '인스턴스 삭제',
@@ -505,7 +507,55 @@ class _SangtaeState extends State<Sangtae> {
     );
   }
 
+
+Future<void> _showDeleteConfirmationDialog(BuildContext context) async {
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        backgroundColor: Colors.black,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10.0),
+          side: BorderSide(color: Colors.white, width: 2.0),
+        ),
+        title: Text(
+          '인스턴스 삭제 확인',
+          style: TextStyle(color: Colors.white),
+        ),
+        content: Text(
+          '정말로 인스턴스를 삭제하시겠습니까?',
+          style: TextStyle(color: Colors.white),
+        ),
+        actions: <Widget>[
+          TextButton(
+            child: Text('취소', style: TextStyle(color: Colors.white)),
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+          ),
+          TextButton(
+            child: Text('삭제', style: TextStyle(color: Colors.red)),
+            onPressed: () async {
+              if (selectedInstance != null) {
+                
+                await APIDeployInfos.deleteInstance(selectedInstance!.instanceId);
+                Navigator.of(context).pop();
+                setState(() {
+                  deployInfoList.remove(selectedInstance);
+                  selectedInstance = null;
+                  selectedServer = null;
+                });
+              }
+            },
+          ),
+        ],
+      );
+    },
+  );
 }
+}
+
+
 
 class MyListView extends StatelessWidget {
   final List<Instance> deployInfoList;

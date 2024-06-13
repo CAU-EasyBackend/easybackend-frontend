@@ -28,6 +28,7 @@ class APIDeployInfos {
   }
 
  static Future<String> fetchLogData(String instanceId) async {
+
     //final url = Uri.parse('$baseUrl/deployments/66694bc71e77c23effcdcc67/logs');
     
     final url = Uri.parse('$baseUrl/deployments/$instanceId/logs');
@@ -55,6 +56,32 @@ class APIDeployInfos {
       rethrow;
     }
   }
+
+
+static Future<void> deleteInstance(String instanceId) async {
+  final url = Uri.parse('$baseUrl/deployments/$instanceId/terminate/instance');
+  final client = BrowserClient()..withCredentials = true;
+  try {
+    final response = await client.post(
+      url,
+      headers: {
+        'Content-Type': 'application/json',
+        'X-Requested-With': 'XMLHttpRequest'
+      },
+    );
+
+    if (response.statusCode == 200) {
+      
+      print('Instance deleted successfully');
+    } else {
+      
+      print('Failed to delete instance: ${response.body}');
+    }
+  } catch (e) {
+    print('Error deleting instance: $e');
+  }
+}
+
 
   static Future<List<Instance>> testGetDeployInfos() async {
     final response_body = '{"success":true,"message":"성공","result":{"instances":[{"instance":{"instanceId":"663da9780b431eec968d19fe","instanceName":"keylime7-1","instanceNumber":1,"status":"running"},"servers":[{"server":{"serverId":"663da9780b431eec968d19ff","serverName":"server","runningVersion":2,"latestVersion":3},"serverVersions":[{"version":1},{"version":2},{"version":3}]}]},{"instance":{"instanceId":"663da9c60b431eec968d1a07","instanceName":"keylime7-2","instanceNumber":2,"status":"running"},"servers":[{"server":{"serverId":"663da9c60b431eec968d1a08","serverName":"server","runningVersion":1,"latestVersion":1},"serverVersions":[{"version":1}]}]}]}}';
