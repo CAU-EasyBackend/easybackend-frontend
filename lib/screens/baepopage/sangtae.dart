@@ -24,6 +24,7 @@ class _SangtaeState extends State<Sangtae> {
 
   Instance? selectedInstance;
   Server? selectedServer;
+  int selectedVersion = 1;
 
   @override
   void initState() {
@@ -33,8 +34,8 @@ class _SangtaeState extends State<Sangtae> {
 
   Future<void> _fetchDeployInfos() async {
     try {
-       List<Instance> infos = await APIDeployInfos.getDeployInfos();
-      //List<Instance> infos = await APIDeployInfos.testGetDeployInfos();
+      //List<Instance> infos = await APIDeployInfos.getDeployInfos();
+      List<Instance> infos = await APIDeployInfos.testGetDeployInfos();
       setState(() {
         deployInfoList = infos;
       });
@@ -142,54 +143,6 @@ class _SangtaeState extends State<Sangtae> {
                                     SizedBox(width: 50),
                                     TextButton(
                                       onPressed: () {
-                                        setState(() {
-                                          serverOn = true;
-                                        });
-                                      },
-                                      child: Text(
-                                        '인스턴스 on',
-                                        style: TextStyle(
-                                          color: serverOn
-                                              ? Colors.green
-                                              : Colors.white,
-                                          fontSize: 16,
-                                        ),
-                                      ),
-                                      style: TextButton.styleFrom(
-                                        side: BorderSide(
-                                            color: serverOn
-                                                ? Colors.green
-                                                : Colors.grey,
-                                            width: 2),
-                                      ),
-                                    ),
-                                    SizedBox(width: 10),
-                                    TextButton(
-                                      onPressed: () {
-                                        setState(() {
-                                          serverOn = false;
-                                        });
-                                      },
-                                      child: Text(
-                                        '인스턴스 off',
-                                        style: TextStyle(
-                                          color: !serverOn
-                                              ? Colors.red
-                                              : Colors.white,
-                                          fontSize: 16,
-                                        ),
-                                      ),
-                                      style: TextButton.styleFrom(
-                                        side: BorderSide(
-                                            color: !serverOn
-                                                ? Colors.red
-                                                : Colors.grey,
-                                            width: 2),
-                                      ),
-                                    ),
-                                    SizedBox(width: 50),
-                                    TextButton(
-                                      onPressed: () {
                                         _showLogConfirmationDialog(context);
                                       },
                                       child: Text(
@@ -208,7 +161,6 @@ class _SangtaeState extends State<Sangtae> {
                                     SizedBox(width: 50),
                                     Row(
                                       children: [
-                                        SizedBox(width: 50),
                                         TextButton.icon(
                                           onPressed: () {
                                             // Some action
@@ -375,11 +327,34 @@ class _SangtaeState extends State<Sangtae> {
                                       ),
                                     ),
                                     SizedBox(width: 50),
+                                    DropdownButton(
+                                      value: selectedVersion,
+                                      dropdownColor: Colors.black,
+                                      items: List.generate(
+                                        selectedServer!.latestVersion,
+                                            (index) => DropdownMenuItem<int>(
+                                          value: index + 1,
+                                          child: Text(
+                                            '${index + 1}',
+                                            style: const TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 18,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                      onChanged: (int? newValue) {
+                                        setState(() {
+                                          selectedVersion = newValue!;
+                                        });
+                                      },
+                                    ),
+                                    SizedBox(width: 10),
                                     TextButton(
                                       onPressed: () {
                                       },
                                       child: Text(
-                                        '버전 관리',
+                                        '선택한 버전으로 변경',
                                         style: TextStyle(
                                           color: Colors.white,
                                           fontSize: 16,
@@ -390,31 +365,6 @@ class _SangtaeState extends State<Sangtae> {
                                             color: Colors.grey,
                                             width: 2),
                                       ),
-                                    ),
-                                    SizedBox(width: 50),
-                                    Row(
-                                      children: [
-                                        SizedBox(width: 50),
-                                        TextButton.icon(
-                                          onPressed: () {
-                                            // Some action
-                                          },
-                                          label: Text(
-                                            '서버 삭제',
-                                            style: TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 16,
-                                            ),
-                                          ),
-                                          icon: Icon(
-                                              Icons.delete_forever_outlined,
-                                              color: Colors.white),
-                                          style: TextButton.styleFrom(
-                                            side: BorderSide(
-                                                color: Colors.grey, width: 2),
-                                          ),
-                                        ),
-                                      ],
                                     ),
                                   ],
                                 ),
@@ -448,6 +398,7 @@ class _SangtaeState extends State<Sangtae> {
     setState(() {
       selectedInstance = instance;
       selectedServer = server;
+      selectedVersion = server?.runningVersion ?? 1;
     });
   }
 
