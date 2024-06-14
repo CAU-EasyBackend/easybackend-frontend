@@ -98,7 +98,7 @@ class _DeploymentState extends State<Deployment> {
                         onPressed: () {
                           _handleButtonPress(5);
                           setState(() {
-                            centerText = '주의사항은 \n\n샤랄라 샤랄라.';
+                            centerText = '코드의 배포는 Terraform을 이용한 AWS EC2 인스턴스의 생성과 함께 이루어 집니다.\n약 1분 30초정도가 소요됩니다.\nnode Express 기반의 코드 배포에서 권장하는 패키지 버전은 다음과 같습니다.\nexpress : 4.18.2\nnode : 20.12.7';
                           });
                         },
                         style: ElevatedButton.styleFrom(
